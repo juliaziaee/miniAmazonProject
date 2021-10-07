@@ -26,7 +26,7 @@ CREATE TABLE Products (
     Inventory INT NOT NULL,
     CHECK(Inventory > -1),
     SellerID INT NOT NULL,
-    PRIMARY KEY(productID, SellerID),
+    PRIMARY KEY(productID),
     FOREIGN KEY(SellerID) REFERENCES Seller(SellerID) 
 );
 
@@ -128,21 +128,12 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER TF_Inventory  
 BEFORE INSERT OR UPDATE ON Purchases
   FOR EACH ROW  EXECUTE PROCEDURE TF_Inventory();
-
--- Create function to wrap two procedures for TG balance, TF Balance function and remove cart function
-CREATE OR REPLACE FUNCTION balance_wrap_procedures(
-) RETURNS VOID AS $$
-BEGIN
-    PERFORM TF_Balance();
-    PERFORM removeCart();
-END; $$
-LANGUAGE plpgsql;
  
 -- Makes sure user has enough balance to purchase the order and moves items in the order out of their cart
 CREATE TRIGGER TG_Balance
 BEFORE INSERT ON Purchases
    FOR EACH ROW
-   EXECUTE PROCEDURE public.balance_wrap_procedures();
+   EXECUTE PROCEDURE TF_Balance();
 
  
 
