@@ -97,19 +97,13 @@ IF EXISTS(SELECT * FROM User
     WHERE uid = NEW.uid) THEN
     UPDATE balance set balance = balance - (NEW.finalUnitPrice * NEW.quantity);
 END IF;
-RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
- 
 -- Removes items from cart if they have been purchased (i.e. the item is now being moved to purchase table)
-CREATE FUNCTION removeCart() RETURNS TRIGGER AS $$
-BEGIN
-  IF EXISTS(SELECT * FROM Cart
+IF EXISTS(SELECT * FROM Cart
     WHERE uid = NEW.uid AND pid = NEW.pid AND sid = NEW.sid)
   THEN
     DELETE FROM Cart WHERE uid = NEW.uid AND pid = NEW.pid AND sid = NEW.sid;
   END IF;
-  RETURN NEW;
+RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
