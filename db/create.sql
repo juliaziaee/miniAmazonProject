@@ -40,7 +40,7 @@ CREATE TABLE Purchases (
     pid INT NOT NULL,
     FOREIGN KEY (pid) REFERENCES Products(productID),
     orderDateTime timestamp without time zone NOT NULL DEFAULT (current_timestamp AT  TIME ZONE 'UTC'),
-    finalUnitPrice INT ,
+    finalUnitPrice FLOAT ,
 	quantity INT NOT NULL,
     CHECK(quantity >= 1), 
     fufullmentstatus VARCHAR(256) NOT NULL, 

@@ -8,7 +8,7 @@
 \COPY SellerReview FROM 'data/SellerReview.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY ProductReview FROM 'data/ProductReview.csv' WITH DELIMITER ',' NULL '' CSV
 
--- populate sample data using insert statements
+-- populate sample data using insert statements (does not conflict with above data)
 
 INSERT INTO Users VALUES
    (1, 'clara.lyra@duke.edu', 'pass1', 'Clara', 'Lyra', 0.00, '123 Erwin Road Durham NC'),
@@ -30,4 +30,4 @@ INSERT INTO ProductReview VALUES
    (1, 1, 3, 'still waiting on my order but excited', '20210618 09:24:09 AM');
  
 INSERT INTO SellerReview VALUES
-   (2, 1, 1, NULL, '20210611 09:24:09 PM');
+   (1, 2, 1, NULL, '20210611 09:24:09 PM');
