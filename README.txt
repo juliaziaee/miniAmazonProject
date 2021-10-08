@@ -25,5 +25,6 @@ Everyone worked together to sketch an E/R diagram and discuss big picture aspect
 Our [Gitlab Repository] (https://gitlab.oit.duke.edu/databosses/mini-amazon-skeleton)
 
 To Create and Load Data into Database:
-~/shared/final/mini-amazon-skeleton/db$ dropdb amazon; createdb amazon; psql amazon -af create.sql~/shared/final/mini-amazon-skeleton/db$ dropdb amazon; createdb amazon; psql amazon -af create.sql
+Inside of the VM terminal, cd to the db folder of the final project and run the following commands.
+~/shared/final/mini-amazon-skeleton/db$ dropdb amazon; createdb amazon; psql amazon -af create.sql;
 ~/shared/final/mini-amazon-skeleton/db$ psql amazon -af load.sql
