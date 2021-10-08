@@ -5,7 +5,7 @@ CREATE TABLE Users (
     password VARCHAR(256) NOT NULL,
     firstname VARCHAR(256) NOT NULL,
     lastname VARCHAR(256) NOT NULL,
-    balance INT NOT NULL,
+    balance FLOAT NOT NULL,
     address VARCHAR(255) NOT NULL
 );
 
@@ -88,20 +88,20 @@ CREATE TABLE SellerReview (
 CREATE FUNCTION TF_Balance() RETURNS TRIGGER AS $$
 BEGIN
  -- check to see if balance is sufficient for purchase
-IF EXISTS(SELECT * FROM User
+IF EXISTS(SELECT * FROM Users, Purchases
     WHERE uid = NEW.uid AND (NEW.finalUnitPrice * NEW.quantity >= balance)) THEN
     RAISE EXCEPTION 'You do not have enough in your balance to complete this purchase';
 END IF;
  -- deduct cost of purchase from balance
-IF EXISTS(SELECT * FROM User
+IF EXISTS(SELECT * FROM Users, purchases
     WHERE uid = NEW.uid) THEN
     UPDATE balance set balance = balance - (NEW.finalUnitPrice * NEW.quantity);
 END IF;
 -- Removes items from cart if they have been purchased (i.e. the item is now being moved to purchase table)
 IF EXISTS(SELECT * FROM Cart
-    WHERE uid = NEW.uid AND pid = NEW.pid AND sid = NEW.sid)
+    WHERE uid = NEW.uid AND pid = NEW.pid)
   THEN
-    DELETE FROM Cart WHERE uid = NEW.uid AND pid = NEW.pid AND sid = NEW.sid;
+    DELETE FROM Cart WHERE uid = NEW.uid AND pid = NEW.pid;
   END IF;
 RETURN NEW;
 END;
@@ -110,8 +110,8 @@ $$ LANGUAGE plpgsql;
 -- Ensures there is enough inventory for the user to purchase the item
 CREATE FUNCTION TF_Inventory() RETURNS TRIGGER AS $$
 BEGIN
-    IF EXISTS(SELECT * FROM Products
-        WHERE productID = NEW.uid AND SellerID = NEW.SellerID AND inventory- quantity<0) THEN
+    IF EXISTS(SELECT * FROM Products, Purchases
+        WHERE productID = NEW.uid AND Purchases.SellerID = NEW.SellerID AND inventory- quantity<0) THEN
         RAISE EXCEPTION '% does not have the desired amount in stock', NEW.uid;
     END IF;
     RETURN NEW;
