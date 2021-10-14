@@ -152,6 +152,7 @@ CREATE VIEW cartTotalPrice(uid, totalPrice) AS
         (SELECT Cart.uid, (Cart.quantity * t1.unitPrice) AS itemTotal FROM Cart JOIN 
             (SELECT productId, unitPrice FROM Products) AS t1 ON Cart.pid = t1.productId) AS t2
     GROUP BY t2.uid;
+    
 
  
 
