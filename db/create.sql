@@ -129,6 +129,19 @@ BEFORE INSERT ON Purchases
    FOR EACH ROW
    EXECUTE PROCEDURE TF_Balance();
 
- 
+ -- Ensures that customer actually bought product from seller before review
+CREATE FUNCTION TF_SellerReview() RETURNS TRIGGER AS $$
+BEGIN
+    IF NOT EXISTS(SELECT * FROM Purchases
+        WHERE uid = NEW.uid AND SellerID = NEW.SellerID) THEN
+        RAISE EXCEPTION '% has not purchased a product from %', NEW.uid, NEW.sid;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-
+-- Trigger checking that reviewer has purchased from seller
+CREATE TRIGGER TG_SellerReview
+BEFORE INSERT ON SellerReview
+    FOR EACH ROW
+    EXECUTE PROCEDURE TF_SellerReview();
