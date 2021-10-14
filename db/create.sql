@@ -145,3 +145,15 @@ CREATE TRIGGER TG_SellerReview
 BEFORE INSERT ON SellerReview
     FOR EACH ROW
     EXECUTE PROCEDURE TF_SellerReview();
+
+--  List total cost of all items currently in each users cart
+CREATE VIEW cartTotalPrice(uid, totalPrice) AS
+    SELECT t2.uid, SUM(t2.itemTotal) AS totalPrice FROM 
+        (SELECT Cart.uid, (Cart.quantity * t1.unitPrice) AS itemTotal FROM Cart JOIN 
+            (SELECT productId, unitPrice FROM Products) AS t1 ON Cart.pid = t1.productId) AS t2
+    GROUP BY t2.uid;
+    
+
+ 
+
+
