@@ -174,8 +174,24 @@ AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_validCartQuantity();
 
+<<<<<<< db/create.sql
+
+TF_updateInventory() RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Products set inventory = inventory - 1 where productID = NEW.pid and SellerID = new.SellerID;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to update the product inventory after a purchase
+CREATE TRIGGER TG_updateInventory
+AFTER INSERT ON Purchases
+    FOR EACH ROW
+    EXECUTE PROCEDURE TF_updateInventory();
+
 --  Create view page for buyer profile
 CREATE VIEW sellerpage(ID) AS
     SELECT sellerID, email, address 
     FROM Seller, Users 
     WHERE ID = uid;
+
