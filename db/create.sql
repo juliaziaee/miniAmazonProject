@@ -154,6 +154,22 @@ CREATE VIEW cartTotalPrice(uid, totalPrice) AS
     GROUP BY t2.uid;
     
 
- 
+ -- Raises error if quantity of an item existing in someones cart is no longer valid because someone
+ -- else purchased the item and the inventory is now less than the amount in the user's cart
+CREATE FUNCTION TF_validCartQuantity() RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS(SELECT * FROM Cart, Products
+        WHERE Cart.pid = Products.productID AND Cart.sid = Products.SellerID AND
+            Products.productID= NEW.pid AND Products.SellerID = NEW.SellerID AND
+            Cart.quantity > Products.inventory) THEN
+        RAISE EXCEPTION '% can no longer purchase % units of %', Cart.uid, Cart.quantity, Cart.pid;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-
+-- Trigger checking that a recent purchase does not make the existing quantity in anyone's carts invalid
+CREATE TRIGGER TG_validCartQuantity
+AFTER INSERT ON Purchases
+    FOR EACH ROW
+    EXECUTE PROCEDURE TF_validCartQuantity();
