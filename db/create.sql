@@ -174,6 +174,7 @@ AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_validCartQuantity();
 
+<<<<<<< db/create.sql
 
 TF_updateInventory() RETURNS TRIGGER AS $$
 BEGIN
@@ -187,3 +188,10 @@ CREATE TRIGGER TG_updateInventory
 AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_updateInventory();
+
+--  Create view page for buyer profile
+CREATE VIEW sellerpage(ID) AS
+    SELECT sellerID, email, address 
+    FROM Seller, Users 
+    WHERE ID = uid;
+
