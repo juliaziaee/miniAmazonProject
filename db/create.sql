@@ -173,3 +173,17 @@ CREATE TRIGGER TG_validCartQuantity
 AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_validCartQuantity();
+
+
+TF_updateInventory() RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Products set inventory = inventory - 1 where productID = NEW.pid and SellerID = new.SellerID;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to update the product inventory after a purchase
+CREATE TRIGGER TG_updateInventory
+AFTER INSERT ON Purchases
+    FOR EACH ROW
+    EXECUTE PROCEDURE TF_updateInventory();

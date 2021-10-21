@@ -31,3 +31,6 @@ INSERT INTO ProductReview VALUES
  
 INSERT INTO SellerReview VALUES
    (1, 2, 1, NULL, '20210611 09:24:09 PM');
+   
+INSERT INTO SellerReview VALUES
+   (2, 5, 4, NULL, '20210611 09:24:09 PM');
