@@ -173,3 +173,9 @@ CREATE TRIGGER TG_validCartQuantity
 AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_validCartQuantity();
+
+--  Create view page for buyer profile
+CREATE VIEW sellerpage(ID) AS
+    SELECT sellerID, email, address 
+    FROM Seller, Users 
+    WHERE ID = uid;
