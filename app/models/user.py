@@ -42,14 +42,17 @@ WHERE email = :email
     def register(email, password, firstname, lastname):
         try:
             rows = app.db.execute("""
-INSERT INTO Users(email, password, firstname, lastname)
-VALUES(:email, :password, :firstname, :lastname)
+INSERT INTO Users(email, password, firstname, lastname, balance, address)
+VALUES(:email, :password, :firstname, :lastname, :balance, :address)
 RETURNING id
 """,
                                   email=email,
                                   password=generate_password_hash(password),
                                   firstname=firstname,
-                                  lastname=lastname)
+                                  lastname=lastname,
+                                  balance = 0.0,
+                                  address = 'NA')
+
             id = rows[0][0]
             return User.get(id)
         except Exception:
