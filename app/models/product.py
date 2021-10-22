@@ -20,7 +20,7 @@ WHERE id = :productID
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT productID, name, unitPrice, inventory
+SELECT productID, name, unitPrice
 FROM Products
 ''',)
         return [Product(*row) for row in rows]
