@@ -1,5 +1,5 @@
 from flask import current_app as app
-
+from flask import Flask, render_template
 
 class Product:
     def __init__(self, id, name, price):
