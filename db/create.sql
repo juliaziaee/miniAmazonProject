@@ -82,6 +82,15 @@ CREATE TABLE SellerReview (
 	PRIMARY KEY(uid, sid)
 	
 );
+
+-- Stores conversations between seller and user 
+CREATE TABLE Messages (
+	uid INT NOT NULL REFERENCES USERS(id),
+	sid INT NOT NULL REFERENCES SELLER(SellerId),
+	message VARCHAR(256),
+	MessageDateTime timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
+	PRIMARY KEY(uid, sid, MessageDateTime)
+);
  
 -- trigger to check that the user has enough in their balance to make a purchase and deducts
 -- cost of purchase from balance when possible
@@ -178,7 +187,7 @@ AFTER INSERT ON Purchases
 
 TF_updateInventory() RETURNS TRIGGER AS $$
 BEGIN
-    UPDATE Products set inventory = inventory - 1 where productID = NEW.pid and SellerID = new.SellerID;
+    UPDATE Products set inventory = inventory - NEW.quantity where productID = NEW.pid and SellerID = new.SellerID;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -194,4 +203,5 @@ CREATE VIEW sellerpage(ID) AS
     SELECT sellerID, email, address 
     FROM Seller, Users 
     WHERE ID = uid;
+
 
