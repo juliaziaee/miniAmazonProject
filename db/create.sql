@@ -5,8 +5,11 @@ CREATE TABLE Users (
     password VARCHAR(256) NOT NULL,
     firstname VARCHAR(256) NOT NULL,
     lastname VARCHAR(256) NOT NULL,
-    balance FLOAT NOT NULL,
-    address VARCHAR(255) NOT NULL
+    street1 VARCHAR(256) NOT NULL, 
+    street2 VARCHAR(256), 
+    city VARCHAR(256) NOT NULL, 
+    state VARCHAR(256) NOT NULL, 
+    zip VARCHAR(5) NOT NULL
 );
 
 -- Keeps track of which users are sellers
