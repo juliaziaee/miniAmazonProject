@@ -9,7 +9,7 @@ CREATE TABLE Users (
     street2 VARCHAR(256), 
     city VARCHAR(256) NOT NULL, 
     state VARCHAR(256) NOT NULL, 
-    zip INT NOT NULL
+    zip VARCHAR(5) NOT NULL
 );
 
 -- Keeps track of which users are sellers

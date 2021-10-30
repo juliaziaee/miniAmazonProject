@@ -54,7 +54,7 @@ RETURNING id
                                   street2 = 'NA',
                                   city = 'NA',
                                   state = 'NA',
-                                  zip = 00000)
+                                  zip = '00000')
 
             id = rows[0][0]
             return User.get(id)
