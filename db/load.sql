@@ -11,8 +11,8 @@
 -- populate sample data using insert statements (does not conflict with above data)
 
 INSERT INTO Users VALUES
-   (1, 'clara.lyra@duke.edu', 'pass1', 'Clara', 'Lyra', '123 Erwin Road Durham NC'),
-   (2, 'julia.ziaee@duke.edu', 'hhixy', 'Julia', 'Ziaee', '300 Swift Ave Durham NC');
+   (1, 'clara.lyra@duke.edu', 'pass1', 'Clara', 'Lyra', '123 Erwin Road', NULL, 'Durham', 'NC', 27705),
+   (2, 'julia.ziaee@duke.edu', 'hhixy', 'Julia', 'Ziaee', '300 Swift Ave', NULL, 'Durham', 'NC', 27705);
  
 INSERT INTO Seller VALUES
    (1), (2);
