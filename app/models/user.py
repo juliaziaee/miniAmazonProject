@@ -50,7 +50,7 @@ RETURNING id
                                   password=generate_password_hash(password),
                                   firstname=firstname,
                                   lastname=lastname,
-                                  street1 = 0.0,
+                                  street1 = 'NA',
                                   street2 = 'NA',
                                   city = 'NA',
                                   state = 'NA',
