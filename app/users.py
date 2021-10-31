@@ -3,7 +3,7 @@ from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
@@ -48,6 +48,12 @@ class RegistrationForm(FlaskForm):
         _l('Repeat Password'), validators=[DataRequired(),
                                            EqualTo('password')])
     submit = SubmitField(_l('Register'))
+    street1 = StringField(_l('Street Line 1'), validators=[DataRequired()])
+    street2 = StringField(_l('Street Line 2'))
+    city = StringField(_l('City'), validators=[DataRequired()])
+    state = StringField(_l('State'), validators=[DataRequired()])
+    zip = StringField(_l('Postal Code'), validators=[DataRequired(), Length(min=5, max=5)])
+
 
     def validate_email(self, email):
         if User.email_exists(email.data):
@@ -63,7 +69,12 @@ def register():
         if User.register(form.email.data,
                          form.password.data,
                          form.firstname.data,
-                         form.lastname.data):
+                         form.lastname.data,
+                         form.street1.data,
+                         form.street2.data,
+                         form.city.data,
+                         form.state.data,
+                         form.zip.data):
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('users.login'))
     return render_template('register.html', title='Register', form=form)
