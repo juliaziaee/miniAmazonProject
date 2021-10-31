@@ -212,5 +212,3 @@ CREATE VIEW sellerpage(ID) AS
     SELECT sellerID, email, street1, street2, city, state, zip 
     FROM Seller, Users 
     WHERE id = sellerID;
-
-
