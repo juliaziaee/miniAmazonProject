@@ -12,13 +12,12 @@ CREATE TABLE Users (
     zip VARCHAR(5) NOT NULL
 );
 
---Track when user adds money to their account
+--Track when user adds or subtracts money to/from their account
 CREATE TABLE Funding (
     id INT NOT NULL PRIMARY KEY, 
     FOREIGN KEY (id) REFERENCES Users(id),
     transactionDT timestamp without time zone NOT NULL DEFAULT (current_timestamp AT  TIME ZONE 'UTC'),
-    amount FLOAT NOT NULL,
-    CHECK(amount > 0.0)
+    amount FLOAT NOT NULL
 );
 
 -- Keeps track of which users are sellers
@@ -104,29 +103,35 @@ CREATE TABLE Messages (
 	PRIMARY KEY(uid, sid, MessageDateTime)
 );
  
--- trigger to check that the user has enough in their balance to make a purchase and deducts
--- cost of purchase from balance when possible
-CREATE FUNCTION TF_Balance() RETURNS TRIGGER AS $$
-BEGIN
- -- check to see if balance is sufficient for purchase
-IF EXISTS(SELECT * FROM Users, Purchases
-    WHERE uid = NEW.uid AND (NEW.finalUnitPrice * NEW.quantity >= balance)) THEN
-    RAISE EXCEPTION 'You do not have enough in your balance to complete this purchase';
-END IF;
- -- deduct cost of purchase from balance
-IF EXISTS(SELECT * FROM Users, purchases
-    WHERE uid = NEW.uid) THEN
-    UPDATE balance set balance = balance - (NEW.finalUnitPrice * NEW.quantity);
-END IF;
--- Removes items from cart if they have been purchased (i.e. the item is now being moved to purchase table)
-IF EXISTS(SELECT * FROM Cart
-    WHERE uid = NEW.uid AND pid = NEW.pid)
-  THEN
-    DELETE FROM Cart WHERE uid = NEW.uid AND pid = NEW.pid;
-  END IF;
-RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+-- -- trigger to check that the user has enough in their balance to make a purchase and deducts
+-- -- cost of purchase from balance when possible
+-- CREATE FUNCTION TF_Balance() RETURNS TRIGGER AS $$
+-- BEGIN
+--  -- check to see if balance is sufficient for purchase
+-- IF EXISTS(SELECT * FROM Users, Purchases
+--     WHERE uid = NEW.uid AND (NEW.finalUnitPrice * NEW.quantity >= balance)) THEN
+--     RAISE EXCEPTION 'You do not have enough in your balance to complete this purchase';
+-- END IF;
+--  -- deduct cost of purchase from balance
+-- IF EXISTS(SELECT * FROM Users, purchases
+--     WHERE uid = NEW.uid) THEN
+--     UPDATE balance set balance = balance - (NEW.finalUnitPrice * NEW.quantity);
+-- END IF;
+-- -- Removes items from cart if they have been purchased (i.e. the item is now being moved to purchase table)
+-- IF EXISTS(SELECT * FROM Cart
+--     WHERE uid = NEW.uid AND pid = NEW.pid)
+--   THEN
+--     DELETE FROM Cart WHERE uid = NEW.uid AND pid = NEW.pid;
+--   END IF;
+-- RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- -- Makes sure user has enough balance to purchase the order and moves items in the order out of their cart
+-- CREATE TRIGGER TG_Balance
+-- BEFORE INSERT ON Purchases
+--    FOR EACH ROW
+--    EXECUTE PROCEDURE TF_Balance();
 
 -- Ensures there is enough inventory for the user to purchase the item
 CREATE FUNCTION TF_Inventory() RETURNS TRIGGER AS $$
@@ -143,18 +148,12 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER TF_Inventory  
 BEFORE INSERT OR UPDATE ON Purchases
   FOR EACH ROW  EXECUTE PROCEDURE TF_Inventory();
- 
--- Makes sure user has enough balance to purchase the order and moves items in the order out of their cart
-CREATE TRIGGER TG_Balance
-BEFORE INSERT ON Purchases
-   FOR EACH ROW
-   EXECUTE PROCEDURE TF_Balance();
 
  -- Ensures that customer actually bought product from seller before review
 CREATE FUNCTION TF_SellerReview() RETURNS TRIGGER AS $$
 BEGIN
     IF NOT EXISTS(SELECT * FROM Purchases
-        WHERE uid = NEW.uid AND SellerID = NEW.SellerID) THEN
+        WHERE uid = NEW.uid AND sid = NEW.sid THEN
         RAISE EXCEPTION '% has not purchased a product from %', NEW.uid, NEW.sid;
     END IF;
     RETURN NEW;
