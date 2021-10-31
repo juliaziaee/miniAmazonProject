@@ -49,7 +49,7 @@ class RegistrationForm(FlaskForm):
                                            EqualTo('password')])
     submit = SubmitField(_l('Register'))
     street1 = StringField(_l('Street Line 1'), validators=[DataRequired()])
-    street2 = StringField(_l('Street Line 2'), validators=[DataRequired()])
+    street2 = StringField(_l('Street Line 2'))
     city = StringField(_l('City'), validators=[DataRequired()])
     state = StringField(_l('State'), validators=[DataRequired()])
     zip = StringField(_l('Postal Code'), validators=[DataRequired(), Length(min=5, max=5)])
@@ -69,7 +69,12 @@ def register():
         if User.register(form.email.data,
                          form.password.data,
                          form.firstname.data,
-                         form.lastname.data):
+                         form.lastname.data,
+                         form.street1.data,
+                         form.street2.data,
+                         form.city.data,
+                         form.state.data,
+                         form.zip.data):
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('users.login'))
     return render_template('register.html', title='Register', form=form)
