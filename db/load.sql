@@ -3,6 +3,7 @@
 \COPY Users FROM 'data/UsersGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY Seller FROM 'data/SellerGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY Products FROM 'data/ProductsGenerated.csv' WITH DELIMITER ',' NULL '' CSV
+\COPY Funding FROM 'data/FundingGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY Purchases FROM 'data/PurchasesGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY Cart FROM 'data/CartGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 -- \COPY SellerReview FROM 'data/SellerReview.csv' WITH DELIMITER ',' NULL '' CSV

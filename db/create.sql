@@ -14,10 +14,11 @@ CREATE TABLE Users (
 
 --Track when user adds or subtracts money to/from their account
 CREATE TABLE Funding (
-    id INT NOT NULL PRIMARY KEY, 
+    id INT NOT NULL, 
     FOREIGN KEY (id) REFERENCES Users(id),
     transactionDT timestamp without time zone NOT NULL DEFAULT (current_timestamp AT  TIME ZONE 'UTC'),
-    amount FLOAT NOT NULL DEFAULT (0)
+    amount FLOAT NOT NULL DEFAULT (0),
+    PRIMARY KEY(id, transactionDT)
 );
 
 -- Keeps track of which users are sellers
@@ -216,9 +217,9 @@ CREATE VIEW sellerpage(ID) AS
 --  Create view page to get each user's current balance
 CREATE VIEW userBalance(id, amount) AS
     SELECT Users.id, COALESCE(balances.balance, 0) AS amount FROM Users LEFT JOIN 
-        (SELECT fund.id, fund.totFund - COALESCE(purch.totPurch, 0) AS balance FROM 
+        (SELECT fund.id, (fund.totFund - COALESCE(purch.totPurch, 0)) AS balance FROM 
             (SELECT id, SUM(amount) AS totFund FROM Funding GROUP BY id) AS fund 
-        LEFT JOIN 
+        FULL OUTER JOIN 
             (SELECT uid, SUM(finalUnitPrice * quantity) AS totPurch FROM Purchases GROUP BY uid) AS purch
         ON fund.id = purch.uid) AS balances
     ON Users.id = balances.id;
