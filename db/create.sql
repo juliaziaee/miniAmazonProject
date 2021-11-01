@@ -17,7 +17,7 @@ CREATE TABLE Funding (
     id INT NOT NULL PRIMARY KEY, 
     FOREIGN KEY (id) REFERENCES Users(id),
     transactionDT timestamp without time zone NOT NULL DEFAULT (current_timestamp AT  TIME ZONE 'UTC'),
-    amount FLOAT NOT NULL
+    amount FLOAT NOT NULL DEFAULT (0)
 );
 
 -- Keeps track of which users are sellers
@@ -153,7 +153,7 @@ BEFORE INSERT OR UPDATE ON Purchases
 CREATE FUNCTION TF_SellerReview() RETURNS TRIGGER AS $$
 BEGIN
     IF NOT EXISTS(SELECT * FROM Purchases
-        WHERE uid = NEW.uid AND sid = NEW.sid THEN
+        WHERE uid = NEW.uid AND sid = NEW.sid) THEN
         RAISE EXCEPTION '% has not purchased a product from %', NEW.uid, NEW.sid;
     END IF;
     RETURN NEW;
@@ -212,3 +212,29 @@ CREATE VIEW sellerpage(ID) AS
     SELECT sellerID, email, street1, street2, city, state, zip 
     FROM Seller, Users 
     WHERE id = sellerID;
+
+--  Create view page to get each user's current balance
+CREATE VIEW userBalance(id, amount) AS
+    SELECT Users.id, COALESCE(balances.balance, 0) AS amount FROM Users LEFT JOIN 
+        (SELECT fund.id, fund.totFund - COALESCE(purch.totPurch, 0) AS balance FROM 
+            (SELECT id, SUM(amount) AS totFund FROM Funding GROUP BY id) AS fund 
+        LEFT JOIN 
+            (SELECT uid, SUM(finalUnitPrice * quantity) AS totPurch FROM Purchases GROUP BY uid) AS purch
+        ON fund.id = purch.uid) AS balances
+    ON Users.id = balances.id;
+
+-- Trigger to ensure user has enough balance for purchase to be made
+CREATE FUNCTION TF_balance() RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS(SELECT * FROM userBalance WHERE 
+        id = NEW.uid AND amount < (NEW.quantity * NEW.finalUnitPrice)) THEN
+        RAISE EXCEPTION 'User % has insufficient funds for purchase', NEW.uid;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TG_balance
+BEFORE INSERT ON Purchases
+    FOR EACH ROW
+    EXECUTE PROCEDURE TF_balance();
