@@ -54,11 +54,15 @@ class RegistrationForm(FlaskForm):
     state = StringField(_l('State'), validators=[DataRequired()])
     zip = StringField(_l('Postal Code'), validators=[DataRequired(), Length(min=5, max=5)])
 
-
     def validate_email(self, email):
         if User.email_exists(email.data):
             raise ValidationError(_('Already a user with this email.'))
 
+class CreateForm(FlaskForm):
+    productID = StringField(_l('Product ID'), validators=[DataRequired()])
+    productName = StringField(_l('Product Name'), validators=[DataRequired()])
+    price = StringField(_l('Price'), validators=[DataRequired()])
+    submit = SubmitField(_l('Create'))
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -84,3 +88,22 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index.index'))
+
+@bp.route("/cart")
+def cart():
+    return render_template("cart.html", title="Home page")
+
+@bp.route("/inventory")
+def inventory():
+    return render_template("inventory.html", title="Home page")
+
+@bp.route("/home")
+def home():
+    return render_template("index.html", title="Home page")
+
+@bp.route("/create", methods=['GET', 'POST'])
+def create():
+    form = CreateForm()
+    return render_template('create.html', title='Create', form=form)
+
+
