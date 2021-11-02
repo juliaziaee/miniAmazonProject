@@ -73,16 +73,16 @@ def createFunding():
         fund.append(dt)
         fund.append(amount)
         funding.append(fund)
-        if (random.randint(0, 1)) == 1:
-            deduct = [i]
-            dtplus1 = dt_unformatted + timedelta(days=1)
-            if (dtplus1 < datetime.now()):
-                deduct.append(dtplus1.strftime('%Y-%m-%d %I:%M:%S %p'))
-                amount2 = -abs(amount)
-                if (random.randint(0, 1)) == 1:
-                    amount2 = -abs(round(random.uniform(00.00, amount2), 2))
-                deduct.append(amount2)
-            funding.append(deduct)
+        # if (random.randint(0, 1)) == 1:
+        #     deduct = [i]
+        #     dtplus1 = dt_unformatted + timedelta(days=1)
+        #     if (dtplus1 < datetime.now()):
+        #         deduct.append(dtplus1.strftime('%Y-%m-%d %I:%M:%S %p'))
+        #         amount2 = -abs(amount)
+        #         if (random.randint(0, 1)) == 1:
+        #             amount2 = -abs(round(random.uniform(00.00, amount2), 2))
+        #         deduct.append(amount2)
+        #     funding.append(deduct)
     x = 500-len(funding) # want 500 entries
     users2 = random.sample(range(0, 999), x)
     for i in users2:
@@ -96,6 +96,7 @@ def createFunding():
 
 def createPurchases(funding, products):
     purchases = []
+    users = []
     while len(purchases) < 200:
         purchase = []
         user = random.randint(0, 999)
@@ -116,6 +117,7 @@ def createPurchases(funding, products):
         balance = funds - spent
 
         productindex = random.randint(0, 199)
+        
         if products[productindex][4] <= balance:
             purchase.append(products[productindex][6])
             purchase.append(user)
@@ -125,8 +127,10 @@ def createPurchases(funding, products):
             purchase.append(1)
             purchase.append("fulfilled")
             purchase.append(dtplus1)
-        if purchase != []:
-            purchases.append(purchase)
+        if user not in users:
+            if purchase != []:
+                purchases.append(purchase)
+                users.append(user)
 
     return purchases
 
