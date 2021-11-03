@@ -39,17 +39,23 @@ WHERE email = :email
         return len(rows) > 0
 
     @staticmethod
-    def register(email, password, firstname, lastname):
+    def register(email, password, firstname, lastname, street1, street2, city, state, zip):
         try:
             rows = app.db.execute("""
-INSERT INTO Users(email, password, firstname, lastname)
-VALUES(:email, :password, :firstname, :lastname)
+INSERT INTO Users(email, password, firstname, lastname, street1, street2, city, state, zip)
+VALUES(:email, :password, :firstname, :lastname, :street1, :street2, :city, :state, :zip)
 RETURNING id
 """,
                                   email=email,
                                   password=generate_password_hash(password),
                                   firstname=firstname,
-                                  lastname=lastname)
+                                  lastname=lastname,
+                                  street1 = street1,
+                                  street2 = street2,
+                                  city = city,
+                                  state = state,
+                                  zip = zip)
+
             id = rows[0][0]
             return User.get(id)
         except Exception:
