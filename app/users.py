@@ -97,7 +97,11 @@ def cart():
 def inventory():
     return render_template("inventory.html", title="Home page")
 
-@bp.route("/home")
+@bp.route("/accountdetails")
+def accountdetails():
+    return render_template("accountdetails.html", title="Home page")
+
+@bp.route("/")
 def home():
     return render_template("index.html", title="Home page")
 
