@@ -141,8 +141,10 @@ def accountdetails():
 
 @bp.route("/accountbalance")
 def accountbalance():
-    userbal = Balance.getBalance(current_user.id)
-    return render_template("accountbalance.html", title="Home page", balance=userbal)
+    if current_user.is_authenticated:
+        userbal = Balance.getBalance(current_user.id)
+        return render_template("accountbalance.html", title="Account Balance", balance=userbal)
+    else: return render_template("accountbalance.html", title="Account Balance")
 
 
 ## MOVE THIS OUT OF THIS FILE ##
