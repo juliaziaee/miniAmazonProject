@@ -4,6 +4,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .. import login
 
+class Balance:
+    def __init__(self, id, amount):
+        self.id = id
+        self.amount = amount
+
+    @staticmethod
+    def getBalance(id):
+        rows = app.db.execute("""
+SELECT id, amount
+FROM userBalance
+WHERE id = :id
+""",
+            id=id)
+        return [Balance(*row) for row in rows]
+
 
 class User(UserMixin):
     def __init__(self, id, email, firstname, lastname, street1, street2, city, state, zip):
