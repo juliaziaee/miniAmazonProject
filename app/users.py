@@ -19,7 +19,6 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField(_l('Remember Me'))
     submit = SubmitField(_l('Sign In'))
 
-
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -58,12 +57,6 @@ class RegistrationForm(FlaskForm):
         if User.email_exists(email.data):
             raise ValidationError(_('Already a user with this email.'))
 
-class CreateForm(FlaskForm):
-    productID = StringField(_l('Product ID'), validators=[DataRequired()])
-    productName = StringField(_l('Product Name'), validators=[DataRequired()])
-    price = StringField(_l('Price'), validators=[DataRequired()])
-    submit = SubmitField(_l('Create'))
-
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -84,10 +77,51 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
+class UpdatePasswordForm(FlaskForm):
+    old_password = PasswordField(_l('Old Password'), validators=[DataRequired()])
+    new_password = PasswordField(_l('New Password'), validators=[DataRequired()])
+    new_password2 = PasswordField(
+        _l('Repeat New Password'), validators=[DataRequired(),
+                                           EqualTo('new_password2')])
+    submit = SubmitField(_l('Update Password'))
+
+@bp.route("/updatepassword", methods=['GET', 'POST'])
+def updatepassword():
+    form = UpdatePasswordForm()
+    if form.validate_on_submit():
+        return redirect(url_for('users.accountdetails'))
+        # NEED TO ADD FUNCTIONALITY
+    return render_template('updatepassword.html', title='Register', form=form)
+
+
 @bp.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index.index'))
+
+
+@bp.route("/accountdetails")
+def accountdetails():
+    return render_template("accountdetails.html", title="Home page")
+
+
+## MOVE THIS OUT OF THIS FILE ##
+
+@bp.route("/")
+def home():
+    return render_template("index.html", title="Home page")
+
+
+class CreateForm(FlaskForm):
+    productID = StringField(_l('Product ID'), validators=[DataRequired()])
+    productName = StringField(_l('Product Name'), validators=[DataRequired()])
+    price = StringField(_l('Price'), validators=[DataRequired()])
+    submit = SubmitField(_l('Create'))
+
+@bp.route("/create", methods=['GET', 'POST'])
+def create():
+    form = CreateForm()
+    return render_template('create.html', title='Create', form=form)
 
 @bp.route("/cart")
 def cart():
@@ -96,18 +130,3 @@ def cart():
 @bp.route("/inventory")
 def inventory():
     return render_template("inventory.html", title="Home page")
-
-@bp.route("/accountdetails")
-def accountdetails():
-    return render_template("accountdetails.html", title="Home page")
-
-@bp.route("/")
-def home():
-    return render_template("index.html", title="Home page")
-
-@bp.route("/create", methods=['GET', 'POST'])
-def create():
-    form = CreateForm()
-    return render_template('create.html', title='Create', form=form)
-
-
