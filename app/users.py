@@ -8,6 +8,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Le
 from flask_babel import _, lazy_gettext as _l
 
 from .models.user import User
+from .models.user import Balance
 
 
 from flask import Blueprint
@@ -140,7 +141,10 @@ def accountdetails():
 
 @bp.route("/accountbalance")
 def accountbalance():
-    return render_template("accountbalance.html", title="Home page")
+    if current_user.is_authenticated:
+        userbal = Balance.getBalance(current_user.id)
+        return render_template("accountbalance.html", title="Account Balance", balance=userbal)
+    else: return render_template("accountbalance.html", title="Account Balance")
 
 
 ## MOVE THIS OUT OF THIS FILE ##
