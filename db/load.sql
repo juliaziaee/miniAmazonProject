@@ -1,6 +1,7 @@
 -- populate sample data using csvs
 
 \COPY Users FROM 'data/UsersGenerated.csv' WITH DELIMITER ',' NULL '' CSV
+SELECT pg_catalog.setval('public.users_id_seq', 1000, false);
 \COPY Seller FROM 'data/SellerGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY Products FROM 'data/ProductsGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY Funding FROM 'data/FundingGenerated.csv' WITH DELIMITER ',' NULL '' CSV
