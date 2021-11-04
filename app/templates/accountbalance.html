@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Account Balance</h1>
+
+{% if current_user.is_authenticated %}
+
+{% else %}
+<p><a href="{{ url_for('users.login') }}">Log in</a> to see your account balance!</p>
+{% endif %}
+
+{% endblock %}

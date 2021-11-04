@@ -138,6 +138,10 @@ def logout():
 def accountdetails():
     return render_template("accountdetails.html", title="Home page")
 
+@bp.route("/accountbalance")
+def accountbalance():
+    return render_template("accountbalance.html", title="Home page")
+
 
 ## MOVE THIS OUT OF THIS FILE ##
 
