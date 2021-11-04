@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request
+from flask.app import Flask
 from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -91,7 +92,40 @@ def updatepassword():
     if form.validate_on_submit():
         return redirect(url_for('users.accountdetails'))
         # NEED TO ADD FUNCTIONALITY
-    return render_template('updatepassword.html', title='Register', form=form)
+    return render_template('updatepassword.html', title='Update Password', form=form)
+
+
+class UpdateUserInfoForm(FlaskForm):
+    firstname = StringField(_l('First Name'), validators=[DataRequired()])
+    lastname = StringField(_l('Last Name'), validators=[DataRequired()])
+    email = StringField(_l('Email'), validators=[DataRequired(), Email()])
+    street1 = StringField(_l('Street Line 1'), validators=[DataRequired()])
+    street2 = StringField(_l('Street Line 2'))
+    city = StringField(_l('City'), validators=[DataRequired()])
+    state = StringField(_l('State'), validators=[DataRequired()])
+    zip = StringField(_l('Postal Code'), validators=[DataRequired(), Length(min=5, max=5)])
+    submit = SubmitField(_l('Update'))
+
+    # def validate_email(self, email):
+    #     if User.email_exists(email.data):
+    #         raise ValidationError(_('Already a user with this email.'))
+
+@bp.route('/updateuserinfo', methods=['GET', 'POST'])
+def updateuserinfo():
+    form = UpdateUserInfoForm()
+    # if form.validate_on_submit():
+    #     if User.register(form.email.data,
+    #                      form.password.data,
+    #                      form.firstname.data,
+    #                      form.lastname.data,
+    #                      form.street1.data,
+    #                      form.street2.data,
+    #                      form.city.data,
+    #                      form.state.data,
+    #                      form.zip.data):
+    #         flash('Congratulations, you are now a registered user!')
+    #         return redirect(url_for('users.login'))
+    return render_template('updateuserinfo.html', title='Update Information', form=form)
 
 
 @bp.route('/logout')
