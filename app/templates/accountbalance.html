@@ -3,9 +3,33 @@
 {% block content %}
 
 <h1>Account Balance</h1>
-
 {% if current_user.is_authenticated %}
-<p>{{balance[0].amount}}</p>
+<h2>{{balance[0].amount}}</h2>
+<br></br>
+<h3>Add Funds</h3>
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+    <p>
+    {{ form.amount.label }}<br/>
+    {{ form.amount(size=32) }}<br/>
+    {% for error in form.amount.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>{{ form.submit() }}</p>
+</form>
+<h3>Deduct Funds</h3>
+<form action="" method="post">
+  {{ form.hidden_tag() }}
+    <p>
+    {{ form.amount.label }}<br/>
+    {{ form.amount(size=32) }}<br/>
+    {% for error in form.amount.errors %}
+    <span style="color: red;">[{{ error }}]</span>
+    {% endfor %}
+  </p>
+  <p>{{ form.submit() }}</p>
+</form>
 
 
 {% else %}

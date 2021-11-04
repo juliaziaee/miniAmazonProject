@@ -139,11 +139,15 @@ def logout():
 def accountdetails():
     return render_template("accountdetails.html", title="Home page")
 
+class Funds(FlaskForm):
+    amount = StringField(_l('Amount'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
+
 @bp.route("/accountbalance")
 def accountbalance():
     if current_user.is_authenticated:
         userbal = Balance.getBalance(current_user.id)
-        return render_template("accountbalance.html", title="Account Balance", balance=userbal)
+        return render_template("accountbalance.html", title="Account Balance", balance=userbal, form = Funds())
     else: return render_template("accountbalance.html", title="Account Balance")
 
 
