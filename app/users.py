@@ -157,28 +157,3 @@ def accountbalance():
     else: return render_template("accountbalance.html", title="Account Balance")
 
 
-## MOVE THIS OUT OF THIS FILE ##
-
-@bp.route("/")
-def home():
-    return render_template("index.html", title="Home page")
-
-
-class CreateForm(FlaskForm):
-    productID = StringField(_l('Product ID'), validators=[DataRequired()])
-    productName = StringField(_l('Product Name'), validators=[DataRequired()])
-    price = StringField(_l('Price'), validators=[DataRequired()])
-    submit = SubmitField(_l('Create'))
-
-@bp.route("/create", methods=['GET', 'POST'])
-def create():
-    form = CreateForm()
-    return render_template('create.html', title='Create', form=form)
-
-@bp.route("/cart")
-def cart():
-    return render_template("cart.html", title="Home page")
-
-@bp.route("/inventory")
-def inventory():
-    return render_template("inventory.html", title="Home page")
