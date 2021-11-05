@@ -6,6 +6,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from flask_babel import _, lazy_gettext as _l
+from datetime import datetime
+
 
 from .models.user import User
 from .models.user import Balance
@@ -143,36 +145,15 @@ class Funds(FlaskForm):
     amount = StringField(_l('Amount'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
-@bp.route("/accountbalance")
+@bp.route("/accountbalance", methods=['GET', 'POST'])
 def accountbalance():
     if current_user.is_authenticated:
         userbal = Balance.getBalance(current_user.id)
-        return render_template("accountbalance.html", title="Account Balance", balance=userbal, form = Funds())
+        form = Funds()
+        if form.validate_on_submit():
+            if Balance.updateBalance(current_user.id, datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'), form.amount.data):
+                return redirect(url_for('users.accountbalance'))
+        return render_template("accountbalance.html", title="Account Balance", balance=userbal, form=form)
     else: return render_template("accountbalance.html", title="Account Balance")
 
 
-## MOVE THIS OUT OF THIS FILE ##
-
-@bp.route("/")
-def home():
-    return render_template("index.html", title="Home page")
-
-
-class CreateForm(FlaskForm):
-    productID = StringField(_l('Product ID'), validators=[DataRequired()])
-    productName = StringField(_l('Product Name'), validators=[DataRequired()])
-    price = StringField(_l('Price'), validators=[DataRequired()])
-    submit = SubmitField(_l('Create'))
-
-@bp.route("/create", methods=['GET', 'POST'])
-def create():
-    form = CreateForm()
-    return render_template('create.html', title='Create', form=form)
-
-@bp.route("/cart")
-def cart():
-    return render_template("cart.html", title="Home page")
-
-@bp.route("/inventory")
-def inventory():
-    return render_template("inventory.html", title="Home page")
