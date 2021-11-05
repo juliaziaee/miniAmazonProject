@@ -6,6 +6,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from flask_babel import _, lazy_gettext as _l
+from datetime import datetime
+
 
 from .models.user import User
 from .models.user import Balance
@@ -143,11 +145,15 @@ class Funds(FlaskForm):
     amount = StringField(_l('Amount'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
-@bp.route("/accountbalance")
+@bp.route("/accountbalance", methods=['GET', 'POST'])
 def accountbalance():
     if current_user.is_authenticated:
         userbal = Balance.getBalance(current_user.id)
-        return render_template("accountbalance.html", title="Account Balance", balance=userbal, form = Funds())
+        form = Funds()
+        if form.validate_on_submit():
+            if Balance.updateBalance(current_user.id, datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'), form.amount.data):
+                return redirect(url_for('users.accountbalance'))
+        return render_template("accountbalance.html", title="Account Balance", balance=userbal, form=form)
     else: return render_template("accountbalance.html", title="Account Balance")
 
 

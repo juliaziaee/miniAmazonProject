@@ -19,6 +19,21 @@ WHERE id = :id
             id=id)
         return [Balance(*row) for row in rows]
 
+    @staticmethod
+    def updateBalance(id, transactionDT, amount):
+        try:
+            rows = app.db.execute("""
+    INSERT INTO Funding(id, transactionDT, amount)
+    VALUES(:id, :transactionDT, :amount)
+    RETURNING id
+    """,
+                id=id,
+                amount=amount,
+                transactionDT=transactionDT)
+            return id
+        except Exception:
+            return None
+
 
 class User(UserMixin):
     def __init__(self, id, email, firstname, lastname, street1, street2, city, state, zip):
