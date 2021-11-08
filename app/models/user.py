@@ -4,18 +4,53 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .. import login
 
+class Balance:
+    def __init__(self, id, amount):
+        self.id = id
+        self.amount = amount
+
+    @staticmethod
+    def getBalance(id):
+        rows = app.db.execute("""
+SELECT id, amount
+FROM userBalance
+WHERE id = :id
+""",
+            id=id)
+        return [Balance(*row) for row in rows]
+
+    @staticmethod
+    def updateBalance(id, transactionDT, amount):
+        try:
+            rows = app.db.execute("""
+    INSERT INTO Funding(id, transactionDT, amount)
+    VALUES(:id, :transactionDT, :amount)
+    RETURNING id
+    """,
+                id=id,
+                amount=amount,
+                transactionDT=transactionDT)
+            return id
+        except Exception:
+            return None
+
 
 class User(UserMixin):
-    def __init__(self, id, email, firstname, lastname):
+    def __init__(self, id, email, firstname, lastname, street1, street2, city, state, zip):
         self.id = id
         self.email = email
         self.firstname = firstname
         self.lastname = lastname
+        self.street1 = street1
+        self.street2 = street2
+        self.city = city
+        self.state = state
+        self.zip = zip
 
     @staticmethod
     def get_by_auth(email, password):
         rows = app.db.execute("""
-SELECT password, id, email, firstname, lastname
+SELECT password, id, email, firstname, lastname, street1, street2, city, state, zip
 FROM Users
 WHERE email = :email
 """,
@@ -39,19 +74,22 @@ WHERE email = :email
         return len(rows) > 0
 
     @staticmethod
-    def register(email, password, firstname, lastname):
+    def register(email, password, firstname, lastname, street1, street2, city, state, zip):
         try:
             rows = app.db.execute("""
-INSERT INTO Users(email, password, firstname, lastname, balance, address)
-VALUES(:email, :password, :firstname, :lastname, :balance, :address)
+INSERT INTO Users(email, password, firstname, lastname, street1, street2, city, state, zip)
+VALUES(:email, :password, :firstname, :lastname, :street1, :street2, :city, :state, :zip)
 RETURNING id
 """,
                                   email=email,
                                   password=generate_password_hash(password),
                                   firstname=firstname,
                                   lastname=lastname,
-                                  balance = 0.0,
-                                  address = 'NA')
+                                  street1 = street1,
+                                  street2 = street2,
+                                  city = city,
+                                  state = state,
+                                  zip = zip)
 
             id = rows[0][0]
             return User.get(id)
@@ -64,7 +102,7 @@ RETURNING id
     @login.user_loader
     def get(id):
         rows = app.db.execute("""
-SELECT id, email, firstname, lastname
+SELECT id, email, firstname, lastname, street1, street2, city, state, zip
 FROM Users
 WHERE id = :id
 """,
