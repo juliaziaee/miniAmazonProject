@@ -56,9 +56,6 @@
           <a href="{{ url_for('users.login') }}" type="button" class="btn btn-light">Log in</a>
         {% endif %}
       </div>
-      <div>
-        {% include 'navbar.html' %}
-      </div>
     {% endblock %}
   </div>
   <div>
@@ -68,5 +65,6 @@
     {% block content %}{% endblock %}
   </div>
 </body>
+
 
 </html>
