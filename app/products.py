@@ -27,8 +27,11 @@ def cart():
 
 @bp.route("/inventory")
 def inventory():
-    # get all available products for sale:
-    inventory = Inventory.get(current_user.id)
-    # render the page by adding information to the index.html file
-    return render_template('inventory.html',
+    if current_user.is_authenticated:
+        # get all available products for sale:
+        inventory = Inventory.get(current_user.id)
+        # render the page by adding information to the index.html file
+        return render_template('inventory.html',
                            avail_inventory=inventory)
+    else:
+        return render_template('inventory.html')
