@@ -2,6 +2,26 @@
 
 {% block content %}
 
-<h1>Inventory</h1>
+<br><br>
+
+<h2>Inventory:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Amount in Stock</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in avail_inventory%}
+      <tr>
+        <th scope="row">{{product.id}}</th>
+        <td>{{product.name}}</td>
+        <td>{{product.num_in_stock}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}
