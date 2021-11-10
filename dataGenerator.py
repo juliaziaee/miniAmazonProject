@@ -23,7 +23,7 @@ def createUser():
             user.append(firstname)
             user.append(lastname)
             user.append(fake.street_address())
-            user.append(None)
+            user.append("")
             user.append(fake.city())
             user.append(fake.state())
             user.append(fake.postcode())
