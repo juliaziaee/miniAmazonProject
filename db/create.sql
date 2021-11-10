@@ -41,7 +41,8 @@ CREATE TABLE Products (
     CHECK(Inventory > -1),
     SellerID INT NOT NULL,
     PRIMARY KEY(productID),
-    FOREIGN KEY(SellerID) REFERENCES Seller(SellerID) 
+    FOREIGN KEY(SellerID) REFERENCES Seller(SellerID),
+    image VARCHAR(256) NOT NULL
 );
 
 -- Table to keep track of purchases/order history and the price at which units were purchased
@@ -283,3 +284,4 @@ CREATE VIEW userBalance(id, amount) AS
             (SELECT uid, SUM(finalUnitPrice * quantity) AS totPurch FROM Purchases GROUP BY uid) AS purch
         ON fund.id = purch.uid) AS balances
     ON Users.id = balances.id;
+
