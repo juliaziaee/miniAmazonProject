@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from flask_babel import _, lazy_gettext as _l
 from wtforms import StringField, SubmitField
@@ -7,20 +7,46 @@ from flask_login import current_user
 
 from .models.inventory import Inventory
 from .models.cart import Cart
+from .models.product import Product
 
 from flask import Blueprint
 bp = Blueprint('products', __name__)
 
 class CreateForm(FlaskForm):
     productID = StringField(_l('Product ID'), validators=[DataRequired()])
-    productName = StringField(_l('Product Name'), validators=[DataRequired()])
-    price = StringField(_l('Price'), validators=[DataRequired()])
+    name = StringField(_l('Product Name'), validators=[DataRequired()])
+    ## add word limit
+    description = StringField(_l('Product Description'), validators=[DataRequired()])
+    ## add dropdown menu
+    category = StringField(_l('Category'), validators=[DataRequired()])
+    unitPrice = StringField(_l('Unit Price'), validators=[DataRequired()])
+    num_products = StringField(_l('Number of Units'), validators=[DataRequired()])
+    image = StringField(_l('Image URL'), validators=[DataRequired()])
     submit = SubmitField(_l('Create'))
+    def validate_product(self, productID):
+        if Product.product_exists(productID.data):
+            raise ValidationError(_('Already a product with this id.'))
 
 @bp.route("/create", methods=['GET', 'POST'])
 def create():
     form = CreateForm()
-    return render_template('create.html', title='Create', form=form)
+    ## check user logged in, product id not in use, and populate database
+    ## create product id????
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            if Product.create(form.productID.data,
+                            form.name.data,
+                            form.description.data,
+                            form.category.data,
+                            form.unitPrice.data,
+                            form.num_products.data,
+                            current_user.id,
+                            form.image.data):
+                                flash('Congratulations, you have listed an item!')
+                                return redirect(url_for('users.login'))
+        return render_template('create.html', title='Create', form=form)
+    else:
+        return redirect(url_for('users.login'))
 
 @bp.route("/cart")
 def cart():
