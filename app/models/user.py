@@ -105,6 +105,10 @@ RETURNING id
                 UPDATE Users
                 SET email = :email, firstname = :firstname, lastname = :lastname, street1 = :street1, street2 = :street2, city = :city, state = :state, zip = :zip
                 WHERE id = :id
+                AND NOT EXISTS
+                    (SELECT *
+                    FROM Users
+                    WHERE email = :email)
                 RETURNING id;""",
                                     id=id,
                                     email=email,
