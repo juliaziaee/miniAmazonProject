@@ -115,18 +115,17 @@ class UpdateUserInfoForm(FlaskForm):
 @bp.route('/updateuserinfo', methods=['GET', 'POST'])
 def updateuserinfo():
     form = UpdateUserInfoForm()
-    # if form.validate_on_submit():
-    #     if User.register(form.email.data,
-    #                      form.password.data,
-    #                      form.firstname.data,
-    #                      form.lastname.data,
-    #                      form.street1.data,
-    #                      form.street2.data,
-    #                      form.city.data,
-    #                      form.state.data,
-    #                      form.zip.data):
-    #         flash('Congratulations, you are now a registered user!')
-    #         return redirect(url_for('users.login'))
+    if form.validate_on_submit():
+        if User.update(current_user.id,
+                         form.email.data,
+                         form.firstname.data,
+                         form.lastname.data,
+                         form.street1.data,
+                         form.street2.data,
+                         form.city.data,
+                         form.state.data,
+                         form.zip.data):
+            return redirect(url_for('users.accountdetails'))
     return render_template('updateuserinfo.html', title='Update Information', form=form)
 
 
