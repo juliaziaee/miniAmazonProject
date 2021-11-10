@@ -6,6 +6,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Le
 from flask_login import current_user
 
 from .models.inventory import Inventory
+from .models.cart import Cart
 
 from flask import Blueprint
 bp = Blueprint('products', __name__)
@@ -23,7 +24,11 @@ def create():
 
 @bp.route("/cart")
 def cart():
-    return render_template("cart.html", title="Home page")
+    #get current items in user's cart
+    cart = Cart.get(current_user.id)
+    #ender page by adding ingo to the index.html file
+    return render_template("cart.html", 
+                                cart_items=cart)
 
 @bp.route("/inventory")
 def inventory():

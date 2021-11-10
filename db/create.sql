@@ -283,3 +283,4 @@ CREATE VIEW userBalance(id, amount) AS
             (SELECT uid, SUM(finalUnitPrice * quantity) AS totPurch FROM Purchases GROUP BY uid) AS purch
         ON fund.id = purch.uid) AS balances
     ON Users.id = balances.id;
+
