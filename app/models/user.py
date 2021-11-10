@@ -99,6 +99,27 @@ RETURNING id
             return None
 
     @staticmethod
+    def update(id, email, firstname, lastname, street1, street2, city, state, zip):
+            try:
+                app.db.execute("""
+                UPDATE Users
+                SET email = :email, firstname = :firstname, lastname = :lastname, street1 = :street1, street2 = :street2, city = :city, state = :state, zip = :zip
+                WHERE id = :id
+                RETURNING id;""",
+                                    id=id,
+                                    email=email,
+                                    firstname=firstname,
+                                    lastname=lastname,
+                                    street1=street1,
+                                    street2=street2,
+                                    city=city,
+                                    state=state,
+                                    zip=zip)
+                return id
+            except Exception:
+                return None
+
+    @staticmethod
     @login.user_loader
     def get(id):
         rows = app.db.execute("""
