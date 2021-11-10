@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from flask_babel import _, lazy_gettext as _l
 from wtforms import StringField, SubmitField
@@ -24,8 +24,12 @@ def create():
 
 @bp.route("/cart")
 def cart():
-    #get current items in user's cart
-    cart = Cart.get(current_user.id)
+    if current_user.is_authenticated:
+        #get current items in user's cart
+        cart = Cart.get(current_user.id)
+    else:
+        #not logged in so redirect to login page 
+        return redirect(url_for('users.login'))
     #ender page by adding ingo to the index.html file
     return render_template("cart.html", 
                                 cart_items=cart)
