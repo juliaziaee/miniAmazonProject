@@ -198,8 +198,8 @@ BEFORE INSERT ON ProductReview
 CREATE FUNCTION TF_DoubleSellerReview() RETURNS TRIGGER AS $$
 BEGIN
     IF NOT EXISTS(SELECT * FROM SellerReview
-        WHERE uid = NEW.uid AND pid = NEW.pid) THEN
-        RAISE EXCEPTION '% has already left a review for product %', NEW.uid, NEW.pid;
+        WHERE uid = NEW.uid AND sid = NEW.sid) THEN
+        RAISE EXCEPTION '% has already left a review for seller %', NEW.uid, NEW.sid;
     END IF;
     RETURN NEW;
 END;
