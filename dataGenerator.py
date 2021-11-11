@@ -43,9 +43,9 @@ def createProducts(sellers):
     i = 0
     names = []
     products = []
-    while i < 500:
+    while i < 1000:
         product = [i]
-        name = fake.word()
+        name = fake.word() + " " + fake.word()
         if name not in names:
             names.append(name)
             description = fake.sentence(nb_words=5)
