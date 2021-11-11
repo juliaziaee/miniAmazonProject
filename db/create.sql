@@ -40,7 +40,6 @@ CREATE TABLE Products (
     Inventory INT NOT NULL,
     CHECK(Inventory > -1),
     SellerID INT NOT NULL,
-    PRIMARY KEY(productID),
     FOREIGN KEY(SellerID) REFERENCES Seller(SellerID),
     image VARCHAR(256) NOT NULL
 );
