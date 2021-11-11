@@ -79,8 +79,8 @@ CREATE TABLE ProductReview (
 	pid INT NOT NULL REFERENCES PRODUCTS(productID),
 	rating FLOAT NOT NULL,
 	CHECK (rating >= 1.0 AND rating <= 5.0),
-    numDownVotes INT NOT NULL CHECK(numDownVotes>-1);
-    numUpVotes INT NOT NULL CHECK(numUpVotes>-1);
+    numDownVotes INT NOT NULL CHECK(numDownVotes>-1),
+    numUpVotes INT NOT NULL CHECK(numUpVotes>-1),
 	review VARCHAR(256),
 	DateTime timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
 	PRIMARY KEY(uid, pid)
@@ -93,8 +93,8 @@ CREATE TABLE SellerReview (
 	sid INT NOT NULL REFERENCES SELLER(SellerId),
 	rating FLOAT NOT NULL,
 	CHECK(rating >= 1.0 AND rating <= 5.0),
-    numDownVotes INT NOT NULL CHECK(numDownVotes>-1);
-    numUpVotes INT NOT NULL CHECK(numUpVotes>-1);
+    numDownVotes INT NOT NULL CHECK(numDownVotes>-1),
+    numUpVotes INT NOT NULL CHECK(numUpVotes>-1),
 	review VARCHAR(256),
 	DateTime timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
 	PRIMARY KEY(uid, sid)

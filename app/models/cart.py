@@ -2,7 +2,7 @@ from flask import current_app as app
 
 
 class Cart:
-    def __init__(self, uid, pid, name, unitPrice, quantity, totalPrice, subtotal):
+    def __init__(self, uid, pid, name, unitPrice, quantity, totalPrice, subtotal, imgUrl):
         self.uid = uid
         self.pid = pid
         self.name = name
@@ -10,13 +10,14 @@ class Cart:
         self.quantity = quantity
         self.totalPrice = totalPrice
         self.subtotal = subtotal
+        self.imgUrl = imgUrl
 
     @staticmethod
     def get(uid):
         rows = app.db.execute('''
 SELECT Cart.uid, Cart.pid, Products.name, Products.unitPrice, Cart.quantity, 
     (Cart.quantity * Products.unitPrice) AS totalPrice,
-    cartTotalPrice.totalPrice AS subtotal
+    cartTotalPrice.totalPrice AS subtotal, Products.image AS imgUrl
 FROM Cart, Products, cartTotalPrice
 WHERE Cart.uid = :uid AND Cart.pid = Products.productID
     AND cartTotalPrice.uid = :uid
