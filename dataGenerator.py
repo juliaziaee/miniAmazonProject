@@ -1,4 +1,4 @@
-from faker import Faker
+
 import csv
 from werkzeug.security import generate_password_hash
 from random import randint
