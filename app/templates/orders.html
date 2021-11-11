@@ -26,7 +26,8 @@
     {% for product in order_history%}
       <tr>
         <th scope="row">{{product.uid}}</th>
-        <td>{{product.street1}} {{product.street2}} {{product.city}} {{product.state}} {{product.zip}}}</td>
+        <td>{{product.street1}} <br/>
+            {{product.street2}} <br/> {{product.city}}, {{product.state}} {{product.zip}}</td>
         <td>{{product.orderDateTime}}</td>
         <td>{{product.finalUnitPrice}}</td>
         <td>{{product.quantity}}</td>

@@ -14,7 +14,6 @@ from flask import Blueprint
 bp = Blueprint('products', __name__)
 
 class CreateForm(FlaskForm):
-    productID = StringField(_l('Product ID'), validators=[DataRequired()])
     name = StringField(_l('Product Name'), validators=[DataRequired()])
     ## add word limit
     description = StringField(_l('Product Description'), validators=[DataRequired()])
@@ -24,9 +23,6 @@ class CreateForm(FlaskForm):
     num_products = StringField(_l('Number of Units'), validators=[DataRequired()])
     image = StringField(_l('Image URL'), validators=[DataRequired()])
     submit = SubmitField(_l('Create'))
-    def validate_product(self, productID):
-        if Product.product_exists(productID.data):
-            raise ValidationError(_('Already a product with this id.'))
 
 @bp.route("/create", methods=['GET', 'POST'])
 def create():
@@ -35,8 +31,7 @@ def create():
     ## create product id????
     if current_user.is_authenticated:
         if form.validate_on_submit():
-            if Product.create(form.productID.data,
-                            form.name.data,
+            if Product.create(form.name.data,
                             form.description.data,
                             form.category.data,
                             form.unitPrice.data,
