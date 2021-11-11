@@ -2,11 +2,19 @@ from flask import current_app as app
 
 
 class Orders:
-    def __init__(self, id, name, num_in_stock, seller):
-        self.id = id
-        self.name = name
-        self.num_in_stock = num_in_stock
-        self.seller = seller
+    def __init__(self, uid, street1, street2, city, state, zip1, orderDateTime,
+finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime):
+        self.uid = uid
+        self.street1 = street1
+        self.street2 = street2
+        self.city = city
+        self.state = state
+        self.zip = zip1
+        self.orderDateTime = orderDateTime
+        self.finalUnitPrice = finalUnitPrice
+        self.quantity = quantity
+        self.fufullmentstatus = fufullmentstatus
+        self.fulfillment_datetime = fulfillment_datetime
 
     @staticmethod
     def get(seller):
