@@ -60,6 +60,8 @@ VALUES(:SellerID)
 
     @staticmethod
     def create(name, description, category, unitPrice, inventory, SellerID, image):
+        if not Product.seller_exists(SellerID):
+            Product.add_seller(SellerID)
         try:
             rows = app.db.execute("""
 INSERT INTO Products(name, description, category, unitPrice, inventory, SellerID, image)
