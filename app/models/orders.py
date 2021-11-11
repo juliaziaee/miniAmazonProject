@@ -25,6 +25,7 @@ SELECT uid, street1, street2, city, state, zip, orderDateTime,
 finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
+ORDER BY orderDateTime DESC
 ''',
                               SellerID=seller)
         return [Orders(*row) for row in rows]
@@ -36,5 +37,6 @@ SELECT Purchases.uid, street1, street2, city, state, zip, orderDateTime,
 finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id
+ORDER BY orderDateTime DESC
 ''',)
         return [Orders(*row) for row in rows]
