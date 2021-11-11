@@ -8,6 +8,7 @@ from flask_login import current_user
 from .models.inventory import Inventory
 from .models.cart import Cart
 from .models.product import Product
+from .models.orders import Orders
 
 from flask import Blueprint
 bp = Blueprint('products', __name__)
@@ -70,3 +71,15 @@ def inventory():
                            avail_inventory=inventory)
     else:
         return render_template('inventory.html')
+
+
+@bp.route("/orders")
+def orders():
+    if current_user.is_authenticated:
+        # get all available products for sale:
+        orders = Orders.get(current_user.id)
+        # render the page by adding information to the index.html file
+        return render_template('orders.html',
+                           order_history=orders)
+    else:
+        return render_template('orders.html')
