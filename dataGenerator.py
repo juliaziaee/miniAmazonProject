@@ -58,7 +58,7 @@ def createProducts(sellers):
             product.append(unitPrice)
             product.append(inventory)
             product.append((sellerId)[0])
-            product.append("https://mir-s3-cdn-cf.behance.net/project_modules/disp/0483de38078561.560682ea5b17b.jpg")
+            product.append("https://source.unsplash.com/random/800x800/?img=1")
             products.append(product)
             i += 1
     return products
