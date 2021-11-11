@@ -65,7 +65,7 @@ def inventory():
         return render_template('inventory.html',
                            avail_inventory=inventory)
     else:
-        return render_template('inventory.html')
+        return redirect(url_for('users.login'))
 
 
 @bp.route("/orders")
@@ -77,4 +77,4 @@ def orders():
         return render_template('orders.html',
                            order_history=orders)
     else:
-        return render_template('orders.html')
+        return redirect(url_for('users.login'))
