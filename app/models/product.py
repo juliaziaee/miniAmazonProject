@@ -59,13 +59,13 @@ VALUES(:SellerID)
             return None
 
     @staticmethod
-    def create(productID, name, description, category, unitPrice, inventory, SellerID, image):
+    def create(name, description, category, unitPrice, inventory, SellerID, image):
         try:
             rows = app.db.execute("""
-INSERT INTO Products(productID, name, description, category, unitPrice, inventory, SellerID, image)
-VALUES(:productID, :name, :description, :category, :unitPrice, :inventory, :SellerID, :image)
+INSERT INTO Products(name, description, category, unitPrice, inventory, SellerID, image)
+VALUES(:name, :description, :category, :unitPrice, :inventory, :SellerID, :image)
+RETURNING productID
 """,
-                                  productID=productID,
                                   name=name,
                                   description=description,
                                   category=category,
@@ -73,7 +73,7 @@ VALUES(:productID, :name, :description, :category, :unitPrice, :inventory, :Sell
                                   inventory = inventory,
                                   SellerID = SellerID,
                                   image = image)
-
+            productID = rows[0][0]
             return Product.get(productID)
         except Exception:
             # likely id already in use; better error checking and

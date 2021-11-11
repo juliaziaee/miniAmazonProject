@@ -7,13 +7,6 @@
 <form action="" method="post">
   {{ form.hidden_tag() }}
   <p>
-    {{ form.productID.label }}<br/>
-    {{ form.productID(size=32) }}<br/>
-    {% for error in form.productID.errors %}
-    <span style="color: red;">[{{ error }}]</span>
-    {% endfor %}
-  </p>
-  <p>
     {{ form.name.label }}<br/>
     {{ form.name(size=32) }}<br/>
     {% for error in form.name.errors %}
