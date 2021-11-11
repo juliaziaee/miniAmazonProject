@@ -19,7 +19,8 @@ def createUser():
             names.append((firstname, lastname))
             user = [i]
             user.append(f"{firstname}.{lastname}@{'gmail.com'}")
-            user.append(generate_password_hash('Databosses316!'))
+            user.append("pbkdf2:sha256:260000$Prs0BucSXtvcysa2$288bd5390da67b596f8dfae36829a51754fd8c1851210d88e79a8946ab7f9592")
+            # password is hashed Databosses316!
             user.append(firstname)
             user.append(lastname)
             user.append(fake.street_address())
@@ -42,9 +43,9 @@ def createProducts(sellers):
     i = 0
     names = []
     products = []
-    while i < 200:
+    while i < 1000:
         product = [i]
-        name = fake.word()
+        name = fake.word() + " " + fake.word()
         if name not in names:
             names.append(name)
             description = fake.sentence(nb_words=5)
@@ -74,16 +75,6 @@ def createFunding():
         fund.append(dt)
         fund.append(amount)
         funding.append(fund)
-        # if (random.randint(0, 1)) == 1:
-        #     deduct = [i]
-        #     dtplus1 = dt_unformatted + timedelta(days=1)
-        #     if (dtplus1 < datetime.now()):
-        #         deduct.append(dtplus1.strftime('%Y-%m-%d %I:%M:%S %p'))
-        #         amount2 = -abs(amount)
-        #         if (random.randint(0, 1)) == 1:
-        #             amount2 = -abs(round(random.uniform(00.00, amount2), 2))
-        #         deduct.append(amount2)
-        #     funding.append(deduct)
     x = 500-len(funding) # want 500 entries
     users2 = random.sample(range(0, 999), x)
     for i in users2:
@@ -145,10 +136,10 @@ def createCart(products):
     
 
 if __name__ == '__main__':
-    # userData = createUser()
-    # with open("db/data/UsersGenerated.csv", "w+") as myCsv:
-    #     csvWriter = csv.writer(myCsv, delimiter=',')
-    #     csvWriter.writerows(userData)
+    userData = createUser()
+    with open("db/data/UsersGenerated.csv", "w+") as myCsv:
+        csvWriter = csv.writer(myCsv, delimiter=',')
+        csvWriter.writerows(userData)
     
     sellerData = createSeller()
     with open("db/data/SellerGenerated.csv", "w+") as myCsv:
