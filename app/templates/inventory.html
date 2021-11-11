@@ -17,6 +17,7 @@
       <th scope="col">Product ID</th>
       <th scope="col">Product Name</th>
       <th scope="col">Amount in Stock</th>
+      <th scope="col">Remove</th>
     </tr>
   </thead>
   <tbody>
@@ -24,7 +25,15 @@
       <tr>
         <th scope="row">{{product.id}}</th>
         <td>{{product.name}}</td>
-        <td>{{product.num_in_stock}}</td>
+        <td>
+          <div class="product-quantity">
+          <input type="number" value="{{product.num_in_stock}}" min="1">
+          <button class="update">Update</button>
+        <td>
+          <button class="remove-product">
+            Remove
+          </button>
+      </td>
       </tr>
     {% endfor %}
 </tbody>
