@@ -1,4 +1,4 @@
-from faker import Faker
+
 import csv
 from werkzeug.security import generate_password_hash
 from random import randint
@@ -58,7 +58,7 @@ def createProducts(sellers):
             product.append(unitPrice)
             product.append(inventory)
             product.append((sellerId)[0])
-            product.append("https://mir-s3-cdn-cf.behance.net/project_modules/disp/0483de38078561.560682ea5b17b.jpg")
+            product.append("https://source.unsplash.com/random/200x200/?img=%d", i)
             products.append(product)
             i += 1
     return products
