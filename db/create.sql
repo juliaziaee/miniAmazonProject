@@ -73,7 +73,6 @@ CREATE TABLE Cart (
 );
  
 -- Stores user reviews on a product
--- Will need to create a trigger to ensure that user can only review a product they actually purchased
 CREATE TABLE ProductReview (
 	uid INT NOT NULL REFERENCES USERS(id),
 	pid INT NOT NULL REFERENCES PRODUCTS(productID),
@@ -87,7 +86,6 @@ CREATE TABLE ProductReview (
 );
  
 -- Stores user's reviews on a given seller
--- Will need a trigger to check that user has actually purchased and received a fulfilled order from seller
 CREATE TABLE SellerReview (
 	uid INT NOT NULL REFERENCES USERS(id),
 	sid INT NOT NULL REFERENCES SELLER(SellerId),
