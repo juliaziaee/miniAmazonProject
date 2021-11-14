@@ -18,7 +18,7 @@
   <tbody>
     {% for product in products%}
       <tr>
-        <th scope="row">{{ loop.index + (page - 1) * per_page }}</th>
+        <th scope="row">{{product.id}}</th>
         <td>{{product.name}}</td>
         <td>{{product.price}}</td>
         <td><img src={{product.image}}></td>
