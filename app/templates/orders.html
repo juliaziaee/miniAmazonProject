@@ -6,7 +6,7 @@
 
 {% if order_history == [] or not current_user.is_authenticated %}
 <h2>You have not sold any items yet</h2>
-<h3>Go to the 'Create' tab to list</h3>
+<h3>Go to the 'List' tab to list a product</h3>
 {% else %}
 
 <h2>Orders:</h2>
@@ -26,8 +26,11 @@
     {% for product in order_history%}
       <tr>
         <th scope="row">{{product.uid}}</th>
-        <td>{{product.street1}} <br/>
-            {{product.street2}} <br/> {{product.city}}, {{product.state}} {{product.zip}}</td>
+        <td>{{product.street1}}
+          {% if product.street2 %}
+          <br/>
+            {{product.street2}}
+            {% endif %} <br/> {{product.city}}, {{product.state}} {{product.zip}}</td>
         <td>{{product.orderDateTime}}</td>
         <td>{{product.finalUnitPrice}}</td>
         <td>{{product.quantity}}</td>

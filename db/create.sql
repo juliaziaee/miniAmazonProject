@@ -73,7 +73,6 @@ CREATE TABLE Cart (
 );
  
 -- Stores user reviews on a product
--- Will need to create a trigger to ensure that user can only review a product they actually purchased
 CREATE TABLE ProductReview (
 	uid INT NOT NULL REFERENCES USERS(id),
 	pid INT NOT NULL REFERENCES PRODUCTS(productID),
@@ -87,7 +86,6 @@ CREATE TABLE ProductReview (
 );
  
 -- Stores user's reviews on a given seller
--- Will need a trigger to check that user has actually purchased and received a fulfilled order from seller
 CREATE TABLE SellerReview (
 	uid INT NOT NULL REFERENCES USERS(id),
 	sid INT NOT NULL REFERENCES SELLER(SellerId),
@@ -198,8 +196,8 @@ BEFORE INSERT ON ProductReview
 CREATE FUNCTION TF_DoubleSellerReview() RETURNS TRIGGER AS $$
 BEGIN
     IF NOT EXISTS(SELECT * FROM SellerReview
-        WHERE uid = NEW.uid AND pid = NEW.pid) THEN
-        RAISE EXCEPTION '% has already left a review for product %', NEW.uid, NEW.pid;
+        WHERE uid = NEW.uid AND sid = NEW.sid) THEN
+        RAISE EXCEPTION '% has already left a review for seller %', NEW.uid, NEW.sid;
     END IF;
     RETURN NEW;
 END;
