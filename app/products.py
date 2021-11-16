@@ -87,40 +87,14 @@ def get_products(products, offset=0, per_page=10):
 
 @bp.route("/search")
 def search():
-    q = request.args.get('q')
-    if q:
-        products = Product.getName(q)
-    else:
-        products = Product.get_all(True)
-
-        # get all available products for sale:
-    page, per_page, offset = get_page_args(page_parameter='page',
-                                           per_page_parameter='per_page')
-    total = len(products)
-    pagination_products = get_products(products, offset=offset, per_page=per_page)
-    pagination = Pagination(page=page, per_page=per_page, total=total,
-                            css_framework='bootstrap4')
-    # find the products current user has bought:
-    if current_user.is_authenticated:
-        purchases = Purchase.get_all_by_uid_since(
-            current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
-    else:
-        purchases = None
-    # render the page by adding information to the index.html file
-
-    return render_template('index.html', 
-                           products=pagination_products,
-                           page = page,
-                           per_page = per_page,
-                           pagination = pagination,
-                           purchase_history=purchases,
-                           )
-
-@bp.route("/category")
-def category():
     c = request.args.get('c')
-    if c:
+    q = request.args.get('q')
+    if c and q:
+        products = Product.getMultiple(q,q,c)
+    elif c:
         products = Product.getCategory(c)
+    elif q:
+        products = Product.getName(q,q)
     else:
         products = Product.get_all(True)
 

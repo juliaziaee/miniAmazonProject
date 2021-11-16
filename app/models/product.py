@@ -22,12 +22,12 @@ WHERE productID = :productID
         return Product(*(rows[0])) if rows is not [] else []
 
     @staticmethod
-    def getName(name):
+    def getName(name, description):
         rows = app.db.execute('''
 SELECT productID, name, unitPrice, image, category, description, Inventory
 FROM Products
-WHERE name LIKE '%{}%'
-'''.format(name))
+WHERE name LIKE '%{}%' OR description LIKE '%{}%'
+'''.format(name, description))
         return [Product(*row) for row in rows]
 
     @staticmethod
@@ -37,6 +37,18 @@ SELECT productID, name, unitPrice, image, category, description, Inventory
 FROM Products
 WHERE category LIKE '%{}%'
 '''.format(category))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getMultiple(name, description, category):
+        print(name)
+        print(description)
+        print(category)
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory
+FROM Products
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND category LIKE '%{}%'
+'''.format(name, description, category))
         return [Product(*row) for row in rows]
 
     @staticmethod

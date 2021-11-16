@@ -5,11 +5,8 @@
 <br><br>
 
 <h2>Products for sale:</h2>
-<form class="form-inline my-2 my-lg-0" method="GET" action="{{ url_for('products.category') }}">
-  <input class="form-control mr-sm-2" name="c" type="search" placeholder="Browse by category..." aria-label="Search">
-  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-</form>
 <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url_for('products.search') }}">
+  <input class="form-control mr-sm-2" name="c" type="search" placeholder="Browse by category..." aria-label="Search">
   <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search item..." aria-label="Search">
   <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 </form>
