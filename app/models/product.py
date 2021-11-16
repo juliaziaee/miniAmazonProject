@@ -2,16 +2,17 @@ from flask import current_app as app
 from flask import Flask, render_template
 
 class Product:
-    def __init__(self, id, name, price, image):
+    def __init__(self, id, name, price, image, category):
         self.id = id
         self.name = name
         self.price = price
         self.image = image
+        self.category = category
 
     @staticmethod
     def get(productID):
         rows = app.db.execute('''
-SELECT productID, name, unitPrice, image
+SELECT productID, name, unitPrice, image, category
 FROM Products
 WHERE productID = :productID
 ''',
@@ -19,9 +20,18 @@ WHERE productID = :productID
         return Product(*(rows[0])) if rows is not [] else []
 
     @staticmethod
+    def getName(name):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category
+FROM Products
+WHERE name LIKE '%{}%'
+'''.format(name))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT productID, name, unitPrice, image
+SELECT productID, name, unitPrice, image, category
 FROM Products
 ''',)
         return [Product(*row) for row in rows]
