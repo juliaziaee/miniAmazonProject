@@ -21,7 +21,6 @@ def index():
     products = Product.get_all(True)
     total = len(products)
     pagination_products = get_products(products, offset=offset, per_page=per_page)
-    print(pagination_products)
     pagination = Pagination(page=page, per_page=per_page, total=total,
                             css_framework='bootstrap4')
     # find the products current user has bought:

@@ -12,6 +12,7 @@
       <th scope="col">Product ID</th>
       <th scope="col">Product Name</th>
       <th scope="col">Price</th>
+      <th scope="col">Category</th>
       <th scope="col">Image</th>
     </tr>
   </thead>
@@ -21,12 +22,14 @@
         <th scope="row">{{product.id}}</th>
         <td>{{product.name}}</td>
         <td>{{product.price}}</td>
+        <td>{{product.category}}</td>
         <td><img src={{product.image}}></td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
 {{ pagination.links }}
+
 
 <br><br>
 {% if current_user.is_authenticated %}
