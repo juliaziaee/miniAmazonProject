@@ -4,13 +4,13 @@ from flask_babel import _, lazy_gettext as _l
 from wtforms import StringField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from flask_login import current_user
+from flask_paginate import Pagination, get_page_args
 import datetime
 
 from .models.inventory import Inventory
 from .models.cart import Cart
 from .models.product import Product
 from .models.orders import Orders
-from flask_paginate import Pagination, get_page_args
 from .models.purchase import Purchase
 
 from flask import Blueprint
@@ -85,16 +85,45 @@ def orders():
 def get_products(products, offset=0, per_page=10):
     return products[offset: offset + per_page]
 
-@bp.route("/search")
+@bp.route("/search",  methods = ['POST', 'GET'])
 def search():
     c = request.args.get('c')
     q = request.args.get('q')
-    if c and q:
-        products = Product.getMultiple(q,q,c)
+    s = request.args.get('s')
+    if c and q and s:
+        if s == "Low":
+            products = Product.getSearchAndCategoryAndAsc(q,q,c)
+        elif s == "High":
+            products = Product.getSearchAndCategoryAndDesc(q,q,c)
+        else:
+            products = Product.getSearchAndCategory(q,q,c)
+    elif c and s:
+        if s == "Low":
+            products = Product.getCategoryAndAsc(c)
+        elif s == "High":
+            products = Product.getCategoryAndDesc(c)
+        else:
+            products = Product.getCategory(c)
+    elif c and q:
+        products = Product.getSearchAndCategory(q,q,c)
+    elif q and s:
+        if s == "Low":
+            products = Product.getNameAndAsc(q,q)
+        elif s == "High":
+            products = Product.getNameAndDesc(q,q)
+        else:
+            products = Product.getName(q,q)
     elif c:
         products = Product.getCategory(c)
     elif q:
         products = Product.getName(q,q)
+    elif s:
+        if s == "Low":
+            products = Product.orderAsc()
+        elif s == "High":
+            products = Product.orderDesc()
+        else:
+            products = Product.get_all(True)
     else:
         products = Product.get_all(True)
 
