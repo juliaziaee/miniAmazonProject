@@ -3,7 +3,38 @@
 {% block content %}
 
 <br><br>
-<p><a href="{{ url_for('products.search') }}"><button>Back</button></a></p>
+<p><a href="{{ url_for('index.index') }}"><button>Back</button></a></p>
 <h2>Product Details:</h2>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <ul class="list-group shadow">
+                <li class="list-group-item">
+                    <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+                        <div class="media-body order-2 order-lg-1">
+                            <h5 class="mt-0 font-weight-bold mb-2">Product Name</h5>
+                            <p class="font-italic text-muted mb-0 small">Description</p>
+                            <div class="d-flex align-items-center justify-content-between mt-1">
+                                <h6 class="font-weight-bold my-2">Price</h6>
+                                <h6 class="font-weight-bold my-2">Category</h6>
+                                <h6 class="font-weight-bold my-2">Rating</h6>
+                                <h6 class="font-weight-bold my-2">Reviews</h6>
+                                <h6 class="font-weight-bold my-2">Sellers</h6>
+                                <h6 class="font-weight-bold my-2">Quantity</h6>
+                                <ul class="list-inline small">
+                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                    <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                                    <li class="list-inline-item m-0"><i class="fa fa-star-o text-gray"></i></li>
+                                </ul>
+                            </div>
+                        </div><img src="https://i.imgur.com/KFojDGa.jpg" alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                    </div> 
+                </li> 
+            </ul> 
+        </div>
+    </div>
+</div>
 
 {% endblock %}
