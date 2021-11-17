@@ -137,6 +137,240 @@ ORDER BY unitPrice DESC
         return [Product(*row) for row in rows]
 
     @staticmethod
+    def getPrice250(unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE unitPrice > 0 AND unitPrice <= 250
+'''.format(unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getPrice500(unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE unitPrice > 250 AND unitPrice <= 500
+'''.format(unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getSearchAndCategoryAndAscAndPrice250(name, description, category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND category LIKE '%{}%' AND unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice
+'''.format(name, description, category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getSearchAndCategoryAndDescAndPrice250(name, description, category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND category LIKE '%{}%' AND unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice DESC
+'''.format(name, description, category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getSearchAndCategoryAndAscAndPrice500(name, description, category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND category LIKE '%{}%' AND unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice
+'''.format(name, description, category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getSearchAndCategoryAndDescAndPrice500(name, description, category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND category LIKE '%{}%' AND unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice DESC
+'''.format(name, description, category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getSearchAndCategoryAndPrice250(name, description, category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND category LIKE '%{}%' AND unitPrice > 0 AND unitPrice <= 250
+'''.format(name, description, category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getSearchAndCategoryAndPrice500(name, description, category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND category LIKE '%{}%' AND unitPrice > 250 AND unitPrice <= 500
+'''.format(name, description, category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getCategoryAndAscAndPrice250(category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE category LIKE '%{}%' AND unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice
+'''.format(category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getCategoryAndAscAndPrice500(category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE category LIKE '%{}%' AND unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice
+'''.format(category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getCategoryAndDescAndPrice250(category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE category LIKE '%{}%' AND unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice DESC
+'''.format(category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getCategoryAndDescAndPrice500(category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE category LIKE '%{}%' AND unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice DESC
+'''.format(category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getCategoryAndPrice250(category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE category LIKE '%{}%' AND unitPrice > 0 AND unitPrice <= 250
+'''.format(category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getCategoryAndPrice500(category, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE category LIKE '%{}%' AND unitPrice > 250 AND unitPrice <= 500
+'''.format(category, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getNameAndAscAndPrice250(name, description, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice
+'''.format(name, description, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getNameAndAscAndPrice500(name, description, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice
+'''.format(name, description, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getNameAndDescAndPrice250(name, description, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice DESC
+'''.format(name, description, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getNameAndDescAndPrice500(name, description, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice DESC
+'''.format(name, description, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getNameAndPrice250(name, description, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND unitPrice > 0 AND unitPrice <= 250
+
+'''.format(name, description, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def getNameAndPrice500(name, description, unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE (name LIKE '%{}%' OR description LIKE '%{}%') AND unitPrice > 250 AND unitPrice <= 500
+
+'''.format(name, description, unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def orderAscAndPrice250(unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice
+'''.format(unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def orderAscAndPrice500(unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice
+'''.format(unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def orderDescAndPrice250(unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE unitPrice > 0 AND unitPrice <= 250
+ORDER BY unitPrice DESC
+'''.format(unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
+    def orderDescAndPrice500(unitPrice):
+        rows = app.db.execute('''
+SELECT productID, name, unitPrice, image, category, description, Inventory, rating
+FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid
+WHERE unitPrice > 250 AND unitPrice <= 500
+ORDER BY unitPrice DESC
+'''.format(unitPrice))
+        return [Product(*row) for row in rows]
+
+    @staticmethod
     def product_exists(productID):
         rows = app.db.execute("""
 SELECT productID

@@ -8,6 +8,11 @@
 <form class="form-inline my-2 my-lg-0" action="{{ url_for('products.search') }}">
   <input class="form-control mr-sm-2" name="c" type="search" placeholder="Search Category" aria-label="Search">
   <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search Keyword" aria-label="Search">
+  <select class="form-control mr-sm-2" name="p">
+    <option value="N/A">Filter Price</option>
+    <option value="250">0-250</option>
+    <option value="500">250-500</option>
+  </select>
   <select class="form-control mr-sm-2" name="s">
     <option value="N/A">Sort by Price</option>
     <option value="Low">Price: Low to High</option>

@@ -90,40 +90,87 @@ def search():
     c = request.args.get('c')
     q = request.args.get('q')
     s = request.args.get('s')
-    if c and q and s:
-        if s == "Low":
+    p = request.args.get('p')
+    if c and q and s and p:
+        if s == "Low" and p == "250":
+            products = Product.getSearchAndCategoryAndAscAndPrice250(q,q,c,p)
+        elif s == "High" and p == "250":
+            products = Product.getSearchAndCategoryAndDescAndPrice250(q,q,c,p)
+        elif s == "Low" and p == "500":
+            products = Product.getSearchAndCategoryAndAscAndPrice500(q,q,c,p)
+        elif s == "High" and p == "500":
+            products = Product.getSearchAndCategoryAndDescAndPrice500(q,q,c,p)
+        elif s == "Low" and p == "N/A":
             products = Product.getSearchAndCategoryAndAsc(q,q,c)
-        elif s == "High":
+        elif s == "High" and p == "N/A":
             products = Product.getSearchAndCategoryAndDesc(q,q,c)
+        elif s == "N/A" and p == "250":
+            products = Product.getSearchAndCategoryAndPrice250(q,q,c,p)
+        elif s == "N/A" and p == "500":
+            products = Product.getSearchAndCategoryAndPrice500(q,q,c,p)
         else:
             products = Product.getSearchAndCategory(q,q,c)
-    elif c and s:
-        if s == "Low":
+    elif c and s and p:
+        if s == "Low" and p == "250":
+            products = Product.getCategoryAndAscAndPrice250(c,p)
+        elif s == "High" and p == "250":
+            products = Product.getCategoryAndDescAndPrice250(c,p)
+        elif s == "Low" and p == "500":
+            products = Product.getCategoryAndAscAndPrice500(c,p)
+        elif s == "High" and p == "500":
+            products = Product.getCategoryAndDescAndPrice500(c,p)
+        elif s == "Low" and p == "N/A":
             products = Product.getCategoryAndAsc(c)
-        elif s == "High":
+        elif s == "High" and p == "N/A":
             products = Product.getCategoryAndDesc(c)
+        elif s == "N/A" and p == "250":
+            products = Product.getCategoryAndPrice250(c,p)
+        elif s == "N/A" and p == "500":
+            products = Product.getCategoryAndPrice500(c,p)
         else:
             products = Product.getCategory(c)
-    elif c and q:
-        products = Product.getSearchAndCategory(q,q,c)
-    elif q and s:
-        if s == "Low":
+    elif q and s and p:
+        if s == "Low" and p == "250":
+            products = Product.getNameAndAscAndPrice250(q,q,p)
+        elif s == "High" and p == "250":
+            products = Product.getNameAndDescAndPrice250(q,q,p)
+        elif s == "Low" and p == "500":
+            products = Product.getNameAndAscAndPrice500(q,q,p)
+        elif s == "High" and p == "500":
+            products = Product.getNameAndDescAndPrice500(q,q,p)
+        elif s == "Low" and p == "N/A":
             products = Product.getNameAndAsc(q,q)
-        elif s == "High":
+        elif s == "High" and p == "N/A":
             products = Product.getNameAndDesc(q,q)
+        elif s == "N/A" and p == "250":
+            products = Product.getNameAndPrice250(q,q,p)
+        elif s == "N/A" and p == "500":
+            products = Product.getNameAndPrice500(q,q,p)
         else:
             products = Product.getName(q,q)
+    elif s and p:
+        if s == "Low" and p == "250":
+            products = Product.orderAscAndPrice250(p)
+        elif s == "High" and p == "250":
+            products = Product.orderDescAndPrice250(p)
+        elif s == "Low" and p == "500":
+            products = Product.orderAscAndPrice500(p)
+        elif s == "High" and p == "500":
+            products = Product.orderDescAndPrice500(p)
+        elif s == "Low" and p == "N/A":
+            products = Product.orderAsc()
+        elif s == "High" and p == "N/A":
+            products = Product.orderDesc()
+        elif s == "N/A" and p == "250":
+            products = Product.getPrice250(p)
+        elif s == "N/A" and p == "500":
+            products = Product.getPrice500(p)
+        else:
+            products = Product.get_all(True)
     elif c:
         products = Product.getCategory(c)
     elif q:
         products = Product.getName(q,q)
-    elif s:
-        if s == "Low":
-            products = Product.orderAsc()
-        elif s == "High":
-            products = Product.orderDesc()
-        else:
-            products = Product.get_all(True)
     else:
         products = Product.get_all(True)
 
