@@ -22,6 +22,16 @@ WHERE productID = :productID
                               productID=productID)
         return Product(*(rows[0])) if rows is not [] else []
 
+    def addCategory():
+        rows = app.db.execute('''
+SELECT DISTINCT(category)
+FROM Products
+''')    
+        data = []
+        for row in rows:
+            data.append(str(str(row)[2:-3]))
+        return data
+
     @staticmethod
     def getName(name, description):
         rows = app.db.execute('''
