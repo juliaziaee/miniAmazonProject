@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from flask_babel import _, lazy_gettext as _l
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from flask_login import current_user
 from flask_paginate import Pagination, get_page_args
@@ -16,12 +16,15 @@ from .models.purchase import Purchase
 from flask import Blueprint
 bp = Blueprint('products', __name__)
 
+options = []
+data = []
+
 class CreateForm(FlaskForm):
     name = StringField(_l('Product Name'), validators=[DataRequired()])
     ## add word limit
     description = StringField(_l('Product Description'), validators=[DataRequired()])
     ## add dropdown menu
-    category = StringField(_l('Category'), validators=[DataRequired()])
+    category = SelectField(_l('Category'), choices=data, validators=[DataRequired()])
     unitPrice = StringField(_l('Unit Price'), validators=[DataRequired()])
     num_products = StringField(_l('Number of Units'), validators=[DataRequired()])
     image = StringField(_l('Image URL'), validators=[DataRequired()])
@@ -29,6 +32,11 @@ class CreateForm(FlaskForm):
 
 @bp.route("/create", methods=['GET', 'POST'])
 def create():
+    options = Product.addCategory()
+    for i in options:
+        if i not in data:
+            data.append(i)
+    data.sort()
     form = CreateForm()
     ## check user logged in, product id not in use, and populate database
     ## create product id????
