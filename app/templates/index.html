@@ -26,11 +26,10 @@
     <tr>
       <th scope="col">Product ID</th>
       <th scope="col">Product Name</th>
-      <th scope="col">Price</th>
       <th scope="col">Category</th>
       <th scope="col">Description</th>
+      <th scope="col">Price</th>
       <th scope="col">Quantity</th>
-      <th scope="col">Rating</th>
       <th scope="col">Image</th>
     </tr>
   </thead>
@@ -39,11 +38,10 @@
       <tr>
         <th scope="row">{{product.id}}</th>
         <td>{{product.name}}</td>
-        <td>{{product.price}}</td>
         <td>{{product.category}}</td>
         <td>{{product.description}}</td>
+        <td>{{product.price}}</td>
         <td>{{product.Inventory}}</td>
-        <td>{{product.rating}}</td>
         <td><img src={{product.image}}></td>
       </tr>
     {% endfor %}
