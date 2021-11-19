@@ -35,8 +35,8 @@
   </thead>
   <tbody>
     {% for product in products%}
-      <tr>
-        <th scope="row">{{product.id}}</th>
+      <tr onclick="window.location.href='{{ url_for('products.detailview', id=product.id)}}'">
+        <td scope="row">{{product.id}}</td>
         <td>{{product.name}}</td>
         <td>{{product.category}}</td>
         <td>{{product.description}}</td>
