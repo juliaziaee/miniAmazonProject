@@ -90,9 +90,9 @@ def orders():
     else:
         return redirect(url_for('users.login'))
 
-@bp.route("/detailview")
-def detailview():
-    return render_template('detailview.html')
+@bp.route("/detailview/<id>")
+def detailview(id):
+    return render_template('detailview.html', product = Product.get(id))
 
 def get_products(products, offset=0, per_page=10):
     return products[offset: offset + per_page]

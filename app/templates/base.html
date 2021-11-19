@@ -64,22 +64,6 @@
   <div class="main">
     {% block content %}{% endblock %}
   </div>
-  <script>
-    var table = document.getElementById("prod-table");
-    var body = document.getElementsByTagName("tbody");
-    var rows = table.getElementsByTagName("tr");
-    for (i = 0; i < rows.length; i++) {
-      var currentRow = table.rows[i];
-      var createClickHandler = function(row) {
-        return function() {
-          var cell = row.getElementsByTagName("td")[0];
-          var id = cell.innerHTML;
-          location.href= "detailview";
-        };
-      };
-      currentRow.onclick = createClickHandler(currentRow);
-    }
-  </script>
 </body>
 
 </html>

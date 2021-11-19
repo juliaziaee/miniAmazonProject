@@ -14,11 +14,11 @@
                 <li class="list-group-item">
                     <div class="media align-items-lg-center flex-column flex-lg-row p-3">
                         <div class="media-body order-2 order-lg-1">
-                            <h5 class="mt-0 font-weight-bold mb-2">iPhone 12</h5>
-                            <p class="mb-0 medium" style="color:#8b0000">Price: $402.99</p>
+                            <h5 class="mt-0 font-weight-bold mb-2">{{product.name}}</h5>
+                            <p class="mb-0 medium" style="color:#8b0000">${{product.price}}</p>
                             <div class="d-flex align-items-center justify-content-between mt-1">
                             </div>
-                        </div><img src="https://i.imgur.com/KFojDGa.jpg" alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
+                        </div><img src={{product.image}} alt="Generic placeholder image" width="200" class="ml-lg-5 order-1 order-lg-2">
                     </div> 
                 </li> 
             </ul> 
@@ -41,11 +41,11 @@
     </ul>
     <div class="tab-content" id="advancedTabContent">
       <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-        <h5><b>iPhone 12</b></h5>
-        <p class="small text-muted mb-2">ID: 303</p>
-        <h6>Category: Electronics</h6>
-        <h6>Rating: 5 Stars</h6>
-        <p class="pt-1">Description: Amazon Essentials Men's Regular-Fit Short-Sleeve Pocket Oxford Shirt</p>
+        <h5><b>{{product.name}}</b></h5>
+        <p class="small text-muted mb-2">ID: {{product.id}}</p>
+        <h6>Category: {{product.category}}</h6>
+        <h6>Rating: {{product.rating}}</h6>
+        <p class="pt-1">Description: {{product.description}}</p>
       </div>
       <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
         <h5>Additional Information</h5>
@@ -59,7 +59,7 @@
           <tbody>
             <tr>
               <th scope="row" class="w-150 dark-grey-text h6">Jeremy</th>
-              <th scope="row" class="w-150 dark-grey-text h6">56</th>
+              <th scope="row" class="w-150 dark-grey-text h6">{{product.Inventory}}</th>
             </tr>
           </tbody>
         </table>
