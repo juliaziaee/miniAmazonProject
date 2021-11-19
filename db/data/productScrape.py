@@ -3,5 +3,10 @@ import urllib.request
 import time
 from bs4 import BeautifulSoup
 
-# url = 'http://web.mta.info/developers/turnstile.html'
-# response = requests.get(url)
+url = 'https://www.walmart.com/shop/deals'
+response = requests.get(url)
+soup = BeautifulSoup(response.text, "html.parser")
+x = soup.findAll('div')
+
+
+print(x)
