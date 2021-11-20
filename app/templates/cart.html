@@ -32,11 +32,11 @@
     </div>
     <div class="product-details">
       <div class="product-title">{{product.name}}</div>
-      <p class="product-id">Product Id: {{product.pid}}</p>
+      <p class="product-id">Product ID: {{product.pid}}</p>
     </div>
     <div class="product-price">{{product.unitPrice}}</div>
     <div class="product-quantity">
-      <input type="number" value="{{product.quantity}}" min="1">
+      <input type="number" value="{{product.quantity}}" min="currentQuantity" max="{{product.Inventory}}">
     </div>
     <div class="product-removal">
       <button class="remove-product">

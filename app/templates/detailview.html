@@ -4,7 +4,12 @@
 
 <br><br>
 <a href="{{ url_for('index.index') }}"><button>Back</button></a>
-        <a style="float:right" href="{{ url_for('products.cart') }}" type="submit"><button>Add to Cart</button></a>
+        <a style="float:right" id="submissionlink" href="{{ url_for('products.cart', uid=user, pid=product.id, sid=product.sellerID, quantity=1) }}" type="submit"><button onclick="addAttribute()">Add to Cart</button></a>
+        <script>
+            function addAttribute() {
+                document.getElementById("submissionlink").href = document.getElementById("submissionlink").href.substring(0,document.getElementById("submissionlink").href.length-1) + "/" + document.getElementById("theQuantity").value;
+            }
+        </script>
 <p></p>
 <h2>Product Details:</h2>
 <div class="container py-5">
@@ -63,8 +68,7 @@
               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{product.sellerName}}</td>
               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{product.Inventory}}</td>
               <td width="25%" scope="row" class="w-150 dark-grey-text h6">
-                <input type="number" value="1" min="1" max="{{product.Inventory}}">
-                <button class="update" type="submit">Update</button>
+              <input id="theQuantity" type="number" value="1" min="1" max="{{product.Inventory}}">
               </td>
             </tr>
           </tbody>

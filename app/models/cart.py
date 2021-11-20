@@ -26,16 +26,16 @@ WHERE Cart.uid = :uid AND Cart.pid = Products.productID
         return [Cart(*row) for row in rows]
 
     @staticmethod
-    def getPid(pid):
+    def getPid(uid, pid):
         rows = app.db.execute('''
 SELECT Cart.uid, Cart.pid, Products.name, Products.unitPrice, Cart.quantity, 
     (Cart.quantity * Products.unitPrice) AS totalPrice,
     cartTotalPrice.totalPrice AS subtotal, Products.image AS imgUrl
 FROM Cart, Products, cartTotalPrice
 WHERE Cart.uid = :uid AND Cart.pid = Products.productID
-    AND cartTotalPrice.uid = :uid
+    AND cartTotalPrice.uid = :uid AND Cart.pid = :pid
 ''',
-                              pid=pid)
+                              uid=uid, pid=pid)
         return [Cart(*row) for row in rows]
 
 #     @staticmethod
@@ -45,3 +45,22 @@ WHERE Cart.uid = :uid AND Cart.pid = Products.productID
 # FROM Products
 # ''',)
 #         return [Inventory(*row) for row in rows]
+
+    @staticmethod
+    def addToCart(uid, pid, sid, quantity):
+        try:
+            rows = app.db.execute("""
+INSERT INTO Cart(uid, pid, sid, quantity)
+VALUES(:uid, :pid, :sid, :quantity)
+RETURNING pid
+""",
+                                  uid=uid,
+                                  pid=pid,
+                                  sid=sid,
+                                  quantity = quantity)
+            productID = rows[0][0]
+            return None
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
