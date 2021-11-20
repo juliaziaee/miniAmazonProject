@@ -67,6 +67,10 @@ def cart():
     return render_template("cart.html", 
                                 cart_items=cart)
 
+@bp.route("/detailview/<id>")
+def detailview(id):
+    return render_template('detailview.html', product = Product.get(id))
+
 @bp.route("/inventory")
 def inventory():
     if current_user.is_authenticated:
@@ -89,10 +93,6 @@ def orders():
                            order_history=orders)
     else:
         return redirect(url_for('users.login'))
-
-@bp.route("/detailview/<id>")
-def detailview(id):
-    return render_template('detailview.html', product = Product.get(id))
 
 def get_products(products, offset=0, per_page=10):
     return products[offset: offset + per_page]
