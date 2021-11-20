@@ -25,6 +25,19 @@ WHERE Cart.uid = :uid AND Cart.pid = Products.productID
                               uid=uid)
         return [Cart(*row) for row in rows]
 
+    @staticmethod
+    def getPid(pid):
+        rows = app.db.execute('''
+SELECT Cart.uid, Cart.pid, Products.name, Products.unitPrice, Cart.quantity, 
+    (Cart.quantity * Products.unitPrice) AS totalPrice,
+    cartTotalPrice.totalPrice AS subtotal, Products.image AS imgUrl
+FROM Cart, Products, cartTotalPrice
+WHERE Cart.uid = :uid AND Cart.pid = Products.productID
+    AND cartTotalPrice.uid = :uid
+''',
+                              pid=pid)
+        return [Cart(*row) for row in rows]
+
 #     @staticmethod
 #     def get_all(available=True):
 #         rows = app.db.execute('''
