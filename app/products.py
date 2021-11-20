@@ -55,21 +55,25 @@ def create():
     else:
         return redirect(url_for('users.login'))
 
-@bp.route("/cart")
-def cart():
+@bp.route("/cart/<uid>/<pid>/<sid>/<quantity>")
+def cart(uid,pid,sid,quantity):
     if current_user.is_authenticated:
         #get current items in user's cart
+        Cart.addToCart(uid,pid,sid,quantity)
         cart = Cart.get(current_user.id)
     else:
         #not logged in so redirect to login page 
         return redirect(url_for('users.login'))
     #ender page by adding ingo to the index.html file
     return render_template("cart.html", 
-                                cart_items=cart)
+                                cart_items=cart,
+                                currentQuantity=quantity,
+                                product = Cart.getPid(current_user.id, pid))
 
 @bp.route("/detailview/<id>")
 def detailview(id):
-    return render_template('detailview.html', product = Product.get(id))
+    return render_template('detailview.html', product = Product.get(id),
+    user = current_user.id)
 
 @bp.route("/inventory")
 def inventory():

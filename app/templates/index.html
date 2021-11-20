@@ -4,19 +4,19 @@
 
 <br><br>
 
-<h2>Products for Sale:</h2>
+<h2>Products for Sale</h2>
 <form class="form-inline my-2 my-lg-0" action="{{ url_for('products.search') }}">
   <input class="form-control mr-sm-2" name="c" type="search" placeholder="Search category" aria-label="Search">
   <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search keyword" aria-label="Search">
   <select class="form-control mr-sm-2" name="s">
     <option value="N/A">Sort by featured</option>
-    <option value="Low">Sort by price: low to high</option>
-    <option value="High">Sort by price: high to low</option>
+    <option value="Low">Price: low to high</option>
+    <option value="High">Price: high to low</option>
   </select>
   <select class="form-control mr-sm-2" name="p">
     <option value="N/A">Filter by price</option>
-    <option value="250">0-250</option>
-    <option value="500">250-500</option>
+    <option value="250">$0 - $250</option>
+    <option value="500">$250 - $500</option>
   </select>
   <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
 </form>
