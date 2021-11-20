@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{{ url_for('index.index') }}">Home</a>
+<nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="{{ url_for('index.index') }}">HOME</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -7,29 +7,29 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('products.create') }}">List</a>
+        <a class="nav-link" href="{{ url_for('products.create') }}">LIST</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Sellers
+          SELLERS
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="nav-link" href="{{ url_for('products.inventory') }}">Inventory</a>
-          <a class="nav-link" href="{{ url_for('products.orders') }}">Orders</a>
+          <a class="nav-link" href="{{ url_for('products.inventory') }}">INVENTORY</a>
+          <a class="nav-link" href="{{ url_for('products.orders') }}">ORDERS</a>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('products.displaycart')}}">Cart</a>
+        <a class="nav-link" href="{{ url_for('products.displaycart')}}">CART</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Account
+          ACCOUNT
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="nav-link" href="{{ url_for('users.accountdetails') }}">Account Details</a>
-          <a class="nav-link" href="{{ url_for('users.accountbalance') }}">Account Balance</a>
+          <a class="nav-link" href="{{ url_for('users.accountdetails') }}">ACCOUNT DETAILS</a>
+          <a class="nav-link" href="{{ url_for('users.accountbalance') }}">ACCOUNT BALANCE</a>
           <div class="dropdown-divider"></div>
-          <a class="nav-link" href="#">Order History</a>
+          <a class="nav-link" href="#">ORDER HISTORY</a>
         </div>
       </li>
     </ul>
