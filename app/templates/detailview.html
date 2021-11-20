@@ -4,7 +4,7 @@
 
 <br><br>
 <a href="{{ url_for('index.index') }}"><button>Back</button></a>
-    <a style="float: right;" href="" type="submit"><button>Add to Cart</button></a>
+    <a style="float: right;" href="{{ url_for('index.index') }}" type="submit"><button>Add to Cart</button></a>
 <p></p>
 <h2>Product Details:</h2>
 <div class="container py-5">
@@ -54,12 +54,17 @@
             <tr>
               <th scope="row" class="w-150 dark-grey-text h6">Sellers</th>
               <th scope="row" class="w-150 dark-grey-text h6">In Stock</th>
+              <th scope="row" class="w-150 dark-grey-text h6">Quantity</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row" class="w-150 dark-grey-text h6">Jeremy</th>
-              <th scope="row" class="w-150 dark-grey-text h6">{{product.Inventory}}</th>
+              <td width="33.33%" scope="row" class="w-150 dark-grey-text h6">Seller Name</td>
+              <td width="33.33%" scope="row" class="w-150 dark-grey-text h6">{{product.Inventory}}</td>
+              <td width="33.33%" scope="row" class="w-150 dark-grey-text h6">
+                <input type="number" value="1" min="1">
+                <button class="update">Update</button>
+              </td>
             </tr>
           </tbody>
         </table>
