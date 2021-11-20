@@ -35,7 +35,7 @@ CREATE TABLE Products (
     name VARCHAR(256) UNIQUE NOT NULL,
     description VARCHAR(256) NOT NULL,
     category VARCHAR(256) NOT NULL,
-    unitPrice FLOAT NOT NULL,
+    unitPrice DECIMAL(65,2) NOT NULL,
     CHECK(unitPrice > 0.0),
     Inventory INT NOT NULL,
     CHECK(Inventory > -1),
