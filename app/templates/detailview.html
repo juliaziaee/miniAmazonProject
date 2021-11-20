@@ -4,7 +4,7 @@
 
 <br><br>
 <a href="{{ url_for('index.index') }}"><button>Back</button></a>
-        <a style="float:right" id="submissionlink" href="{{ url_for('products.cart', uid=user, pid=product.id, sid=product.sellerID, quantity=1) }}" type="submit"><button onclick="addAttribute()">Add to Cart</button></a>
+        <a style="float:right" id="submissionlink" href="{{ url_for('products.addtocart', pid=product.id, sid=product.sellerID, quantity=1) }}" type="submit"><button onclick="addAttribute()">Add to Cart</button></a>
         <script>
             function addAttribute() {
                 document.getElementById("submissionlink").href = document.getElementById("submissionlink").href.substring(0,document.getElementById("submissionlink").href.length-1) + "/" + document.getElementById("theQuantity").value;
@@ -37,7 +37,7 @@
         <a class="nav-link active show" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Information</a>
+        <a class="nav-link" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Update Quantity</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews (1)</a>
@@ -46,7 +46,7 @@
     <div class="tab-content" id="advancedTabContent">
       <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
         <h5><b>{{product.name}}</b></h5>
-        <p class="small text-muted mb-2">ID: {{product.id}}</p>
+        <p class="small text-muted mb-2">Product ID: {{product.id}}</p>
         <h6>Category: {{product.category}}</h6>
         <h6>Rating: {{product.rating}}</h6>
         <p class="pt-1">Description: {{product.description}}</p>

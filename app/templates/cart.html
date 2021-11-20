@@ -14,9 +14,8 @@
     <h1>Your cart is currently empty.</h1>
 {% else %}
 <h1>Shopping Cart</h1>
-
+<br><br>
 <div class="shopping-cart">
-
   <div class="column-labels">
     <label class="product-image">Image</label>
     <label class="product-details">Product</label>
@@ -36,7 +35,7 @@
     </div>
     <div class="product-price">{{product.unitPrice}}</div>
     <div class="product-quantity">
-      <input type="number" value="{{product.quantity}}" min="currentQuantity" max="{{product.Inventory}}">
+      <input type="number" value="{{product.quantity}}" min="1" max="{{product.Inventory}}">
     </div>
     <div class="product-removal">
       <button class="remove-product">
@@ -50,7 +49,7 @@
   <div class="totals">
     <div class="totals-item">
       <label>Subtotal</label>
-      <div class="totals-value" id="cart-subtotal">{{cart_items[0].totalPrice}}</div>
+      <div class="totals-value" id="cart-subtotal">{{subtotal}}</div>
     </div>
   </div>
       
