@@ -83,8 +83,11 @@ def displaycart():
 
 @bp.route("/detailview/<id>")
 def detailview(id):
-    return render_template('detailview.html', product = Product.get(id),
-    user = current_user.id)
+    if current_user.is_authenticated:
+        return render_template('detailview.html', product = Product.get(id),
+                                                  user = current_user.id)
+    else:
+        return redirect(url_for('users.login'))
 
 @bp.route("/inventory")
 def inventory():
