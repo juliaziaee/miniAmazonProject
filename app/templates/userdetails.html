@@ -2,7 +2,10 @@
 
 {% block content %}
 
-<h1>User Details: {{user}}</h1>
+<h1>User Details</h1>
+<h3>{{user.firstname}} {{user.lastname}}</h3>
+<h3>User ID {{user.id}}</h3>
+<p>{{user.email}}</p>
 
 
 {% endblock %}
