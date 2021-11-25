@@ -63,7 +63,7 @@
           </thead>
           <tbody>
             <tr>
-              <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{product.sellerID}}</td>
+              <td><p><a href="{{ url_for('users.userdetails') }}">{{product.sellerID}}</a></p></td>
               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{product.sellerName}}</td>
               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{product.Inventory}}</td>
               <td width="25%" scope="row" class="w-150 dark-grey-text h6">

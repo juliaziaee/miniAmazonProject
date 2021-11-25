@@ -153,5 +153,7 @@ def accountbalance():
                 return redirect(url_for('users.accountbalance'))
         return render_template("accountbalance.html", title="Account Balance", balance=userbal, form=form)
     else: return render_template("accountbalance.html", title="Account Balance")
-
-
+    
+@bp.route("/userdetails")
+def userdetails():
+    return render_template("userdetails.html", title="User Details")
