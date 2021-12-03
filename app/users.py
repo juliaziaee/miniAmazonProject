@@ -139,6 +139,10 @@ def logout():
 def accountdetails():
     return render_template("accountdetails.html", title="Home page")
 
+@bp.route("/orderhistory")
+def orderhistory():
+    return render_template("orderhistory.html", title="Home page")
+
 class Funds(FlaskForm):
     amount = StringField(_l('Amount'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
