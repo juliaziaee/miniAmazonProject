@@ -256,6 +256,21 @@ BEFORE INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_balance();
 
+-- Trigger to ensure user has enough balance to deduct funds
+CREATE FUNCTION TF_funds() RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS(SELECT * FROM userBalance WHERE 
+        id = NEW.id AND amount < -(NEW.amount)) THEN
+        RAISE EXCEPTION 'User % has insufficient funds for to deduct this amount:', -(NEW.amount);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TG_deductfunds
+BEFORE INSERT ON Funding
+    FOR EACH ROW
+    EXECUTE PROCEDURE TF_funds();
 
 -- VIEWS
 
