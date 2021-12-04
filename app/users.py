@@ -157,7 +157,7 @@ def accountbalance():
             if Balance.updateBalance(current_user.id, datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'), form.amount.data) == current_user.id:
                 return redirect(url_for('users.accountbalance'))
             else:
-                error = 'Cannot deduct more balance than you have'
+                error = (Balance.updateBalance(current_user.id, datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'), form.amount.data).split("CONTEXT"))[0]
         return render_template("accountbalance.html", title="Account Balance", balance=userbal, form=form, error = error)
     else: return render_template("accountbalance.html", title="Account Balance")
     

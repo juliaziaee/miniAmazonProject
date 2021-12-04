@@ -32,7 +32,8 @@ WHERE id = :id
                 amount=amount,
                 transactionDT=transactionDT)
         except SQLAlchemyError as e:
-            error = str(e.__dict__['orig'])
+            errorInfo = e.orig.args
+            error = (errorInfo[0])
             return error
         return id
             
