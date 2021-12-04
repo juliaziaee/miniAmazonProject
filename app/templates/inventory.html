@@ -21,16 +21,19 @@
   <tbody>
     {% for product in avail_inventory%}
       <tr>
-        <th scope="row">{{product.id}}</th>
+        <th scope="row">{{product.pid}}</th>
         <td>{{product.name}}</td>
         <td>
           <div class="product-quantity">
           <input type="number" value="{{product.num_in_stock}}" min="1">
           <button class="update">Update</button>
         <td>
-          <button class="remove-product">
-            Remove
-          </button>
+          <a id="submissionlink" href="{{ url_for('products.removeinventory', pid=product.pid) }}" type="submit"><button onclick="removeInventory()">Remove</button></a>
+          <script>
+              function removeInventory() {
+                  document.getElementById("submissionlink").href = document.getElementById("submissionlink").href.substring(0,document.getElementById("submissionlink").href.length-1) + "/" + document.getElementById("theQuantity").value;
+              }
+          </script>
       </td>
       </tr>
     {% endfor %}

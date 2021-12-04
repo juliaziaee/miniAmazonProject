@@ -100,6 +100,12 @@ def inventory():
     else:
         return redirect(url_for('users.login'))
 
+@bp.route("/inventory/<pid>")
+def removeinventory(pid):
+    Inventory.removeInventory(pid)
+    #ender page by adding ingo to the index.html file
+    return redirect(url_for('products.inventory'))
+
 
 @bp.route("/orders")
 def orders():
