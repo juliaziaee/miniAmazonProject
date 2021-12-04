@@ -8,6 +8,9 @@
 <br></br>
 <h3>Add or Deduct Funds</h3>
 <p>To deduct funds, insert a negative value no greater than your current balance</p>
+{% if error %}
+    <p style="color:#FF0000" class=error><strong>Error:</strong> {{ error }}
+{% endif %}
 <form action="" method="post">
   {{ form.hidden_tag() }}
     <p>

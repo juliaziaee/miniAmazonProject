@@ -149,13 +149,16 @@ class Funds(FlaskForm):
 
 @bp.route("/accountbalance", methods=['GET', 'POST'])
 def accountbalance():
+    error = None
     if current_user.is_authenticated:
         userbal = Balance.getBalance(current_user.id)
         form = Funds()
         if form.validate_on_submit():
-            if Balance.updateBalance(current_user.id, datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'), form.amount.data):
+            if Balance.updateBalance(current_user.id, datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'), form.amount.data) == current_user.id:
                 return redirect(url_for('users.accountbalance'))
-        return render_template("accountbalance.html", title="Account Balance", balance=userbal, form=form)
+            else:
+                error = 'Cannot deduct more balance than you have'
+        return render_template("accountbalance.html", title="Account Balance", balance=userbal, form=form, error = error)
     else: return render_template("accountbalance.html", title="Account Balance")
     
 @bp.route("/userdetails", methods=['GET', 'POST'])
