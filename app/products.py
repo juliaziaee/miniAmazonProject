@@ -11,6 +11,7 @@ from .models.inventory import Inventory
 from .models.cart import Cart
 from .models.product import Product
 from .models.orders import Orders
+from .models.reviews import ProdReviews
 from .models.purchase import Purchase
 
 from flask import Blueprint
@@ -85,7 +86,8 @@ def displaycart():
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
-                                                  user = current_user.id)
+                                                  user = current_user.id, 
+                                                  review = ProdReviews.get(id))
     else:
         return redirect(url_for('users.login'))
 
