@@ -55,7 +55,7 @@ def create():
     else:
         return redirect(url_for('users.login'))
 
-@bp.route("/cart/<pid>/<sid>/<quantity>")
+@bp.route("/cart/<int:pid>/<int:sid>/<int:quantity>")
 def addtocart(pid,sid,quantity):
     if current_user.is_authenticated:
         #get current items in user's cart
@@ -81,7 +81,7 @@ def displaycart():
                                 cart_items=cart,
                                 subtotal=total)                     
 
-@bp.route("/detailview/<id>")
+@bp.route("/detailview/<int:id>")
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
@@ -99,6 +99,12 @@ def inventory():
                            avail_inventory=inventory)
     else:
         return redirect(url_for('users.login'))
+
+@bp.route("/inventory/<pid>")
+def removeinventory(pid):
+    Inventory.removeInventory(pid)
+    #ender page by adding ingo to the index.html file
+    return redirect(url_for('products.inventory'))
 
 
 @bp.route("/orders")
