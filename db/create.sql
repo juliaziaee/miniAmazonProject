@@ -261,7 +261,7 @@ CREATE FUNCTION TF_funds() RETURNS TRIGGER AS $$
 BEGIN
     IF EXISTS(SELECT * FROM userBalance WHERE 
         id = NEW.id AND amount < -(NEW.amount)) THEN
-        RAISE EXCEPTION 'User % has insufficient funds for to deduct this amount:', -(NEW.amount);
+        RAISE EXCEPTION 'You cannot deduct more funds than you have';
     END IF;
     RETURN NEW;
 END;
