@@ -37,16 +37,16 @@
   {% for product in products%}
   <div id="click" onclick="window.location.href='{{ url_for('products.detailview', id=product.id) }}'">
     <div id="click" class="product">
-      <div id="click" class="product-image">
-        <img id="click" style="float:left" src={{product.image}}>
+      <div class="product-image">
+        <img style="float:left" src={{product.image}}>
       </div>
       <div class="product-details">
         <div class="product-title">{{product.name}}</div>
         <p class="product-id">Product ID: {{product.id}}</p>
       </div>
-      <div id="click" class="product-price">{{product.price}}</div>
-      <div id="click" class="product-description">{{product.description}}</div>
-      <div id="click" style="float:right" class="product-category">{{product.category}}</div>
+      <div class="product-price">{{product.price}}</div>
+      <div class="product-description">{{product.description}}</div>
+      <div style="float:right" class="product-category">{{product.category}}</div>
     </div>
   </div>
   {% endfor %}
