@@ -35,20 +35,22 @@
     <label style="float:right" class="product-category">Category</label>  
   </div>
   {% for product in products%}
-  <div id="click" onclick="window.location.href='{{ url_for('products.detailview', id=product.id) }}'">
-    <div id="click" class="product">
-      <div class="product-image">
-        <img style="float:left" src={{product.image}}>
+    {% if product.Inventory > 0 %}
+    <div id="click" onclick="window.location.href='{{ url_for('products.detailview', id=product.id) }}'">
+      <div id="click" class="product">
+        <div class="product-image">
+          <img style="float:left" src={{product.image}}>
+        </div>
+        <div class="product-details">
+          <div class="product-title">{{product.name}}</div>
+          <p class="product-id">Product ID: {{product.id}}</p>
+        </div>
+        <div class="product-price">{{product.price}}</div>
+        <div class="product-description">{{product.description}}</div>
+        <div style="float:right" class="product-category">{{product.category}}</div>
       </div>
-      <div class="product-details">
-        <div class="product-title">{{product.name}}</div>
-        <p class="product-id">Product ID: {{product.id}}</p>
-      </div>
-      <div class="product-price">{{product.price}}</div>
-      <div class="product-description">{{product.description}}</div>
-      <div style="float:right" class="product-category">{{product.category}}</div>
     </div>
-  </div>
+    {% endif %}
   {% endfor %}
 </div>
 
