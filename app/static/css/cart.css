@@ -130,6 +130,7 @@
 	float: right;
 	border: 0;
 	margin-top: 20px;
+	margin-bottom: 10px;
 	padding: 6px 25px;
 	background-color: rgb(32, 196, 32); 
 	color: #fff;
@@ -153,4 +154,19 @@
   .product .remove-product:hover {
 	background-color: rgb(228, 117, 117);
   }
+
+  .product .update-qty {
+	border: 0;
+	padding: 2px 4px;
+	background-color: rgb(68, 128, 197); 
+	color: #fff;
+	font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
+	font-size: 10px;
+	border-radius: 3px;
+  }
+  .product .update-qty:hover {
+	background-color: rgb(147, 192, 229);
+  }
+
+  
   

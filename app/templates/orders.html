@@ -2,6 +2,11 @@
 
 {% block content %}
 
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/cart.css">
+</head>
+
 {% if order_history == [] or not current_user.is_authenticated %}
 <h2>You have not sold any items yet</h2>
 <h3>Go to the 'List' tab to list a product</h3>

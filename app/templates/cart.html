@@ -34,12 +34,19 @@
     </div>
     <div class="product-price">{{product.unitPrice}}</div>
     <div class="product-quantity">
-      <input type="number" value="{{product.quantity}}" min="1" max="{{product.Inventory}}">
+      <input id = "prodQty" name = "{{product.pid}}" type="number" value="{{product.quantity}}" min="1" max="{{product.Inventory}}" onchange="changeQty(this.value, this.name)">
+      <a id="{{product.pid}}" href="{{ url_for('products.updateCartQty', pid=product.pid, quantity=product.quantity)}}" 
+          type="submit"><button class = "update-qty" onclick="updateAtrribute()">Update</button></a>
+         <script>
+          function changeQty(newVal, newId) {
+            document.getElementById(newId).href = document.getElementById(newId).href.substring(0,document.getElementById(newId).href.length-2) + "/" + String(newVal);
+            return;
+          }
+        </script>
     </div>
     <div class="product-removal">
-      <button class="remove-product">
-        Remove
-      </button>
+      <a id="updatelink" href="{{ url_for('products.removeItem', pid=product.pid)}}" 
+          type="submit"><button class = "remove-product">Remove</button></a>
     </div>
     <div class="product-line-price">{{product.totalPrice}}</div>
   </div>
@@ -60,7 +67,6 @@
 
 <!-- partial -->
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script  src="app/models/scripts/cart.js"></script>
 {% endblock %}
 </body>
 </html>

@@ -2,7 +2,16 @@
 
 {% block content %}
 
-<h1>Update Information</h1>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/cart.css">
+</head>
+
+<h1>Update Contact Information</h1>
+
+{% if error %}
+    <p style="color:#FF0000" class=error><strong>Error:</strong> {{ error }}
+{% endif %}
 
 <form action="" method="post">
   {{ form.hidden_tag() }}
@@ -17,13 +26,6 @@
     {{ form.lastname.label }}<br/>
     {{ form.lastname(size=32) }}<br/>
     {% for error in form.lastname.errors %}
-    <span style="color: red;">[{{ error }}]</span>
-    {% endfor %}
-  </p>
-  <p>
-    {{ form.email.label }}<br/>
-    {{ form.email(size=64) }}<br/>
-    {% for error in form.email.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
   </p>

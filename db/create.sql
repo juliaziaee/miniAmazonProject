@@ -179,7 +179,7 @@ BEFORE INSERT ON ProductReview
 -- Ensures that customer has not already submitted a product review
 CREATE FUNCTION TF_DoubleProductReview() RETURNS TRIGGER AS $$
 BEGIN
-    IF NOT EXISTS(SELECT * FROM ProductReview
+    IF EXISTS(SELECT * FROM ProductReview
         WHERE uid = NEW.uid AND pid = NEW.pid) THEN
         RAISE EXCEPTION '% has already left a review for product %', NEW.uid, NEW.pid;
     END IF;
@@ -195,7 +195,7 @@ BEFORE INSERT ON ProductReview
 -- Ensures that customer has not already submitted a seller review
 CREATE FUNCTION TF_DoubleSellerReview() RETURNS TRIGGER AS $$
 BEGIN
-    IF NOT EXISTS(SELECT * FROM SellerReview
+    IF EXISTS(SELECT * FROM SellerReview
         WHERE uid = NEW.uid AND sid = NEW.sid) THEN
         RAISE EXCEPTION '% has already left a review for seller %', NEW.uid, NEW.sid;
     END IF;
@@ -240,12 +240,13 @@ AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_updateInventory();
 
--- Trigger to ensure user has enough balance for purchase to be made
+
+-- Trigger to ensure user has enough balance for cart order to be purchased
 CREATE FUNCTION TF_balance() RETURNS TRIGGER AS $$
 BEGIN
-    IF EXISTS(SELECT * FROM userBalance WHERE 
-        id = NEW.uid AND amount < (NEW.quantity * NEW.finalUnitPrice)) THEN
-        RAISE EXCEPTION 'User % has insufficient funds for purchase', NEW.uid;
+    IF EXISTS(SELECT * FROM userBalance, cartTotalPrice WHERE 
+        userBalance.id = NEW.uid AND userBalance.amount < cartTotalPrice.totalPrice THEN
+        RAISE EXCEPTION 'User % has insufficient funds for this order', NEW.uid;
     END IF;
     RETURN NEW;
 END;
@@ -256,6 +257,21 @@ BEFORE INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_balance();
 
+-- Trigger to ensure user has enough balance to deduct funds
+CREATE FUNCTION TF_funds() RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS(SELECT * FROM userBalance WHERE 
+        id = NEW.id AND amount < -(NEW.amount)) THEN
+        RAISE EXCEPTION 'You cannot deduct more funds than you have';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER TG_deductfunds
+BEFORE INSERT ON Funding
+    FOR EACH ROW
+    EXECUTE PROCEDURE TF_funds();
 
 -- VIEWS
 
@@ -274,11 +290,10 @@ CREATE VIEW sellerpage(ID) AS
 
 --  Create view page to get each user's current balance
 CREATE VIEW userBalance(id, amount) AS
-    SELECT Users.id, COALESCE(balances.balance, 0) AS amount FROM Users LEFT JOIN 
+    SELECT Users.id, COALESCE(balances.balance,0) AS amount FROM Users LEFT JOIN 
         (SELECT fund.id, (fund.totFund - COALESCE(purch.totPurch, 0)) AS balance FROM 
             (SELECT id, SUM(amount) AS totFund FROM Funding GROUP BY id) AS fund 
         FULL OUTER JOIN 
             (SELECT uid, SUM(finalUnitPrice * quantity) AS totPurch FROM Purchases GROUP BY uid) AS purch
         ON fund.id = purch.uid) AS balances
     ON Users.id = balances.id;
-
