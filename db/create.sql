@@ -179,7 +179,7 @@ BEFORE INSERT ON ProductReview
 -- Ensures that customer has not already submitted a product review
 CREATE FUNCTION TF_DoubleProductReview() RETURNS TRIGGER AS $$
 BEGIN
-    IF NOT EXISTS(SELECT * FROM ProductReview
+    IF EXISTS(SELECT * FROM ProductReview
         WHERE uid = NEW.uid AND pid = NEW.pid) THEN
         RAISE EXCEPTION '% has already left a review for product %', NEW.uid, NEW.pid;
     END IF;
@@ -195,7 +195,7 @@ BEFORE INSERT ON ProductReview
 -- Ensures that customer has not already submitted a seller review
 CREATE FUNCTION TF_DoubleSellerReview() RETURNS TRIGGER AS $$
 BEGIN
-    IF NOT EXISTS(SELECT * FROM SellerReview
+    IF EXISTS(SELECT * FROM SellerReview
         WHERE uid = NEW.uid AND sid = NEW.sid) THEN
         RAISE EXCEPTION '% has already left a review for seller %', NEW.uid, NEW.sid;
     END IF;
@@ -296,4 +296,3 @@ CREATE VIEW userBalance(id, amount) AS
             (SELECT uid, SUM(finalUnitPrice * quantity) AS totPurch FROM Purchases GROUP BY uid) AS purch
         ON fund.id = purch.uid) AS balances
     ON Users.id = balances.id;
-

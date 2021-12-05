@@ -109,7 +109,7 @@ def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
                                                   user = current_user.id, 
-                                                  review = ProdReviews.get(id))
+                                                  review = ProdReviews.get_all(id))
     else:
         return redirect(url_for('users.login'))
 
