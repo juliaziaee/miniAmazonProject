@@ -28,12 +28,7 @@
           <input type="number" value="{{product.num_in_stock}}" min="1">
           <button class="update">Update</button>
         <td>
-          <a id="submissionlink" href="{{ url_for('products.removeinventory', pid=product.pid) }}" type="submit"><button onclick="removeInventory()">Remove</button></a>
-          <script>
-              function removeInventory() {
-                  document.getElementById("submissionlink").href = document.getElementById("submissionlink").href.substring(0,document.getElementById("submissionlink").href.length-1) + "/" + document.getElementById("theQuantity").value;
-              }
-          </script>
+          <a id="removelink" href="{{ url_for('products.removeinventory', pid=product.pid) }}" type="submit"><button>Remove</button></a>
       </td>
       </tr>
     {% endfor %}

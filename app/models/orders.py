@@ -16,6 +16,7 @@ finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime):
         self.fufullmentstatus = fufullmentstatus
         self.fulfillment_datetime = fulfillment_datetime
 
+
     @staticmethod
     def get(seller):
         # buyer information including address, date order placed,
@@ -29,6 +30,7 @@ ORDER BY orderDateTime DESC
 ''',
                               SellerID=seller)
         return [Orders(*row) for row in rows]
+
 
     @staticmethod
     def get_all(available=True):
