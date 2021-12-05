@@ -40,3 +40,16 @@ WHERE Purchases.uid = Users.id
 ORDER BY orderDateTime DESC
 ''',)
         return [Orders(*row) for row in rows]
+    
+    @staticmethod
+    def getOrders(uid):
+        # buyer information including address, date order placed,
+        # total amount/number of items, and overall fulfillment status
+        rows = app.db.execute('''
+SELECT *
+FROM Purchases
+WHERE uid = :uid
+ORDER BY orderDateTime DESC
+''',
+                              uid=uid)
+        return [Orders(*row) for row in rows]

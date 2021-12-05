@@ -60,7 +60,6 @@ RETURNING pid
 UPDATE Cart
 SET quantity = :new_quantity 
 WHERE uid = :uid AND pid = :pid
-RETURNING pid 
 """,
                                   uid=uid,
                                   pid=pid,
