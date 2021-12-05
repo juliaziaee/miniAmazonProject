@@ -13,7 +13,7 @@ class Inventory:
         rows = app.db.execute('''
 SELECT productID, name, inventory, SellerID
 FROM Products
-WHERE SellerID = :SellerID
+WHERE SellerID = :SellerID AND inventory > 0
 ''',
                               SellerID=seller)
         return [Inventory(*row) for row in rows]
@@ -29,11 +29,13 @@ FROM Products
     @staticmethod
     def removeInventory(pid):
         try:
-            app.db.execute("""
-DELETE FROM PRODUCTS
+            rows = app.db.execute("""
+UPDATE PRODUCTS
+SET Inventory = 0
 WHERE productID = :pid
 """,
                                   pid = pid)
+            productID = rows
             return None
         except Exception:
             # likely id already in use; better error checking and
