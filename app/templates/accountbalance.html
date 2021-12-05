@@ -9,7 +9,7 @@
 
 <h1>Account Balance</h1>
 {% if current_user.is_authenticated %}
-<h2>{{balance[0].amount}}</h2>
+<h2>{{balance.amount}}</h2>
 <br></br>
 <h3>Add or Deduct Funds</h3>
 <p>To deduct funds, insert a negative value no greater than your current balance</p>
@@ -20,7 +20,7 @@
   {{ form.hidden_tag() }}
     <p>
     {{ form.amount.label }}<br/>
-    {{ form.amount(size=32) }}<br/>
+    ${{ form.amount(size=32) }}<br/>
     {% for error in form.amount.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
