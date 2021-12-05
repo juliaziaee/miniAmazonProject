@@ -22,22 +22,27 @@
     <tr>
       <th scope="row" class="w-150 dark-grey-text h6">Order Date</th>
       <th scope="row" class="w-150 dark-grey-text h6">Product Information</th>
+      <th scope="row" class="w-150 dark-grey-text h6">Order Status</th>
       <th scope="row" class="w-150 dark-grey-text h6">Final Unit Price</th>
       <th scope="row" class="w-150 dark-grey-text h6">Quantity</th>
-      <th scope="row" class="w-150 dark-grey-text h6">Final Total Price</th>
+      <th scope="row" class="w-150 dark-grey-text h6">Total Price</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.orderDateTime}}</td>
       <td width="25%" scope="row" class="w-150 dark-grey-text h6"> 
+        <div> Name: {{order.productName}}</div> 
         <div> Seller ID: {{order.sellerID}}</div> 
         <div> Product ID: {{order.pid}}</div> 
       </td>
-      <td width="25%" scope="row" class="w-150 dark-grey-text h6">{order.finalUnitPrice}}</td>
+      <td width="25%" scope="row" class="w-150 dark-grey-text h6">
+        <div>{{order.fufullmentstatus}}</div>
+        <div>on {{order.fulfillment_datetime}}</div>
+      </td>
+      <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.finalUnitPrice}}</td>
       <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.quantity}}</td>
-      <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.totalPrice}}</td>
-
+      <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{order.totalPrice}}</td>
       
     </tr>
   </tbody>
