@@ -136,7 +136,7 @@ def removeinventory(pid):
 def orders():
     if current_user.is_authenticated:
         # get all available products for sale:
-        orders = Orders.get(current_user.id)
+        orders = Orders.getOverview(current_user.id)
         # render the page by adding information to the index.html file
         return render_template('orders.html',
                            order_history=orders)
