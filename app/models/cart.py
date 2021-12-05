@@ -52,3 +52,39 @@ RETURNING pid
             # likely id already in use; better error checking and
             # reporting needed
             return None
+
+    @staticmethod
+    def updateQuantity(uid, pid, new_quantity):
+        try:
+            rows = app.db.execute("""
+UPDATE Cart
+SET quantity = :new_quantity 
+WHERE uid = :uid AND pid = :pid
+RETURNING pid 
+""",
+                                  uid=uid,
+                                  pid=pid,
+                                  new_quantity = new_quantity)
+            productID = rows[0][0]
+            return None
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
+    
+    @staticmethod
+    def removeFromCart(uid, pid):
+        try:
+            rows = app.db.execute("""
+DELETE FROM Cart
+WHERE uid = :uid AND pid = :pid
+""",
+                                  uid=uid,
+                                  pid=pid)
+            productID = rows
+            return None
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
+        

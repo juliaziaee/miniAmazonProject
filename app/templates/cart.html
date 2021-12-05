@@ -34,12 +34,18 @@
     </div>
     <div class="product-price">{{product.unitPrice}}</div>
     <div class="product-quantity">
-      <input type="number" value="{{product.quantity}}" min="1" max="{{product.Inventory}}">
+      <input id = "prodQty" type="number" value="{{product.quantity}}" min="1" max="{{product.Inventory}}">
+      <a id="updatelink" href="{{ url_for('products.updateCartQty', pid=product.pid, quantity=1)}}" 
+          type="submit"><button class = "update-qty" onclick="updateAtrribute()">Update</button></a>
+        <script>
+            function updateAtrribute() {
+                document.getElementById("updatelink").href = document.getElementById("updatelink").href.substring(0,document.getElementById("updatelink").href.length-1) + "/" + document.getElementById("prodQty").value;
+            }
+        </script>
     </div>
     <div class="product-removal">
-      <button class="remove-product">
-        Remove
-      </button>
+      <a id="updatelink" href="{{ url_for('products.removeItem', pid=product.pid)}}" 
+          type="submit"><button class = "remove-product">Remove</button></a>
     </div>
     <div class="product-line-price">{{product.totalPrice}}</div>
   </div>
