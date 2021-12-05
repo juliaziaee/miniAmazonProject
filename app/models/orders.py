@@ -2,9 +2,11 @@ from flask import current_app as app
 
 
 class Orders:
-    def __init__(self, uid, street1, street2, city, state, zip1, orderDateTime,
-finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime):
+    def __init__(self, uid, sellerID, pid, street1, street2, city, state, zip1, orderDateTime,
+finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, totalPrice):
         self.uid = uid
+        self.sellerID = sellerID
+        self.pid = pid
         self.street1 = street1
         self.street2 = street2
         self.city = city
@@ -15,6 +17,7 @@ finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime):
         self.quantity = quantity
         self.fufullmentstatus = fufullmentstatus
         self.fulfillment_datetime = fulfillment_datetime
+        self.totalPrice = totalPrice
 
 
     @staticmethod
@@ -22,8 +25,8 @@ finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime):
         # buyer information including address, date order placed,
         # total amount/number of items, and overall fulfillment status
         rows = app.db.execute('''
-SELECT uid, street1, street2, city, state, zip, orderDateTime,
-finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime
+SELECT uid, SellerID, pid, street1, street2, city, state, zip, orderDateTime,
+finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, (quantity*finalUnitPrice) AS totalPrice
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
 ORDER BY orderDateTime DESC
@@ -35,8 +38,8 @@ ORDER BY orderDateTime DESC
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT Purchases.uid, street1, street2, city, state, zip, orderDateTime,
-finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime
+SELECT Purchases. uid, SellerID, pid, street1, street2, city, state, zip, orderDateTime,
+finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, (quantity*finalUnitPrice) AS totalPrice
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id
 ORDER BY orderDateTime DESC
@@ -48,9 +51,10 @@ ORDER BY orderDateTime DESC
         # buyer information including address, date order placed,
         # total amount/number of items, and overall fulfillment status
         rows = app.db.execute('''
-SELECT *
-FROM Purchases
-WHERE uid = :uid
+SELECT uid, SellerID, pid, street1, street2, city, state, zip, orderDateTime,
+finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, (quantity*finalUnitPrice) AS totalPrice
+FROM Purchases, Users
+WHERE Purchases.uid = Users.id AND Purchases.uid = :uid
 ORDER BY orderDateTime DESC
 ''',
                               uid=uid)
