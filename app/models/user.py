@@ -177,9 +177,11 @@ RETURNING id
                 state=state,
                 zip=zip,
             )
-            return id
-        except Exception:
-            return None
+        except SQLAlchemyError as e:
+            errorInfo = e.orig.args
+            error = errorInfo[0]
+            return error
+        return id
 
     @staticmethod
     @login.user_loader

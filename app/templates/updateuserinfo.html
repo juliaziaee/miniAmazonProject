@@ -9,6 +9,10 @@
 
 <h1>Update Contact Information</h1>
 
+{% if error %}
+    <p style="color:#FF0000" class=error><strong>Error:</strong> {{ error }}
+{% endif %}
+
 <form action="" method="post">
   {{ form.hidden_tag() }}
   <p>

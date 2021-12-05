@@ -67,6 +67,12 @@ class RegistrationForm(FlaskForm):
     zip = StringField(
         _l("Postal Code"), validators=[DataRequired(), Length(min=5, max=5)]
     )
+    
+    def validate_zip(form, field):
+        try:
+            float(field.data)
+        except ValueError:
+            raise ValidationError("Must be a valid zipcode")
 
     def validate_email(self, email):
         if User.email_exists(email.data):
@@ -164,24 +170,50 @@ class UpdateUserInfoForm(FlaskForm):
         _l("Postal Code"), validators=[DataRequired(), Length(min=5, max=5)]
     )
     submit = SubmitField(_l("Update"))
-
+    
+    def validate_zip(form, field):
+        try:
+            float(field.data)
+        except ValueError:
+            raise ValidationError("Must be a valid zipcode")
+            
 
 @bp.route("/updateuserinfo", methods=["GET", "POST"])
 def updateuserinfo():
-    form = UpdateUserInfoForm()
-    if form.validate_on_submit():
-        if User.update(
-            current_user.id,
-            form.firstname.data,
-            form.lastname.data,
-            form.street1.data,
-            form.street2.data,
-            form.city.data,
-            form.state.data,
-            form.zip.data,
-        ):
-            return redirect(url_for("users.accountdetails"))
-    return render_template("updateuserinfo.html", title="Update Information", form=form)
+    error = None
+    if current_user.is_authenticated:
+        form = UpdateUserInfoForm()
+        if form.validate_on_submit():
+            if (
+                User.update(
+                    current_user.id,
+                    form.firstname.data,
+                    form.lastname.data,
+                    form.street1.data,
+                    form.street2.data,
+                    form.city.data,
+                    form.state.data,
+                    form.zip.data,
+                )
+                == current_user.id
+            ):
+                return redirect(url_for("users.accountdetails"))
+            else:
+                error = User.update(
+                    current_user.id,
+                    form.firstname.data,
+                    form.lastname.data,
+                    form.street1.data,
+                    form.street2.data,
+                    form.city.data,
+                    form.state.data,
+                    form.zip.data,
+                ).split("CONTEXT")[0]
+        return render_template(
+            "updateuserinfo.html", title="Update Contact Info", form=form, error=error
+        )
+    else:
+        return render_template("updateuserinfo.html", title="Update Contact Info")
 
 
 class FundsForm(FlaskForm):
