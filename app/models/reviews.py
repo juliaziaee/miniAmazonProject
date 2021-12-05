@@ -21,4 +21,4 @@ WHERE pid = :pid
 ORDER BY DateTime DESC
 ''',pid=pid)
         print(rows)
-        return [ProdReviews(*row) for row in rows][0]
+        return [ProdReviews(*row) for row in rows]
