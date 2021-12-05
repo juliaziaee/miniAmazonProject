@@ -1,6 +1,8 @@
 from flask_login import UserMixin
 from flask import current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.exc import SQLAlchemyError
+
 
 from .. import login
 
@@ -21,8 +23,7 @@ WHERE id = :id
 
     @staticmethod
     def updateBalance(id, transactionDT, amount):
-        try:
-            rows = app.db.execute("""
+        try: app.db.execute("""
     INSERT INTO Funding(id, transactionDT, amount)
     VALUES(:id, :transactionDT, :amount)
     RETURNING id
@@ -30,9 +31,12 @@ WHERE id = :id
                 id=id,
                 amount=amount,
                 transactionDT=transactionDT)
-            return id
-        except Exception:
-            return None
+        except SQLAlchemyError as e:
+            errorInfo = e.orig.args
+            error = (errorInfo[0])
+            return error
+        return id
+            
 
 
 class User(UserMixin):

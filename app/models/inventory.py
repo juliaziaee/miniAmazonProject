@@ -2,8 +2,8 @@ from flask import current_app as app
 
 
 class Inventory:
-    def __init__(self, id, name, num_in_stock, seller):
-        self.id = id
+    def __init__(self, pid, name, num_in_stock, seller):
+        self.pid = pid
         self.name = name
         self.num_in_stock = num_in_stock
         self.seller = seller
@@ -25,3 +25,17 @@ SELECT productID, name, inventory, SellerID
 FROM Products
 ''',)
         return [Inventory(*row) for row in rows]
+
+    @staticmethod
+    def removeInventory(pid):
+        try:
+            app.db.execute("""
+DELETE FROM PRODUCTS
+WHERE productID = :pid
+""",
+                                  pid = pid)
+            return None
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
