@@ -111,6 +111,26 @@ RETURNING id;""",
         return id
 
     @staticmethod
+    def updatePassword(id, newpassword):
+        try:
+            app.db.execute(
+                """
+UPDATE Users
+SET password = :newpassword
+WHERE id = :id
+RETURNING id;
+""",
+                id=id,
+                newpassword=generate_password_hash(newpassword),
+            )
+        except SQLAlchemyError as e:
+            errorInfo = e.orig.args
+            error = errorInfo[0]
+            return error
+        return id
+        
+
+    @staticmethod
     def register(
         email, password, firstname, lastname, street1, street2, city, state, zip
     ):
@@ -157,9 +177,11 @@ RETURNING id
                 state=state,
                 zip=zip,
             )
-            return id
-        except Exception:
-            return None
+        except SQLAlchemyError as e:
+            errorInfo = e.orig.args
+            error = errorInfo[0]
+            return error
+        return id
 
     @staticmethod
     @login.user_loader
