@@ -12,11 +12,13 @@ class ProdReviews:
         self.DateTime = DateTime
 
     @staticmethod
-    def get(pid):
+    def get_all(pid):
+       
         rows = app.db.execute('''
 SELECT uid, pid, rating, numUpVotes, numDownVotes, review, DateTime
 FROM ProductReview
 WHERE pid = :pid
 ORDER BY DateTime DESC
 ''',pid=pid)
-        return [ProdReviews(*row) for row in rows]
+        print(rows)
+        return [ProdReviews(*row) for row in rows][0]
