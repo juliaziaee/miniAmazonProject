@@ -9,7 +9,7 @@ from .. import login
 class Balance:
     def __init__(self, id, amount):
         self.id = id
-        self.amount = amount
+        self.amount = round(amount,2)
 
     @staticmethod
     def getBalance(id):
@@ -19,7 +19,7 @@ FROM userBalance
 WHERE id = :id
 """,
             id=id)
-        return [Balance(*row) for row in rows]
+        return Balance(*(rows[0]))
 
     @staticmethod
     def updateBalance(id, transactionDT, amount):

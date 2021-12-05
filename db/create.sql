@@ -289,7 +289,7 @@ CREATE VIEW sellerpage(ID) AS
 
 --  Create view page to get each user's current balance
 CREATE VIEW userBalance(id, amount) AS
-    SELECT Users.id, COALESCE(balances.balance, 0) AS amount FROM Users LEFT JOIN 
+    SELECT Users.id, COALESCE(balances.balance,0) AS amount FROM Users LEFT JOIN 
         (SELECT fund.id, (fund.totFund - COALESCE(purch.totPurch, 0)) AS balance FROM 
             (SELECT id, SUM(amount) AS totFund FROM Funding GROUP BY id) AS fund 
         FULL OUTER JOIN 
