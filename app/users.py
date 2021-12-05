@@ -91,11 +91,16 @@ class UpdateEmailForm(FlaskForm):
 
 @bp.route("/updateemail", methods=['GET', 'POST'])
 def updateemail():
-    form = UpdateEmailForm()
-    if form.validate_on_submit():
-        return redirect(url_for('users.accountdetails'))
-        # NEED TO ADD FUNCTIONALITY
-    return render_template('updateemail.html', title='Update Email', form=form)
+    error = None
+    if current_user.is_authenticated:
+        form = UpdateEmailForm()
+        if form.validate_on_submit():
+            if User.updateEmail(current_user.id, form.email.data) == current_user.id:
+                return redirect(url_for('users.accountdetails'))
+            else:
+                error = "An error has occured please try again"
+        return render_template("updateemail.html", title="Account Balance", error = error, form=form)
+    else: return render_template("updateemail.html", title="Account Balance")
 
 
 class UpdatePasswordForm(FlaskForm):
@@ -141,7 +146,7 @@ def updateuserinfo():
     return render_template('updateuserinfo.html', title='Update Information', form=form)
 
 
-class Funds(FlaskForm):
+class FundsForm(FlaskForm):
     amount = DecimalField(_l('Amount'))
     submit = SubmitField(_l('Submit'))
     
@@ -156,7 +161,7 @@ def accountbalance():
     error = None
     if current_user.is_authenticated:
         userbal = Balance.getBalance(current_user.id)
-        form = Funds()
+        form = FundsForm()
         if form.validate_on_submit():
             if Balance.updateBalance(current_user.id, datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'), form.amount.data) == current_user.id:
                 return redirect(url_for('users.accountbalance'))
