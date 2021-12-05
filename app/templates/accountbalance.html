@@ -20,7 +20,7 @@
   {{ form.hidden_tag() }}
     <p>
     {{ form.amount.label }}<br/>
-    {{ form.amount(size=32) }}<br/>
+    ${{ form.amount(size=32) }}<br/>
     {% for error in form.amount.errors %}
     <span style="color: red;">[{{ error }}]</span>
     {% endfor %}
