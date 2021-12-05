@@ -81,6 +81,23 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
+class UpdateEmailForm(FlaskForm):
+    email = StringField(_l('New Email Address'), validators=[DataRequired(), Email()])
+    submit = SubmitField(_l('Update Email'))
+    
+    def validate_email(self, email):
+        if User.email_exists(email.data):
+            raise ValidationError(_('Already a user with this email.'))
+
+@bp.route("/updateemail", methods=['GET', 'POST'])
+def updateemail():
+    form = UpdateEmailForm()
+    if form.validate_on_submit():
+        return redirect(url_for('users.accountdetails'))
+        # NEED TO ADD FUNCTIONALITY
+    return render_template('updateemail.html', title='Update Email', form=form)
+
+
 class UpdatePasswordForm(FlaskForm):
     old_password = PasswordField(_l('Old Password'), validators=[DataRequired()])
     new_password = PasswordField(_l('New Password'), validators=[DataRequired()])
@@ -88,7 +105,7 @@ class UpdatePasswordForm(FlaskForm):
         _l('Repeat New Password'), validators=[DataRequired(),
                                            EqualTo('new_password2')])
     submit = SubmitField(_l('Update Password'))
-
+    
 @bp.route("/updatepassword", methods=['GET', 'POST'])
 def updatepassword():
     form = UpdatePasswordForm()
@@ -101,7 +118,6 @@ def updatepassword():
 class UpdateUserInfoForm(FlaskForm):
     firstname = StringField(_l('First Name'), validators=[DataRequired()])
     lastname = StringField(_l('Last Name'), validators=[DataRequired()])
-    email = StringField(_l('Email'), validators=[DataRequired(), Email()])
     street1 = StringField(_l('Street Line 1'), validators=[DataRequired()])
     street2 = StringField(_l('Street Line 2'))
     city = StringField(_l('City'), validators=[DataRequired()])
@@ -109,16 +125,11 @@ class UpdateUserInfoForm(FlaskForm):
     zip = StringField(_l('Postal Code'), validators=[DataRequired(), Length(min=5, max=5)])
     submit = SubmitField(_l('Update'))
 
-    # def validate_email(self, email):
-    #     if User.email_exists(email.data):
-    #         raise ValidationError(_('Already a user with this email.'))
-
 @bp.route('/updateuserinfo', methods=['GET', 'POST'])
 def updateuserinfo():
     form = UpdateUserInfoForm()
     if form.validate_on_submit():
         if User.update(current_user.id,
-                         form.email.data,
                          form.firstname.data,
                          form.lastname.data,
                          form.street1.data,
@@ -129,20 +140,6 @@ def updateuserinfo():
             return redirect(url_for('users.accountdetails'))
     return render_template('updateuserinfo.html', title='Update Information', form=form)
 
-
-@bp.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index.index'))
-
-
-@bp.route("/accountdetails")
-def accountdetails():
-    return render_template("accountdetails.html", title="Home page")
-
-@bp.route("/orderhistory")
-def orderhistory():
-    return render_template("orderhistory.html", title="Home page")
 
 class Funds(FlaskForm):
     amount = DecimalField(_l('Amount'))
@@ -168,9 +165,23 @@ def accountbalance():
         return render_template("accountbalance.html", title="Account Balance", balance=userbal, form=form, error = error)
     else: return render_template("accountbalance.html", title="Account Balance")
     
-@bp.route("/userdetails", methods=['GET', 'POST'])
-def userdetails():
-    uid = request.args.get('uid', None)
+    
+@bp.route("/accountdetails")
+def accountdetails():
+    return render_template("accountdetails.html", title="Home page")
+
+@bp.route("/userdetails/<int:uid>", methods=['GET', 'POST'])
+def userdetails(uid):
     user = User.get(uid)
     return render_template('userdetails.html', user=user)
+
+@bp.route("/orderhistory")
+def orderhistory():
+    return render_template("orderhistory.html", title="Home page")
+
+@bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index.index'))
+
 
