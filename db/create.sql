@@ -240,12 +240,13 @@ AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_updateInventory();
 
--- Trigger to ensure user has enough balance for purchase to be made
+
+-- Trigger to ensure user has enough balance for cart order to be purchased
 CREATE FUNCTION TF_balance() RETURNS TRIGGER AS $$
 BEGIN
-    IF EXISTS(SELECT * FROM userBalance WHERE 
-        id = NEW.uid AND amount < (NEW.quantity * NEW.finalUnitPrice)) THEN
-        RAISE EXCEPTION 'User % has insufficient funds for purchase', NEW.uid;
+    IF EXISTS(SELECT * FROM userBalance, cartTotalPrice WHERE 
+        userBalance.id = NEW.uid AND userBalance.amount < cartTotalPrice.totalPrice THEN
+        RAISE EXCEPTION 'User % has insufficient funds for this order', NEW.uid;
     END IF;
     RETURN NEW;
 END;

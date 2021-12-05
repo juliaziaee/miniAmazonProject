@@ -67,7 +67,7 @@ def addtocart(pid,sid,quantity):
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.displaycart'))
 
-@bp.route("/cart/<pid>/<quantity>")
+@bp.route("/cart/<int:pid>/<int:quantity>")
 def updateCartQty(pid, quantity):
     if current_user.is_authenticated:
         #get current items in user's cart
@@ -77,6 +77,7 @@ def updateCartQty(pid, quantity):
         return redirect(url_for('users.login'))
     #refresh page
     return redirect(url_for('products.displaycart'))
+    
 
 @bp.route("/cart/<pid>")
 def removeItem(pid):
