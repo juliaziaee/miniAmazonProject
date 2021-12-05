@@ -113,7 +113,9 @@ def updateemail():
             if User.updateEmail(current_user.id, form.email.data) == current_user.id:
                 return redirect(url_for("users.accountdetails"))
             else:
-                error = "An error has occured please try again"
+                error = User.updateEmail(current_user.id, form.email.data).split(
+                    "CONTEXT"
+                )[0]
         return render_template(
             "updateemail.html", title="Account Balance", error=error, form=form
         )
@@ -122,21 +124,33 @@ def updateemail():
 
 
 class UpdatePasswordForm(FlaskForm):
-    old_password = PasswordField(_l("Old Password"), validators=[DataRequired()])
     new_password = PasswordField(_l("New Password"), validators=[DataRequired()])
     new_password2 = PasswordField(
-        _l("Repeat New Password"), validators=[DataRequired(), EqualTo("new_password2")]
+        _l("Repeat New Password"), validators=[DataRequired(), EqualTo("new_password")]
     )
     submit = SubmitField(_l("Update Password"))
 
 
 @bp.route("/updatepassword", methods=["GET", "POST"])
 def updatepassword():
-    form = UpdatePasswordForm()
-    if form.validate_on_submit():
-        return redirect(url_for("users.accountdetails"))
-        # NEED TO ADD FUNCTIONALITY
-    return render_template("updatepassword.html", title="Update Password", form=form)
+    error = None
+    if current_user.is_authenticated:
+        form = UpdatePasswordForm()
+        if form.validate_on_submit():
+            if (
+                User.updatePassword(current_user.id, form.new_password.data)
+                == current_user.id
+            ):
+                return redirect(url_for("users.accountdetails"))
+            else:
+                error = User.updatePassword(
+                    current_user.id, form.new_password.data
+                ).split("CONTEXT")[0]
+        return render_template(
+            "updatepassword.html", title="Update Password", form=form, error=error
+        )
+    else:
+        return render_template("updateemail.html", title="Account Balance")
 
 
 class UpdateUserInfoForm(FlaskForm):
