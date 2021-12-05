@@ -21,3 +21,46 @@ position: absolute;
 right: 0px;
 width: 50%;
 }
+
+.votContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1pm solid var(--borderColor);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%
+}
+
+.votContainer div{
+    margin: 1px;
+    font-size: 12px;
+}
+.votContainer:hover div{
+    margin: 5px 15px;
+}
+
+.votContainer:hover{
+    border: none;
+    width: 60px;
+    height:50px;
+    border-radius: 50px;
+}
+
+
+.votContainer div:first-child:hover{
+    padding: 12px 19px;
+    border-radius: 50px 50px 0 0;
+    background: linear-gradient(145deg, #cacaca, #58b124);
+    box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffff; 
+    color: rgb(133, 131, 131);
+}
+
+.votContainer div:last-child:hover{
+    padding: 12px 19px;
+    border-radius: 0 0 50px 50px ;
+    background: linear-gradient(145deg, #cacaca, #b12929);
+    box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffff; 
+    color: rgb(133, 131, 131);
+}
