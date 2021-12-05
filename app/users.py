@@ -10,8 +10,7 @@ from wtforms.validators import (
     DataRequired,
     Email,
     EqualTo,
-    Length,
-    NumberRange,
+    Length
 )
 from flask_babel import _, lazy_gettext as _l
 from datetime import datetime
@@ -210,10 +209,10 @@ def updateuserinfo():
                     form.zip.data,
                 ).split("CONTEXT")[0]
         return render_template(
-            "updateuserinfo.html", title="Update Contact Info", form=form, error=error
+            "updateuserinfo.html", title="Update Info", form=form, error=error
         )
     else:
-        return render_template("updateuserinfo.html", title="Update Contact Info")
+        return render_template("updateuserinfo.html", title="Update Info")
 
 
 class FundsForm(FlaskForm):
