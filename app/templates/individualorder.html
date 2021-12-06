@@ -12,18 +12,19 @@
 <h3>Go to the 'List' tab to list a product</h3>
 {% else %}
 
-<h2>Orders:</h2>
+<h2>Order:</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
         <th scope="col">Buyer ID</th>
       <th scope="col">Buyer Address</th>
       <th scope="col">Date Order Placed</th>
-      <th scope="col">Total Amount</th>
-      <th scope="col">Number of Items</th>
+      <th scope="col">Price</th>
+      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Quantity</th>
       <th scope="col">Fulfillment Status</th>
       <th scope="col">Fulfillment Date</th>
-      <th scope="col">Edit</th>
     </tr>
   </thead>
   <tbody>
@@ -37,16 +38,17 @@
             {% endif %} <br/> {{product.city}}, {{product.state}} {{product.zip}}</td>
         <td>{{product.orderDateTime}}</td>
         <td>{{product.finalUnitPrice}}</td>
+        <td>{{product.pid}}</td>
+        <td>{{product.productName}}</td>
         <td>{{product.quantity}}</td>
         <td>
-          {% if product.quantity == 1 %}
-            {{product.fufullmentstatus[0]}}
-          {% else %}
-            unfulfilled
-          {% endif %}
+            {{product.fufullmentstatus}}
+            {% if product.fufullmentstatus == 'unfulfilled'%}
+                <p></p>
+                <a id="marklink" href="{{ url_for('products.markFulfilled', uid=product.uid, sellerID = product.sellerID, orderDateTime = product.orderDateTime, pid = product.pid) }}" type="submit"><button>Mark Fulfilled</button></a>
+            {% endif %}
         </td>
         <td>{{product.fulfillment_datetime}}</td>
-        <td><a id="editlink" href="{{ url_for('products.individualOrder', uid=product.uid, sellerID = product.sellerID, orderDateTime = product.orderDateTime) }}" type="submit"><button>Edit</button></a></td>
       </tr>
     </tbody>
     {% endfor %}

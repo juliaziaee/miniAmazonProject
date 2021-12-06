@@ -36,6 +36,22 @@ ORDER BY orderDateTime DESC
                               SellerID=seller)
         return [Orders(*row) for row in rows]
 
+    @staticmethod
+    def getIndividual(seller, uid, orderDateTime):
+        # buyer information including address, date order placed,
+        # total amount/number of items, and overall fulfillment status
+        rows = app.db.execute('''
+SELECT Purchases.uid, Purchases.SellerID, pid, street1, street2, city, state, zip, orderDateTime,
+finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, 
+(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName
+FROM Purchases, Users, Products
+WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID AND Products.productID = Purchases.pid AND Users.id = :uid AND
+orderDateTime = :orderDateTime
+ORDER BY fulfillment_datetime DESC
+''',
+                              SellerID=seller, uid = uid, orderDateTime = orderDateTime)
+        return [Orders(*row) for row in rows]
+
 
     @staticmethod
     def getOverview(seller):
@@ -43,11 +59,11 @@ ORDER BY orderDateTime DESC
         # total amount/number of items, and overall fulfillment status
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
-SUM(finalUnitPrice), SUM(quantity), fufullmentstatus, fulfillment_datetime, 
+SUM(finalUnitPrice), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, fulfillment_datetime, 
 '', ''
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
-GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime, fufullmentstatus, fulfillment_datetime
+GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime, fulfillment_datetime
 ORDER BY orderDateTime DESC
 ''',
                               SellerID=seller)
@@ -63,7 +79,7 @@ finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime,
 FROM Purchases, Users, Products
 WHERE Purchases.uid = Users.id AND Products.productID = Purchases.pid
 ORDER BY orderDateTime DESC
-''',)
+''')
         return [Orders(*row) for row in rows]
     
     @staticmethod
@@ -80,3 +96,19 @@ ORDER BY orderDateTime DESC
 ''',
                               uid=uid)
         return [Orders(*row) for row in rows]
+
+    @staticmethod
+    def markFulfilled(uid, sellerID, orderDateTime, pid):
+        try:
+            rows = app.db.execute("""
+UPDATE Purchases
+SET fufullmentstatus = 'fulfilled', fulfillment_datetime = LOCALTIMESTAMP(0)
+WHERE uid = :uid AND SellerID = :sellerID AND orderDateTime = :orderDateTime AND pid = :pid
+""",
+                                  uid = uid, sellerID = sellerID, orderDateTime = orderDateTime, pid = pid)
+
+            return None
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None

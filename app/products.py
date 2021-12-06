@@ -115,6 +115,10 @@ def detailview(id):
     else:
         return redirect(url_for('users.login'))
 
+@bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
+def individualOrder(uid, sellerID, orderDateTime):
+    return render_template('individualorder.html', order_history = Orders.getIndividual(current_user.id, uid, orderDateTime))
+
 @bp.route("/inventory")
 def inventory():
     if current_user.is_authenticated:
@@ -136,13 +140,18 @@ def removeinventory(pid):
 @bp.route("/orders")
 def orders():
     if current_user.is_authenticated:
-        # get all available products for sale:
+        # get all orders
         orders = Orders.getOverview(current_user.id)
-        # render the page by adding information to the index.html file
+        # render the page by adding information to the orders.html file
         return render_template('orders.html',
                            order_history=orders)
     else:
         return redirect(url_for('users.login'))
+
+@bp.route("/orders/<uid>/<sellerID>/<orderDateTime>/<pid>")
+def markFulfilled(uid, sellerID, orderDateTime, pid):
+    Orders.markFulfilled(uid, sellerID, orderDateTime, pid)
+    return redirect(url_for('products.individualOrder', uid = uid, sellerID = sellerID, orderDateTime = orderDateTime))
 
 def get_products(products, offset=0, per_page=10):
     return products[offset: offset + per_page]
