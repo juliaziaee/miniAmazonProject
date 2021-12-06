@@ -18,6 +18,7 @@ from datetime import datetime
 from .models.user import User
 from .models.user import Balance
 from .models.orders import Orders
+from .models.reviews import SellerReviews
 
 
 from flask import Blueprint
@@ -269,7 +270,7 @@ def accountdetails():
 
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
 def userdetails(uid):
-    reviews = None
+    reviews = SellerReviews.get_user_reviews(uid)
     seller = User.is_seller(uid)
     user = User.get(uid)
     return render_template("userdetails.html", user=user, seller=seller, reviews=reviews)

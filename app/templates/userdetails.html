@@ -25,6 +25,38 @@
 
 <h1>Seller Reviews:</h1>
     {% if reviews %}
+    {% for rev in reviews%}
+            <div class="d-sm-flex justify-content-between">
+              <p class="mt-1 mb-2">
+                <strong>{{rev.firstname}} {{rev.lastname}} </strong>
+                <span>– </span><span>{{rev.DateTime}}</span>
+              </p>
+            </div>
+            <div class="d-sm-flex justify-content-space-between"></div>
+            <p class="mt-0 mb-6">
+              <span>{{rev.review}}  </span>  </p>
+            </p>
+          </head>
+            <body>
+              <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
+          
+              <div class = "votContainer">
+                <div class = "upbutton">
+                  <i class = "fas fa-chevron-up"></i>
+                </div>
+                <div class = "vot">
+                  <p> {{rev.numVotes}}</p>
+                </div>
+                <div class = "downbutton">
+                  <i class = "fas fa-chevron-down"></i>
+                </div>
+              </div>
+
+            </body>
+            <hr>
+          </div>
+          </div>
+          {% endfor %}
     {% endif %}
     {% if reviews == None %}
     <p>This seller has not been reviewed yet!<p>
