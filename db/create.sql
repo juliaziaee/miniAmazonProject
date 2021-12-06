@@ -243,8 +243,8 @@ AFTER INSERT ON Purchases
 CREATE FUNCTION TF_balance() RETURNS TRIGGER AS $$
 BEGIN
     IF EXISTS(SELECT * FROM userBalance, cartTotalPrice WHERE 
-        userBalance.id = NEW.uid AND userBalance.amount < cartTotalPrice.totalPrice THEN
-        RAISE EXCEPTION 'User % has insufficient funds for this order', NEW.uid;
+        cartTotalPrice.uid = NEW.uid AND userBalance.id = NEW.uid AND userBalance.amount < cartTotalPrice.totalPrice) 
+        THEN RAISE EXCEPTION 'User % has insufficient funds for this order', NEW.uid;
     END IF;
     RETURN NEW;
 END;
