@@ -38,6 +38,23 @@ ORDER BY orderDateTime DESC
 
 
     @staticmethod
+    def getOverview(seller):
+        # buyer information including address, date order placed,
+        # total amount/number of items, and overall fulfillment status
+        rows = app.db.execute('''
+SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
+SUM(finalUnitPrice), SUM(quantity), fufullmentstatus, fulfillment_datetime, 
+'', ''
+FROM Purchases, Users
+WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
+GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime, fufullmentstatus, fulfillment_datetime
+ORDER BY orderDateTime DESC
+''',
+                              SellerID=seller)
+        return [Orders(*row) for row in rows]
+
+
+    @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, pid, street1, street2, city, state, zip, orderDateTime,
