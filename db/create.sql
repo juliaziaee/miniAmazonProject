@@ -144,7 +144,7 @@ BEFORE INSERT OR UPDATE ON Messages
 CREATE FUNCTION TF_SellerReview() RETURNS TRIGGER AS $$
 BEGIN
     IF NOT EXISTS(SELECT * FROM Purchases
-        WHERE uid = NEW.uid AND sid = NEW.sid) THEN
+        WHERE uid = NEW.uid AND SellerID = NEW.sid) THEN
         RAISE EXCEPTION '% has not purchased a product from %', NEW.uid, NEW.sid;
     END IF;
     RETURN NEW;

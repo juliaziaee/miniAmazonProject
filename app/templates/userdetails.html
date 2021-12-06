@@ -7,10 +7,60 @@
     <link rel="stylesheet" type="text/css" href="static/css/cart.css">
 </head>
 
-<h1>User Details</h1>
-<h3>{{user.firstname}} {{user.lastname}}</h3>
-<h3>User ID {{user.id}}</h3>
-<p>{{user.email}}</p>
+
+{% if user!=None %}
+
+<h1>User Details:</h1>
+<p>{{user.firstname}} {{user.lastname}}</p>
+<p>User ID: {{user.id}}</p>
+
+{% if seller %}
+    <h1>Seller Information:</h1>
+    <p>{{user.email}}</p>
+    <p>{{user.street1}}</p>
+    {% if user.street2 %}
+    <p>{{user.street2}}</p>
+    {% endif %}
+    <p>{{user.city}}, {{user.state}} {{user.zip}} </p>
+
+<h1>Seller Reviews:</h1>
+    {% if reviews %}
+        {% for rev in reviews%}
+        <table class="table table-bordered mt-3">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="row" class="w-150 dark-grey-text h6">Review Date</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Rating</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Review</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Reviewer</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+                <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
+                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
+                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
+                <td><a href="{{ url_for('users.userdetails', uid=rev.uid) }}">User {{rev.uid}}</a></td>
+                <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.numVotes}}</td>
+                
+              </tr>
+            </tbody>
+          </table>
+        {% endfor %}
+
+    {% endif %}
+    {% if reviews == None %}
+    <p>This seller has not been reviewed yet!<p>
+    {% endif %}
+
+{% endif %}
+{% endif %}
+
+
+{% if user==None %}
+<h3>Error: you have requested information for an invalid user</h3>
+
+{% endif %}
 
 
 {% endblock %}
