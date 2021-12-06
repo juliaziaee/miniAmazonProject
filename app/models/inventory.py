@@ -35,7 +35,6 @@ SET Inventory = 0
 WHERE productID = :pid
 """,
                                   pid = pid)
-            productID = rows
             return None
         except Exception:
             # likely id already in use; better error checking and
