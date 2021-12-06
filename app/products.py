@@ -77,6 +77,14 @@ def updateCartQty(pid, quantity):
         return redirect(url_for('users.login'))
     #refresh page
     return redirect(url_for('products.displaycart'))
+
+
+@bp.route("/inventory/<pid>/<num>")
+def updateInventoryQty(pid, num):
+    #change inventory in database
+    Inventory.updateQuantity(pid,num)
+    #refresh page
+    return redirect(url_for('products.inventory'))
     
 
 @bp.route("/cart/<pid>")

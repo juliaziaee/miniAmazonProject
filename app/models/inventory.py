@@ -40,3 +40,19 @@ WHERE productID = :pid
             # likely id already in use; better error checking and
             # reporting needed
             return None
+
+    @staticmethod
+    def updateQuantity(pid, new_quantity):
+        try:
+            rows = app.db.execute("""
+UPDATE Products
+SET Inventory = :new_quantity 
+WHERE productID = :pid
+""",
+                                  pid=pid,
+                                  new_quantity = new_quantity)
+            return None
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
