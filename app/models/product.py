@@ -55,6 +55,14 @@ WHERE (name LIKE :keyword OR description LIKE :keyword) AND (category LIKE :cate
             query += "ORDER BY unitPrice"
         if sort == "High":
             query += "ORDER BY unitPrice DESC"
+        if sort == "idlow":
+            query += "ORDER BY productID"
+        if sort == "idhigh":
+            query += "ORDER BY productID DESC"
+        if sort == "quantlow":
+            query += "ORDER BY Inventory"
+        if sort == "quanthigh":
+            query += "ORDER BY Inventory DESC"
                 
         rows = app.db.execute(query,
 category=category,
