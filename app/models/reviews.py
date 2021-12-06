@@ -30,25 +30,25 @@ ORDER BY DateTime DESC
         try:
             rows = app.db.execute(
                 """
-INSERT INTO ProductReview(uid, pid, rating, numVotes, review, DateTime)
-VALUES(:uid, :pid, :rating, 0, :review, LOCALTIMESTAMP(0))
+INSERT INTO ProductReview(uid, pid, rating, numVotes, review)
+VALUES(:uid, :pid, :rating, 0, :review)
+RETURNING uid
 """,
                 uid=uid, 
                 pid=pid, 
                 rating= rating, 
                 review= review, 
             )
-         
-            return None
+            return uid
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
 
 class SellerReviews:
-    def __init__(self, uid, sid, rating, numVotes, review, DateTime):
+    def __init__(self, firstname, lastname, uid, sid, rating, numVotes, review, DateTime):
+        self.firstname = firstname
+        self.lastname = lastname
         self.uid = uid
-        self.pid = sid
+        self.sid = sid
         self.rating = rating
         self.numVotes = numVotes
         self.review = review
@@ -57,9 +57,9 @@ class SellerReviews:
     @staticmethod
     def get_user_reviews(sid):
         try: rows = app.db.execute('''
-SELECT uid, sid, rating, numVotes, review, DateTime
-FROM SellerReview
-WHERE sid = :sid
+SELECT firstname, lastname, uid, sid, rating, numVotes, review, DateTime
+FROM SellerReview, Users
+WHERE SellerReview.uid = Users.id AND SellerReview.sid = :sid
 ORDER BY DateTime DESC
 ''',sid=sid)
         except Exception:
