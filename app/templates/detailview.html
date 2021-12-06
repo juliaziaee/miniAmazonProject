@@ -80,15 +80,13 @@
                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
                 
                 <div class = "votContainer">
-                  <div class = "upbutton">
-                    <i class = "fas fa-chevron-up" role="button"></i>
-                  </div>
+                  <a id="{{rev.pid + rev.uid}} up" href="{{ url_for('products.upVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  type="submit"><button class = "up-rev">Upvote</button></a>
                   <div class = "vot">
                     <p> {{rev.numVotes}}</p>
                   </div>
-                  <div class = "downbutton">
-                    <i class = "fas fa-chevron-down"></i>
-                  </div>
+                  <a id="{{rev.pid + rev.uid}} down" href="{{ url_for('products.downVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  type="submit"><button class = "down-rev">Downvote</button></a>
                 </div>
                
               </body></td>
