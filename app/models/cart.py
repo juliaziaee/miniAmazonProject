@@ -132,8 +132,8 @@ WHERE uid = :uid AND pid = :pid
             )
         except SQLAlchemyError as e:
             errorInfo = e.orig.args
-            error = errorInfo[0]
-            return error
+            error = errorInfo[0].split("CONTEXT")
+            return error[0]
         return uid
         
         
