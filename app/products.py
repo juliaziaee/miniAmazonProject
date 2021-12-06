@@ -192,6 +192,10 @@ def search():
             products = Product.getSearchAndCategoryAndAscAndPrice500(q,q,c,p)
         elif s == "High" and p == "500":
             products = Product.getSearchAndCategoryAndDescAndPrice500(q,q,c,p)
+        elif s == "Low" and p == "over":
+            products = Product.getSearchAndCategoryAndAscAndPriceOver500(q,q,c,p)
+        elif s == "High" and p == "over":
+            products = Product.getSearchAndCategoryAndDescAndPriceOver500(q,q,c,p)
         elif s == "Low" and p == "N/A":
             products = Product.getSearchAndCategoryAndAsc(q,q,c)
         elif s == "High" and p == "N/A":
@@ -200,6 +204,8 @@ def search():
             products = Product.getSearchAndCategoryAndPrice250(q,q,c,p)
         elif s == "N/A" and p == "500":
             products = Product.getSearchAndCategoryAndPrice500(q,q,c,p)
+        elif s == "N/A" and p == "over":
+            products = Product.getSearchAndCategoryAndPriceOver500(q,q,c,p)
         else:
             products = Product.getSearchAndCategory(q,q,c)
     elif c and s and p:
@@ -211,6 +217,10 @@ def search():
             products = Product.getCategoryAndAscAndPrice500(c,p)
         elif s == "High" and p == "500":
             products = Product.getCategoryAndDescAndPrice500(c,p)
+        elif s == "Low" and p == "over":
+            products = Product.getCategoryAndAscAndPriceOver500(c,p)
+        elif s == "High" and p == "over":
+            products = Product.getCategoryAndDescAndPriceOver500(c,p)
         elif s == "Low" and p == "N/A":
             products = Product.getCategoryAndAsc(c)
         elif s == "High" and p == "N/A":
@@ -219,6 +229,8 @@ def search():
             products = Product.getCategoryAndPrice250(c,p)
         elif s == "N/A" and p == "500":
             products = Product.getCategoryAndPrice500(c,p)
+        elif s == "N/A" and p == "over":
+            products = Product.getCategoryAndPriceOver500(c,p)
         else:
             products = Product.getCategory(c)
     elif q and s and p:
@@ -230,6 +242,10 @@ def search():
             products = Product.getNameAndAscAndPrice500(q,q,p)
         elif s == "High" and p == "500":
             products = Product.getNameAndDescAndPrice500(q,q,p)
+        elif s == "Low" and p == "over":
+            products = Product.getNameAndAscAndPriceOver500(q,q,p)
+        elif s == "High" and p == "over":
+            products = Product.getNameAndDescAndPriceOver500(q,q,p)
         elif s == "Low" and p == "N/A":
             products = Product.getNameAndAsc(q,q)
         elif s == "High" and p == "N/A":
@@ -238,6 +254,8 @@ def search():
             products = Product.getNameAndPrice250(q,q,p)
         elif s == "N/A" and p == "500":
             products = Product.getNameAndPrice500(q,q,p)
+        elif s == "N/A" and p == "over":
+            products = Product.getNameAndPriceOver500(q,q,p)
         else:
             products = Product.getName(q,q)
     elif s and p:
@@ -249,6 +267,10 @@ def search():
             products = Product.orderAscAndPrice500(p)
         elif s == "High" and p == "500":
             products = Product.orderDescAndPrice500(p)
+        elif s == "Low" and p == "over":
+            products = Product.orderAscAndPriceOver500(p)
+        elif s == "High" and p == "over":
+            products = Product.orderDescAndPriceOver500(p)
         elif s == "Low" and p == "N/A":
             products = Product.orderAsc()
         elif s == "High" and p == "N/A":
@@ -257,6 +279,8 @@ def search():
             products = Product.getPrice250(p)
         elif s == "N/A" and p == "500":
             products = Product.getPrice500(p)
+        elif s == "N/A" and p == "over":
+            products = Product.getPriceOver500(p)
         else:
             products = Product.get_all(True)
     elif c:
