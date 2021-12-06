@@ -58,9 +58,9 @@
       <div class="totals-value" id="cart-subtotal">{{subtotal}}</div>
     </div>
   </div>
-      
+    <a id="checkout" href = "{{url_for('products.checkout')}}" type = "submit">
       <button class="checkout">Checkout</button>
-
+    </a>
 </div>
 
 {% endif %}
