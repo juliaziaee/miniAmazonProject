@@ -67,7 +67,7 @@ def addtocart(pid,sid,quantity):
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.displaycart'))
 
-@bp.route("/cart/<pid>/<quantity>")
+@bp.route("/cart/<int:pid>/<int:quantity>")
 def updateCartQty(pid, quantity):
     if current_user.is_authenticated:
         #get current items in user's cart
@@ -77,6 +77,7 @@ def updateCartQty(pid, quantity):
         return redirect(url_for('users.login'))
     #refresh page
     return redirect(url_for('products.displaycart'))
+    
 
 @bp.route("/cart/<pid>")
 def removeItem(pid):
@@ -109,7 +110,8 @@ def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
                                                   user = current_user.id, 
-                                                  review = ProdReviews.get_all(id))
+                                                  review = ProdReviews.get_all(id),
+                                                  leng = len(ProdReviews.get_all(id)))
     else:
         return redirect(url_for('users.login'))
 
@@ -135,7 +137,7 @@ def removeinventory(pid):
 def orders():
     if current_user.is_authenticated:
         # get all available products for sale:
-        orders = Orders.get(current_user.id)
+        orders = Orders.getOverview(current_user.id)
         # render the page by adding information to the index.html file
         return render_template('orders.html',
                            order_history=orders)

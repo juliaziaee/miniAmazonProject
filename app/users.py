@@ -17,6 +17,7 @@ from datetime import datetime
 
 from .models.user import User
 from .models.user import Balance
+from .models.orders import Orders
 
 
 from flask import Blueprint
@@ -274,7 +275,25 @@ def userdetails(uid):
 
 @bp.route("/orderhistory")
 def orderhistory():
-    return render_template("orderhistory.html", title="Home page")
+    if current_user.is_authenticated:
+        #get orders if user is logged in 
+        orderHist = Orders.getOrders(current_user.id)
+
+        #group orders by date for UI 
+        orderDates = {}
+        for row in orderHist:
+            if row.orderDateTime not in orderDates:
+                orderDates[row.orderDateTime] = []
+            orderDates[row.orderDateTime].append(row)
+
+        #format for html doc
+        allOrders = [[key, orderDates[key]] for key in orderDates.keys()]
+
+    else:
+        #prompt user to log in if not
+        return redirect(url_for("users.login"))
+    #show order history if properly logged in 
+    return render_template("orderhistory.html", all_orders = orderHist)
 
 
 @bp.route("/logout")

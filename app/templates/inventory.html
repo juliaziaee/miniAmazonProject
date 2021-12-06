@@ -27,17 +27,12 @@
   <div class="product">
     <div class="product-id">{{product.pid}}</div>
     <div style="float: left; position: relative; left: 403px" class="product-title">{{product.name}}</div>
-    <div style="float: left; position: fixed; left: 843px" class="product-quantity">
+    <div style="float: left; position: relative; left: 763px" class="product-quantity">
       <input type="number" value="{{product.num_in_stock}}" min="1">
       <button class="update">Update</button>
     </div>
     <div style="float:right" class="product-removal">
-      <a id="submissionlink" href="{{ url_for('products.removeinventory', pid=product.pid) }}" type="submit"><button onclick="removeInventory()">Remove</button></a>
-          <script>
-              function removeInventory() {
-                  document.getElementById("submissionlink").href = document.getElementById("submissionlink").href.substring(0,document.getElementById("submissionlink").href.length-1) + "/" + document.getElementById("theQuantity").value;
-              }
-          </script>
+      <a id="submissionlink" href="{{ url_for('products.removeinventory', pid=product.pid) }}" type="submit"><button>Remove</button></a>
     </div>
   </div>
   {% endfor %}
