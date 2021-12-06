@@ -39,7 +39,7 @@
           type="submit"><button class = "update-qty" onclick="updateAtrribute()">Update</button></a>
          <script>
           function changeQty(newVal, newId) {
-            document.getElementById(newId).href = document.getElementById(newId).href.substring(0,document.getElementById(newId).href.length-2) + "/" + String(newVal);
+            document.getElementById(newId).href = (document.getElementById(newId).href.split('/').slice(0, -1).join('/')) + "/" + String(newVal);
             return;
           }
         </script>
