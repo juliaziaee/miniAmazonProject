@@ -9,7 +9,8 @@
 
 
 {% if user!=None %}
-
+<br>
+<a href="{{ url_for('index.index') }}"><button>Back</button></a>
 <h1>User Details:</h1>
 <p>{{user.firstname}} {{user.lastname}}</p>
 <p>User ID: {{user.id}}</p>
