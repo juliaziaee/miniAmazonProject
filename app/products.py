@@ -136,6 +136,29 @@ def detailview(id):
     else:
         return redirect(url_for('users.login'))
 
+
+class ReviewForm(FlaskForm):
+    review = StringField(_l("Review"), validators=[DataRequired()])
+    rating = StringField(_l("Rating"), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
+
+@bp.route("/newReview/<int:id>", methods=["GET", "POST"])
+def review(id):
+    form = ReviewForm()
+    user = current_user.id
+    product = Product.get(id)
+    if form.validate_on_submit():
+        if ProdReviews.NewProdReview(
+            user, 
+            product, 
+            form.review.data,
+            form.rating.data,
+        ):
+        
+            flash("You have successfully submitted a review!")
+            return redirect(url_for("product.detailview"))
+    return render_template("newReview.html", title="Leave a Review", form=form)
+
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
 def individualOrder(uid, sellerID, orderDateTime):
     return render_template('individualorder.html', order_history = Orders.getIndividual(current_user.id, uid, orderDateTime))
