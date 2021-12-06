@@ -3,11 +3,10 @@
 <div style="display: flex; align-items: center;flex-direction: column;">
     <h1 class="mb-4 mt-4">Your order has failed</h1>
     <div> <i class="fas fa-clipboard-check fa-10x" style="color: rgb(153, 36, 32);"></i></div>
-
+    <div>{{error}}</div>
 
     <div class="mt-5">
         <a type="button" class="btn btn-primary" href="{{url_for('products.displaycart')}}">Back To Cart</a>
-        <a type="button" class="btn btn-primary" href="{{url_for('users.orderhistory')}}">See Order Here</a>
     </div>
  </div>
 {% endblock %}

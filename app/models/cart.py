@@ -1,5 +1,6 @@
 from flask import current_app as app
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 
 
 class Cart:
@@ -98,24 +99,26 @@ WHERE uid = :uid AND pid = :pid
                 FROM Cart, Products
                 WHERE Cart.uid = :uid AND Products.productID = Cart.pid
                 ''', uid=uid)
-            for row in rows:
-                res = Cart.insertPurchases(uid, row[1], row[2], row[3], row[4], orderDateTime)
-                if res:
+        except SQLAlchemyError as e:
+            errorInfo = e.orig.args
+            error = errorInfo[0]
+            return error
+        for row in rows:
+                res = Cart.insertPurchases(uid, row[1], row[2], row[3], row[4], orderDateTime, orderDateTime)
+                if res == uid:
                     Cart.removeFromCart(uid, row[1])
-            return True
-        except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
-            return False
+                else:
+                    return Cart.insertPurchases(uid, row[1], row[2], row[3], row[4], orderDateTime, orderDateTime)
+        return uid
     
     @staticmethod
-    def insertPurchases(uid, pid, SellerID, finalUnitPrice, quantity, orderDateTime):
+    def insertPurchases(uid, pid, SellerID, finalUnitPrice, quantity, orderDateTime, fulfillment_datetime):
         fufullmentstatus = "Processing"
         try:
             app.db.execute(
                 """
-    INSERT INTO Purchases(SellerID, uid, pid, orderDateTime, finalUnitPrice, quantity, fufullmentstatus)
-    VALUES(:SellerID, :uid, :pid, :orderDateTime, :finalUnitPrice, :quantity, :fufullmentstatus)
+    INSERT INTO Purchases(SellerID, uid, pid, orderDateTime, finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime)
+    VALUES(:SellerID, :uid, :pid, :orderDateTime, :finalUnitPrice, :quantity, :fufullmentstatus, :fulfillment_datetime)
     RETURNING uid
     """,
                 SellerID = SellerID,
@@ -124,12 +127,13 @@ WHERE uid = :uid AND pid = :pid
                 orderDateTime=orderDateTime,
                 finalUnitPrice=finalUnitPrice,
                 quantity=quantity,
-                fufullmentstatus=fufullmentstatus
+                fufullmentstatus=fufullmentstatus,
+                fulfillment_datetime=fulfillment_datetime
             )
-            return True
-        except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
-            return False
+        except SQLAlchemyError as e:
+            errorInfo = e.orig.args
+            error = errorInfo[0]
+            return error
+        return uid
         
         

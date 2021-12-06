@@ -93,12 +93,13 @@ def removeItem(pid):
 @bp.route("/checkout")
 def checkout():
     if current_user.is_authenticated:
-        #get current items in user's cart
+        #get current items in user's cart & move entries to purchases
         checkedOut = Cart.checkoutCart(current_user.id)
-        if checkedOut:
+        if checkedOut == current_user.id:
             return render_template('orderSuccess.html')
         else:
-            return render_template('orderFail.html')
+            return render_template('orderFail.html', 
+                                            error = checkedOut)
     else:
         #not logged in so redirect to login page 
         return redirect(url_for('users.login'))
