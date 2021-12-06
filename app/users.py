@@ -1,6 +1,7 @@
 from typing import Type
 from flask import render_template, redirect, url_for, flash, request, session
 from flask.app import Flask
+import datetime
 from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -281,22 +282,23 @@ def orderhistory():
     if current_user.is_authenticated:
         #get orders if user is logged in 
         orderHist = Orders.getOrders(current_user.id)
-
-        #group orders by date for UI 
-        orderDates = {}
-        for row in orderHist:
-            if row.orderDateTime not in orderDates:
-                orderDates[row.orderDateTime] = []
-            orderDates[row.orderDateTime].append(row)
-
-        #format for html doc
-        allOrders = [[key, orderDates[key]] for key in orderDates.keys()]
-
     else:
         #prompt user to log in if not
         return redirect(url_for("users.login"))
     #show order history if properly logged in 
-    return render_template("orderhistory.html", all_orders = orderHist)
+    return render_template("orderHistoryNew.html", order_history = orderHist)
+
+@bp.route("/orderhistory/singleorderhistory/<orderDateTime>")
+def singleOrderHistory(orderDateTime):
+    if current_user.is_authenticated:
+        format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S.%f')
+        #get order details if user is logged in
+        orderDetails = Orders.getSingleOrder(current_user.id, format_dateTime)
+    else:
+        #prompt user to log in if not
+        return redirect(url_for("users.login"))
+    #show order details if properly logged in 
+    return render_template("orderhistory.html", all_orders = orderDetails)
 
 
 @bp.route("/logout")

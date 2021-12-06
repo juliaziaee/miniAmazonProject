@@ -83,15 +83,31 @@ ORDER BY orderDateTime DESC
         return [Orders(*row) for row in rows]
     
     @staticmethod
-    def getOrders(uid):
+    def getSingleOrder(uid, orderDateTime):
         # buyer information including address, date order placed,
         # total amount/number of items, and overall fulfillment status
         rows = app.db.execute('''
-SELECT Purchases.uid, Purchases.SellerID, pid, street1, street2, city, state, zip, orderDateTime,
+SELECT Purchases.uid, Purchases.SellerID, Purchases.pid, street1, street2, city, state, zip, orderDateTime,
 finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, 
 (quantity*finalUnitPrice) AS totalPrice, Products.name AS productName
 FROM Purchases, Users, Products
-WHERE Purchases.uid = Users.id AND Purchases.uid = :uid AND Products.productID = Purchases.pid
+WHERE Purchases.uid = Users.id AND Purchases.uid = :uid 
+    AND Products.productID = Purchases.pid AND Purchases.orderDateTime = :orderDateTime
+ORDER BY orderDateTime DESC
+''',
+                              uid=uid,
+                              orderDateTime=orderDateTime)
+        return [Orders(*row) for row in rows]
+    
+    @staticmethod
+    def getOrders(uid):
+        rows = app.db.execute('''
+SELECT Purchases.uid, '', '', street1, street2, city, state, zip, orderDateTime,
+SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
+'', ''
+FROM Purchases, Users, Products
+WHERE Purchases.uid = :uid AND Users.id = :uid AND Products.productID = Purchases.pid
+GROUP BY orderDateTime, Purchases.uid, street1, street2, city, state, zip
 ORDER BY orderDateTime DESC
 ''',
                               uid=uid)

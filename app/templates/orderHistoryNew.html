@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/cart.css">
+</head>
+
+{% if order_history == [] or not current_user.is_authenticated %}
+<h2>You have not purchased any items yet</h2>
+{% else %}
+
+<h2>Order History:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Date Order Placed</th>
+      <th scope="col">Shipping Address</th>
+      <th scope="col">Total Amount</th>
+      <th scope="col">Number of Items</th>
+      <th scope="col">Fulfillment Status</th>
+      <th scope="col">Fulfillment Date</th>
+      <th scope="col">View Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in order_history%}
+      <tr>
+        <th scope="row">{{product.orderDateTime}}</th>
+        <td>{{product.street1}}
+          {% if product.street2 %}
+          <br/>
+            {{product.street2}}
+            {% endif %} <br/> {{product.city}}, {{product.state}} {{product.zip}}</td>
+        <td>{{product.finalUnitPrice}}</td>
+        <td>{{product.quantity}}</td>
+        <td>
+          {% if product.fufullmentstatus[0] != 'fulfilled' or product.fufullmentstatus[1] != 'fulfilled'%}
+            unfulfilled
+          {% else %}
+            fulfilled
+          {% endif %}
+        </td>
+        <td>{{product.fulfillment_datetime}}</td>
+        <td><a id="viewlink" href="{{ url_for('users.singleOrderHistory', orderDateTime = product.orderDateTime) }}" type="submit"><button>Details</button></a></td>
+      </tr>
+    </tbody>
+    {% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% endblock %}
