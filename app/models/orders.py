@@ -59,11 +59,11 @@ ORDER BY fulfillment_datetime DESC
         # total amount/number of items, and overall fulfillment status
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
-SUM(finalUnitPrice), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, fulfillment_datetime, 
+SUM(finalUnitPrice), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
 '', ''
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
-GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime, fulfillment_datetime
+GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime
 ORDER BY orderDateTime DESC
 ''',
                               SellerID=seller)
