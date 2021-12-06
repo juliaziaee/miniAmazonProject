@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from flask_babel import _, lazy_gettext as _l
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from flask_login import current_user
 from flask_paginate import Pagination, get_page_args
@@ -119,13 +119,20 @@ def displaycart():
                                 cart_items=cart,
                                 subtotal=total)                     
 
+class ProdReviewForm(FlaskForm):
+    name = StringField(_l('Name'), validators=[DataRequired()])
+    email = StringField(_l('Email (will not be published)'), validators=[DataRequired(), Email()])
+    review = TextAreaField(_l('Review'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
+    
 @bp.route("/detailview/<int:id>")
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
                                                   user = current_user.id, 
                                                   review = ProdReviews.get_all(id),
-                                                  leng = len(ProdReviews.get_all(id)))
+                                                  leng = len(ProdReviews.get_all(id)),
+                                                  form=ProdReviewForm())
     else:
         return redirect(url_for('users.login'))
 
