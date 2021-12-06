@@ -269,8 +269,10 @@ def accountdetails():
 
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
 def userdetails(uid):
+    reviews = None
+    seller = User.is_seller(uid)
     user = User.get(uid)
-    return render_template("userdetails.html", user=user)
+    return render_template("userdetails.html", user=user, seller=seller, reviews=reviews)
 
 
 @bp.route("/orderhistory")
