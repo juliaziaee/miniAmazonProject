@@ -43,7 +43,7 @@
         <td>{{product.quantity}}</td>
         <td>
             {{product.fufullmentstatus}}
-            {% if product.fufullmentstatus == 'unfulfilled'%}
+            {% if product.fufullmentstatus == 'Processing'%}
                 <p></p>
                 <a id="marklink" href="{{ url_for('products.markFulfilled', uid=product.uid, sellerID = product.sellerID, orderDateTime = product.orderDateTime, pid = product.pid) }}" type="submit"><button>Mark Fulfilled</button></a>
             {% endif %}
