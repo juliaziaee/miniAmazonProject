@@ -25,38 +25,29 @@
 
 <h1>Seller Reviews:</h1>
     {% if reviews %}
-    {% for rev in reviews%}
-            <div class="d-sm-flex justify-content-between">
-              <p class="mt-1 mb-2">
-                <strong>{{rev.firstname}} {{rev.lastname}} </strong>
-                <span>– </span><span>{{rev.DateTime}}</span>
-              </p>
-            </div>
-            <div class="d-sm-flex justify-content-space-between"></div>
-            <p class="mt-0 mb-6">
-              <span>{{rev.review}}  </span>  </p>
-            </p>
-          </head>
-            <body>
-              <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
-          
-              <div class = "votContainer">
-                <div class = "upbutton">
-                  <i class = "fas fa-chevron-up"></i>
-                </div>
-                <div class = "vot">
-                  <p> {{rev.numVotes}}</p>
-                </div>
-                <div class = "downbutton">
-                  <i class = "fas fa-chevron-down"></i>
-                </div>
-              </div>
+        {% for rev in reviews%}
+        <table class="table table-bordered mt-3">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="row" class="w-150 dark-grey-text h6">Review Date</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Rating</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Review</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Reviewer</th>
+                <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+                <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
+                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
+                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
+                <td><a href="{{ url_for('users.userdetails', uid=rev.uid) }}">User {{rev.uid}}</a></td>
+                <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.numVotes}}</td>
+                
+              </tr>
+            </tbody>
+          </table>
+        {% endfor %}
 
-            </body>
-            <hr>
-          </div>
-          </div>
-          {% endfor %}
     {% endif %}
     {% if reviews == None %}
     <p>This seller has not been reviewed yet!<p>
