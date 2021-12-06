@@ -45,6 +45,26 @@ VALUES(:uid, :pid, :rating, 0, :review, LOCALTIMESTAMP(0))
             # reporting needed
             return None
 
+    @staticmethod
+    def upVotes(pid, numVotes, uid):
+        try: rows = app.db.execute('''
+UPDATE ProductReview
+SET numVotes = :numVotes + 1
+WHERE pid = :pid AND uid = :uid
+''',pid=pid, numVotes = numVotes, uid = uid)
+        except Exception:
+            return None
+
+    @staticmethod
+    def downVotes(pid, numVotes, uid):
+        try: rows = app.db.execute('''
+UPDATE ProductReview
+SET numVotes = :numVotes - 1
+WHERE pid = :pid AND uid = :uid
+''',pid=pid, numVotes = numVotes, uid = uid)
+        except Exception:
+            return None
+
 class SellerReviews:
     def __init__(self, uid, sid, rating, numVotes, review, DateTime):
         self.uid = uid
