@@ -1,4 +1,5 @@
 from flask import current_app as app
+from datetime import datetime
 
 
 class Cart:
@@ -86,4 +87,49 @@ WHERE uid = :uid AND pid = :pid
             # likely id already in use; better error checking and
             # reporting needed
             return None
+    
+    @staticmethod
+    def checkoutCart(uid):    
+        try:
+            orderDateTime = datetime.now()
+            rows = app.db.execute('''
+                SELECT Cart.uid, Cart.pid, Products.SellerID, Products.unitPrice, 
+                    Cart.quantity
+                FROM Cart, Products
+                WHERE Cart.uid = :uid AND Products.productID = Cart.pid
+                ''', uid=uid)
+            for row in rows:
+                res = Cart.insertPurchases(uid, row[1], row[2], row[3], row[4], orderDateTime)
+                if res:
+                    Cart.removeFromCart(uid, row[1])
+            return True
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return False
+    
+    @staticmethod
+    def insertPurchases(uid, pid, SellerID, finalUnitPrice, quantity, orderDateTime):
+        fufullmentstatus = "Processing"
+        try:
+            app.db.execute(
+                """
+    INSERT INTO Purchases(SellerID, uid, pid, orderDateTime, finalUnitPrice, quantity, fufullmentstatus)
+    VALUES(:SellerID, :uid, :pid, :orderDateTime, :finalUnitPrice, :quantity, :fufullmentstatus)
+    RETURNING uid
+    """,
+                SellerID = SellerID,
+                uid=uid,
+                pid=pid,
+                orderDateTime=orderDateTime,
+                finalUnitPrice=finalUnitPrice,
+                quantity=quantity,
+                fufullmentstatus=fufullmentstatus
+            )
+            return True
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return False
+        
         
