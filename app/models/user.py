@@ -87,6 +87,18 @@ WHERE email = :email
             email=email,
         )
         return len(rows) > 0
+    
+    @staticmethod
+    def is_seller(id):
+        rows = app.db.execute(
+            """
+SELECT SellerID
+FROM Seller
+WHERE SellerID = :SellerID
+""",
+            SellerID=id,
+        )
+        return len(rows) > 0
 
     @staticmethod
     def updateEmail(id, email):

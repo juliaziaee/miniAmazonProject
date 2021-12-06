@@ -7,10 +7,69 @@
     <link rel="stylesheet" type="text/css" href="static/css/cart.css">
 </head>
 
-<h1>User Details</h1>
-<h3>{{user.firstname}} {{user.lastname}}</h3>
-<h3>User ID {{user.id}}</h3>
-<p>{{user.email}}</p>
+
+{% if user!=None %}
+
+<h1>User Details:</h1>
+<p>{{user.firstname}} {{user.lastname}}</p>
+<p>User ID: {{user.id}}</p>
+
+{% if seller %}
+    <h1>Seller Information:</h1>
+    <p>{{user.email}}</p>
+    <p>{{user.street1}}</p>
+    {% if user.street2 %}
+    <p>{{user.street2}}</p>
+    {% endif %}
+    <p>{{user.city}}, {{user.state}} {{user.zip}} </p>
+
+<h1>Seller Reviews:</h1>
+    {% if reviews %}
+    {% for rev in reviews%}
+            <div class="d-sm-flex justify-content-between">
+              <p class="mt-1 mb-2">
+                <strong>{{rev.firstname}} {{rev.lastname}} </strong>
+                <span>– </span><span>{{rev.DateTime}}</span>
+              </p>
+            </div>
+            <div class="d-sm-flex justify-content-space-between"></div>
+            <p class="mt-0 mb-6">
+              <span>{{rev.review}}  </span>  </p>
+            </p>
+          </head>
+            <body>
+              <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
+          
+              <div class = "votContainer">
+                <div class = "upbutton">
+                  <i class = "fas fa-chevron-up"></i>
+                </div>
+                <div class = "vot">
+                  <p> {{rev.numVotes}}</p>
+                </div>
+                <div class = "downbutton">
+                  <i class = "fas fa-chevron-down"></i>
+                </div>
+              </div>
+
+            </body>
+            <hr>
+          </div>
+          </div>
+          {% endfor %}
+    {% endif %}
+    {% if reviews == None %}
+    <p>This seller has not been reviewed yet!<p>
+    {% endif %}
+
+{% endif %}
+{% endif %}
+
+
+{% if user==None %}
+<h3>Error: you have requested information for an invalid user</h3>
+
+{% endif %}
 
 
 {% endblock %}

@@ -10,8 +10,7 @@ from wtforms.validators import (
     DataRequired,
     Email,
     EqualTo,
-    Length,
-    NumberRange,
+    Length
 )
 from flask_babel import _, lazy_gettext as _l
 from datetime import datetime
@@ -19,6 +18,7 @@ from datetime import datetime
 from .models.user import User
 from .models.user import Balance
 from .models.orders import Orders
+from .models.reviews import SellerReviews
 
 
 from flask import Blueprint
@@ -211,10 +211,10 @@ def updateuserinfo():
                     form.zip.data,
                 ).split("CONTEXT")[0]
         return render_template(
-            "updateuserinfo.html", title="Update Contact Info", form=form, error=error
+            "updateuserinfo.html", title="Update Info", form=form, error=error
         )
     else:
-        return render_template("updateuserinfo.html", title="Update Contact Info")
+        return render_template("updateuserinfo.html", title="Update Info")
 
 
 class FundsForm(FlaskForm):
@@ -270,8 +270,10 @@ def accountdetails():
 
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
 def userdetails(uid):
+    reviews = SellerReviews.get_user_reviews(uid)
+    seller = User.is_seller(uid)
     user = User.get(uid)
-    return render_template("userdetails.html", user=user)
+    return render_template("userdetails.html", user=user, seller=seller, reviews=reviews)
 
 
 @bp.route("/orderhistory")
