@@ -21,8 +21,29 @@ FROM ProductReview, Users
 WHERE ProductReview.uid = Users.id AND ProductReview.pid = :pid
 ORDER BY DateTime DESC
 ''',pid=pid)
-        print(rows)
         return [ProdReviews(*row) for row in rows]
+    
+    @staticmethod
+    def NewProdReview(
+        uid, pid, rating, review
+    ):
+        try:
+            rows = app.db.execute(
+                """
+INSERT INTO ProductReview(uid, pid, rating, numVotes, review, DateTime)
+VALUES(:uid, :pid, :rating, 0, :review, LOCALTIMESTAMP(0))
+""",
+                uid=uid, 
+                pid=pid, 
+                rating= rating, 
+                review= review, 
+            )
+         
+            return None
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
 
 class SellerReviews:
     def __init__(self, uid, sid, rating, numVotes, review, DateTime):
