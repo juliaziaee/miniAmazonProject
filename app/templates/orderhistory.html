@@ -16,7 +16,6 @@
 
 {% else %}
 <h1>Order History</h1>
-{% for order in all_orders%}
 <table class="table table-bordered mt-3">
   <thead class="thead-dark">
     <tr>
@@ -28,6 +27,7 @@
       <th scope="row" class="w-150 dark-grey-text h6">Total Price</th>
     </tr>
   </thead>
+  {% for order in all_orders%}
   <tbody>
     <tr>
       <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.orderDateTime}}</td>
@@ -46,9 +46,8 @@
       
     </tr>
   </tbody>
+  {% endfor %}
 </table>
-
-{% endfor %}
 {% endif %}
 
 
