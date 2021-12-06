@@ -20,6 +20,10 @@
                     <div class="media align-items-lg-center flex-column flex-lg-row p-3">
                         <div class="media-body order-2 order-lg-1">
                             <h5 class="mt-0 font-weight-bold mb-2">{{product.name}}</h5>
+                            <h6><u>Product ID</u>: {{product.id}}</h6>
+                            <h6><u>Category</u>: {{product.category}}</h6>
+                            <h6><u>Rating</u>: {{product.rating}}</h6>
+                            <h6><u>Description</u>: {{product.description}}<h6>
                             <p><span class="mb-0 medium" style="color:gray">Price: </span><span class="mb-0 medium" style="color:#8b0000">${{product.price}}</span></p>
                             <div class="d-flex align-items-center justify-content-between mt-1"></div>
                         </div><img src={{product.image}} alt="Generic placeholder image" width="400" class="ml-lg-5 order-1 order-lg-2">
@@ -29,29 +33,9 @@
         </div>
     </div>
 </div>
-<!-- Classic tabs -->
-<div class="classic-tabs border rounded px-4 pt-1">
-    <ul class="nav tabs-primary nav-justified" id="advancedTab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link active show" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Update Quantity</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews ({{leng}})</a>
-      </li>
-    </ul>
-    <div class="tab-content" id="advancedTabContent">
-      <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-        <h5><b>{{product.name}}</b></h5>
-        <p class="small text-muted mb-2"><u>Product ID</u>: {{product.id}}</p>
-        <h6><u>Category</u>: {{product.category}}</h6>
-        <h6><u>Rating</u>: {{product.rating}}</h6>
-        <p class="pt-1"><u>Description</u>: {{product.description}}</p>
-      </div>
-      <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
-        <h5>Additional Information</h5>
+
+<br></br>
+<h3>Seller Information and Quantity</h3>
         <table class="table table-bordered mt-3">
           <thead class="thead-dark">
             <tr>
@@ -72,75 +56,78 @@
             </tr>
           </tbody>
         </table>
-      </div>
-      <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-        <h5><span>{{leng}}</span> reviews for <span>{{product.name}}</span></h5>
-        <div class="media mt-3 mb-4">
-           <div class="media-body">
-            {% for rev in review%}
-            <div class="d-sm-flex justify-content-between">
-              <p class="mt-1 mb-2">
-                <strong>{{rev.firstname}} {{rev.lastname}} </strong>
-                <span>– </span><span>{{rev.DateTime}}</span>
-              </p>
-            </div>
-            <div class="d-sm-flex justify-content-space-between"></div>
-            <p class="mt-0 mb-6">
-              <span>{{rev.review}}  </span>  </p>
-            </p>
-          </head>
-            <body>
-              <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
-          
-              <div class = "votContainer">
-                <div class = "upbutton">
-                  <i class = "fas fa-chevron-up"></i>
-                </div>
-                <div class = "vot">
-                  <p> {{rev.numVotes}}</p>
-                </div>
-                <div class = "downbutton">
-                  <i class = "fas fa-chevron-down"></i>
-                </div>
-              </div>
 
-            </body>
-            <hr>
-          </div>
-          </div>
-          {% endfor %}
-          </div>
-  
-        </div>
-        <hr>
-        <h5 class="mt-4">Add a review</h5>
-        <p>Your email address will not be published.</p>
-        <div class="my-3">
-        </div>
-        <div>
-          <!-- Your review -->
-          <div class="md-form md-outline">
-            <textarea id="form76" class="md-textarea form-control pr-6" rows="4"></textarea>
-            <label for="form76">Your review</label>
-          </div>
-          <!-- Name -->
-          <div class="md-form md-outline">
-            <input type="text" id="form75" class="form-control pr-6">
-            <label for="form75">Name</label>
-          </div>
-          <!-- Email -->
-          <div class="md-form md-outline">
-            <input type="email" id="form77" class="form-control pr-6">
-            <label for="form77">Email</label>
-          </div>
-          <div class="text-right pb-2">
-            <button type="button" class="btn btn-primary">Add a review</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+   <br></br>   
+   <h1>Product Reviews:</h1>
+   {% if review %}
+       <table class="table table-bordered mt-3">
+           <thead class="thead-dark">
+             <tr>
+               <th scope="row" class="w-150 dark-grey-text h6">Review Date</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Rating</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Review</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Reviewer</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
+             </tr>
+           </thead>
+           {% for rev in review%}
+           <tbody>
+               <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}</td>
+               <td> <body>
+                <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
+            
+                <div class = "votContainer">
+                  <div class = "upbutton">
+                    <i class = "fas fa-chevron-up"></i>
+                  </div>
+                  <div class = "vot">
+                    <p> {{rev.numVotes}}</p>
+                  </div>
+                  <div class = "downbutton">
+                    <i class = "fas fa-chevron-down"></i>
+                  </div>
+                </div>
+              </body></td>
+               
+             </tr>
+           </tbody>
+           {% endfor %}
+         </table>
+
+   {% endif %}
+   {% if not review %}
+   <p>This product has not been reviewed yet!<p>
+   {% endif %}
+
   <br>
-  <!-- Classic tabs -->
+  <h3>Leave a Review</h3>
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+      {{ form.name.label }}<br/>
+      {{ form.name(size=32) }}<br/>
+      {% for error in form.name.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+      </p>
+      <p>
+      {{ form.email.label }}<br/>
+      {{ form.email(size=32) }}<br/>
+      {% for error in form.email.errors %}
+      <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+      </p>
+      <p>
+        {{ form.review.label }}<br/>
+        {{ form.review(rows='10',cols='100') }}<br/>
+        {% for error in form.review.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        </p>
+      <p>{{ form.submit() }}</p>
+  </form>
 
 {% endblock %}

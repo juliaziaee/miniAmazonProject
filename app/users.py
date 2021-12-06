@@ -1,5 +1,5 @@
 from typing import Type
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 from flask.app import Flask
 from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user, current_user
@@ -41,7 +41,7 @@ def login():
     if form.validate_on_submit():
         user = User.get_by_auth(form.email.data, form.password.data)
         if user is None:
-            flash("Invalid email or password")
+            flash("Invalid email or password", "login")
             return redirect(url_for("users.login"))
         login_user(user)
         next_page = request.args.get("next")
@@ -97,7 +97,7 @@ def register():
             form.state.data,
             form.zip.data,
         ):
-            flash("Congratulations, you are now a registered user!")
+            flash("Congratulations, you are now a registered user! Sign in with your credentials!", "login")
             return redirect(url_for("users.login"))
     return render_template("register.html", title="Register", form=form)
 
