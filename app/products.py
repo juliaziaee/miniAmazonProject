@@ -136,6 +136,29 @@ def detailview(id):
     else:
         return redirect(url_for('users.login'))
 
+
+class ReviewForm(FlaskForm):
+    review = StringField(_l("Review"), validators=[DataRequired()])
+    rating = StringField(_l("Rating"), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
+
+@bp.route("/newReview/<int:id>", methods=["GET", "POST"])
+def review(id):
+    form = ReviewForm()
+    user = current_user.id
+    product = Product.get(id)
+    if form.validate_on_submit():
+        if ProdReviews.NewProdReview(
+            user, 
+            product, 
+            form.review.data,
+            form.rating.data,
+        ):
+        
+            flash("You have successfully submitted a review!")
+            return redirect(url_for("product.detailview"))
+    return render_template("newReview.html", title="Leave a Review", form=form)
+
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
 def individualOrder(uid, sellerID, orderDateTime):
     return render_template('individualorder.html', order_history = Orders.getIndividual(current_user.id, uid, orderDateTime))
@@ -207,3 +230,42 @@ def search():
                            pagination = pagination,
                            purchase_history=purchases,
                            )
+    
+class EditForm(FlaskForm):
+    name = StringField(_l('Product Name'), validators=[DataRequired()])
+    description = StringField(_l('Product Description'), validators=[DataRequired()])
+    category = SelectField(_l('Category'), choices=data, validators=[DataRequired()])
+    unitPrice = StringField(_l('Unit Price'), validators=[DataRequired()])
+    num_products = StringField(_l('Number of Units'), validators=[DataRequired()])
+    image = StringField(_l('Image URL'), validators=[DataRequired()])
+    update = SubmitField(_l('Update'))
+
+@bp.route("/edit/<int:pid>", methods=['GET', 'POST'])
+def edit(pid):
+    product = Product.get(pid)
+    options = Product.addCategory()
+    for i in options:
+        if i not in data:
+            data.append(i)
+    data.sort()
+    form = EditForm()
+    form.name.data = product.name
+    form.description.data = product.description
+    form.category.data = product.category
+    form.unitPrice.data = product.price
+    form.num_products.data = product.Inventory
+    form.image.data = product.image
+
+    if current_user.is_authenticated:
+        if form.validate_on_submit():
+            # if Product.create(form.name.data,
+            #                 form.description.data,
+            #                 form.category.data,
+            #                 form.unitPrice.data,
+            #                 form.num_products.data,
+            #                 current_user.id,
+            #                 form.image.data):
+                                return redirect(url_for('users.login'))
+        return render_template('edit.html', title='Update', form=form, product=product)
+    else:
+        return redirect(url_for('users.login'))

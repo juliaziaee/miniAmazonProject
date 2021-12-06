@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+{% if product!=None %}
 <br>
 <a href="{{ url_for('index.index') }}"><button>Back</button></a>
         <a style="float:right" id="submissionlink" href="{{ url_for('products.addtocart', pid=product.id, sid=product.sellerID, quantity=1) }}" type="submit"><button onclick="addAttribute()">Add to Cart</button></a>
@@ -72,16 +72,16 @@
            </thead>
            {% for rev in review%}
            <tbody>
-               <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}</td>
                <td> <body>
                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
-            
+                
                 <div class = "votContainer">
                   <div class = "upbutton">
-                    <i class = "fas fa-chevron-up"></i>
+                    <i class = "fas fa-chevron-up" role="button"></i>
                   </div>
                   <div class = "vot">
                     <p> {{rev.numVotes}}</p>
@@ -90,10 +90,14 @@
                     <i class = "fas fa-chevron-down"></i>
                   </div>
                 </div>
-              </body></td>
                
+              </body></td>
+               {% if user.id == rev.uid %}
+               <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Log in</a> 
+              {% endif %}
              </tr>
-           </tbody>
+            
+            </tbody>
            {% endfor %}
          </table>
 
@@ -103,31 +107,13 @@
    {% endif %}
 
   <br>
-  <h3>Leave a Review</h3>
-  <form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-      {{ form.name.label }}<br/>
-      {{ form.name(size=32) }}<br/>
-      {% for error in form.name.errors %}
-      <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-      </p>
-      <p>
-      {{ form.email.label }}<br/>
-      {{ form.email(size=32) }}<br/>
-      {% for error in form.email.errors %}
-      <span style="color: red;">[{{ error }}]</span>
-      {% endfor %}
-      </p>
-      <p>
-        {{ form.review.label }}<br/>
-        {{ form.review(rows='10',cols='100') }}<br/>
-        {% for error in form.review.errors %}
-        <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-        </p>
-      <p>{{ form.submit() }}</p>
-  </form>
+
+  <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
+
+  {% endif %}
+
+  {% if product==None %}
+  <h3>Error: you have requested a product that doesn't exist.</h3>
+  {% endif %}
 
 {% endblock %}

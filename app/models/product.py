@@ -22,7 +22,7 @@ FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductRevie
 WHERE productID = :productID AND Users.id = Products.SellerID
 ''',
                               productID=productID)
-        return Product(*(rows[0])) if rows is not [] else []
+        return Product(*(rows[0])) if rows else None
 
     def addCategory():
         rows = app.db.execute('''
@@ -44,10 +44,16 @@ SELECT productID, name, unitPrice, image, category, description, Inventory, rati
 FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid, Users
 WHERE (name LIKE :keyword OR description LIKE :keyword) AND (category LIKE :category) AND Users.id = Products.SellerID
 '''
-        if price == "250":
-            query += "AND unitPrice < 250"
-        if price == "500":
-            query += "AND unitPrice > 250 AND unitPrice < 500"
+        if price == "0":
+            query += "AND unitPrice <= 100"
+        if price == "100":
+            query += "AND unitPrice > 100 AND unitPrice < 200"
+        if price == "200":
+            query += "AND unitPrice > 200 AND unitPrice < 300"
+        if price == "300":
+            query += "AND unitPrice > 300 AND unitPrice < 400"
+        if price == "400":
+            query += "AND unitPrice > 400 AND unitPrice < 500"
         if price == "over":
             query += "AND unitPrice > 500"
             
