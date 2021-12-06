@@ -22,7 +22,7 @@ FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductRevie
 WHERE productID = :productID AND Users.id = Products.SellerID
 ''',
                               productID=productID)
-        return Product(*(rows[0])) if rows is not [] else []
+        return Product(*(rows[0])) if rows else None
 
     def addCategory():
         rows = app.db.execute('''
