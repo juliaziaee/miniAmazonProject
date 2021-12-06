@@ -36,7 +36,7 @@ FROM Products
 
     @staticmethod
     def getSearchAndFilt(category, keyword, sort, price):
-        category: category = "%{}%".format(category)
+        category = "%{}%".format(category)
         keyword = "%{}%".format(keyword)
         
         query = '''
