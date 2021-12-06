@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+{% if product!=None %}
 <br>
 <a href="{{ url_for('index.index') }}"><button>Back</button></a>
         <a style="float:right" id="submissionlink" href="{{ url_for('products.addtocart', pid=product.id, sid=product.sellerID, quantity=1) }}" type="submit"><button onclick="addAttribute()">Add to Cart</button></a>
@@ -109,5 +109,11 @@
   <br>
 
   <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
+
+  {% endif %}
+
+  {% if product==None %}
+  <h3>Error: you have requested a product that doesn't exist.</h3>
+  {% endif %}
 
 {% endblock %}
