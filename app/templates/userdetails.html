@@ -41,7 +41,7 @@
                 <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
-                <td><a href="{{ url_for('users.userdetails', uid=rev.uid) }}">User {{rev.uid}}</a></td>
+                <td><a href="{{ url_for('users.userdetails', uid=rev.uid) }}">User {{rev.firstname}}</a></td>
                 <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.numVotes}}</td>
                 
               </tr>
