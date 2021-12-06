@@ -2,7 +2,7 @@ from flask import current_app as app
 from flask import Flask, render_template
 
 class Product:
-    def __init__(self, id, name, price, image, category, description, Inventory, rating, sellerID, sellerName):
+    def __init__(self, id, name, price, image, category, description, Inventory, sellerID, sellerName):
         self.id = id
         self.name = name
         self.price = price
@@ -10,15 +10,14 @@ class Product:
         self.category = category
         self.description = description
         self.Inventory = Inventory
-        self.rating = rating
         self.sellerID = sellerID
         self.sellerName = sellerName
 
     @staticmethod
     def get(productID):
         rows = app.db.execute('''
-SELECT productID, name, unitPrice, image, category, description, Inventory, rating, SellerID, firstname
-FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid, Users
+SELECT productID, name, unitPrice, image, category, description, Inventory, SellerID, firstname
+FROM Products, Users
 WHERE productID = :productID AND Users.id = Products.SellerID
 ''',
                               productID=productID)
@@ -40,8 +39,8 @@ FROM Products
         keyword = "%{}%".format(keyword)
         
         query = '''
-SELECT productID, name, unitPrice, image, category, description, Inventory, rating, SellerID, firstname
-FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid, Users
+SELECT productID, name, unitPrice, image, category, description, Inventory, SellerID, firstname
+FROM Products, Users
 WHERE (name LIKE :keyword OR description LIKE :keyword) AND (category LIKE :category) AND Users.id = Products.SellerID
 '''
         if price == "0":
@@ -79,8 +78,8 @@ keyword=keyword,
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT productID, name, unitPrice, image, category, description, Inventory, rating, SellerID, firstname
-FROM Products LEFT OUTER JOIN ProductReview ON Products.productID = ProductReview.pid, Users
+SELECT productID, name, unitPrice, image, category, description, Inventory, SellerID, firstname
+FROM Products, Users
 WHERE Users.id = Products.SellerID
 ''',)
         return [Product(*row) for row in rows]
