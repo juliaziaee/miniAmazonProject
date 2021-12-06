@@ -20,7 +20,7 @@
 
     .sidenav {
         height: 100%;
-        background-color: #000;
+        background-color: #00008B;
         overflow-x: hidden;
         padding-top: 20px;
     }
@@ -48,13 +48,15 @@
 
 <body>
   <div class="sidenav">
+    <div style="color: aliceblue; text-align: center; margin-bottom: 10px">
+    <img src="https://i.ibb.co/TKKGg03/Databosses.png" width="400" height="150">
+    </div>
     {% block msg %}
-      <h1 style="color:aliceblue">Welcome to Databosses!</h1>
-      <div style="color: aliceblue; text-align: right; margin-bottom: 25px">
+      <div style="color: aliceblue; text-align: right; margin-bottom: 10px">
         {% if current_user.is_authenticated %}
-          Hello {{current_user.firstname}}! <a href="{{ url_for('users.logout') }}" type="button" class="btn btn-light">Log out</a>
+          Hello {{current_user.firstname}}! <a href="{{ url_for('users.logout') }}" type="button" class="btn btn-dark">Log out</a>
         {% else %}
-          <a href="{{ url_for('users.login') }}" type="button" class="btn btn-light">Log in</a>
+          <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Log in</a>
         {% endif %}
       </div>
     {% endblock %}
