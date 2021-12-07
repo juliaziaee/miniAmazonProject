@@ -366,10 +366,13 @@ def downVotes(sid, numVotes, uid):
 
 @bp.route("/spendinghistory")
 def spendinghistory():
-    category_purchases = Purchase.get_by_category(current_user.id)[:-2].split("),")
-    cat = []
-    for i in category_purchases:
-        cat.append(i.split(",")[0][3:-1] + ": $" + str(round(float(i.split(",")[1]),2)))
+    category_purchases = Purchase.get_by_category(current_user.id)
+    cat = None
+    if category_purchases != "[]":
+        category_purchases = category_purchases[:-2].split("),")
+        cat = []
+        for i in category_purchases:
+            cat.append(i.split(",")[0][3:-1] + ": $" + str(round(float(i.split(",")[1]),2)))
     return render_template("spendinghistory.html", title="Spending History", cat = cat)
 
 @bp.route("/logout")

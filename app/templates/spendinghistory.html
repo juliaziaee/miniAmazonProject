@@ -2,10 +2,21 @@
 
 {% block content %}
 
+{% if current_user.is_authenticated %}
 <h1>Spending History</h1>
 <br></br>
 <h3>Spending By Category</h3>
+
+{% if cat%}
 {% for i in cat%}
 <p>{{i}}<p>
 {% endfor %}
+{% else %}
+<p>No spending to see!</p>
+
+{% endif %}
+
+{% else %}
+<p><a href="{{ url_for('users.login') }}">Log in</a> to see your spending history!</p>
+{% endif %}
 {% endblock %}
