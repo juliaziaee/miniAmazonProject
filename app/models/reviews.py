@@ -145,7 +145,18 @@ ORDER BY DateTime DESC
 ''',sid=sid)
     
         return [SellerReviews(*row) for row in rows]
-      
+    
+    @staticmethod
+    def get_authored(id):
+       
+        rows = app.db.execute('''
+SELECT firstname, lastname, uid, sid, rating, numVotes, review, DateTime
+FROM SellerReview, Users
+WHERE SellerReview.uid = Users.id AND Users.id = :id
+ORDER BY DateTime DESC
+''',id=id)
+        return [SellerReviews(*row) for row in rows]
+
     @staticmethod
     def hasReviewedS(uid,sid):
        
