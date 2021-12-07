@@ -23,6 +23,17 @@ ORDER BY DateTime DESC
 ''',pid=pid)
         return [ProdReviews(*row) for row in rows]
 
+    @staticmethod
+    def get_authored(id):
+       
+        rows = app.db.execute('''
+SELECT firstname, lastname, uid, pid, rating, numVotes, review, DateTime
+FROM ProductReview, Users
+WHERE ProductReview.uid = Users.id AND Users.id = :id
+ORDER BY DateTime DESC
+''',id=id)
+        return [ProdReviews(*row) for row in rows]
+
     def getAvgReview(pid):
         avg = app.db.execute('''
 SELECT AVG(rating)
