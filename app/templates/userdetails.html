@@ -39,12 +39,15 @@
             {% for rev in review%}
             <tbody>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
-                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
+                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}
+                {% if user == rev.uid %}
+                 <a href="{{ url_for('users.updatereview' , id=page.id)}}" type="button" class="btn btn-dark">Edit</a> 
+                 <a href="{{ url_for('users.removereview' , sid=rev.sid, uid = rev.uid)}}" type="button" style="background-color:red" class="btn btn-dark">Remove</a> 
+                 {% endif %}
+                </td>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>
-                 {% if user == rev.uid %}
-                 <a href="{{ url_for('users.userdetails' , uid=page.id)}}" type="button" class="btn btn-dark">Edit</a> 
-                {% endif %}</td>
+                 </td>
                 <td> <body>
                  <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
                  
@@ -67,19 +70,26 @@
  
     {% endif %}
    
+    {% if not review %}
+    <p>This seller has not been reviewed yet!<p>
+     
+    {% endif %}
+    
+    {% if availBought and availNew %}
+        <a class="btn btn-secondary" href="{{ url_for('users.review', id=page.id)}}" role="button">Leave a Review</a>
+       {% endif %}
+{% endif %}
+   
+<br>
 
-{% endif %}
-{% if not review %}
-<p>This product has not been reviewed yet!<p>
- 
-{% endif %}
 
 {% if availBought and availNew %}
-    <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
+    <a class="btn btn-secondary" href="{{ url_for('products.review', id=page.id)}}" role="button">Leave a Review</a>
    {% endif %}
   <br>
-{% endif %}
 
+{% endif %}
+  
 
 {% if page==None %}
 <h3>Error: you have requested information for an invalid page</h3>

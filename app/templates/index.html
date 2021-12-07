@@ -39,8 +39,8 @@
     <label class="product-image">Image</label>
     <label class="product-details">Product</label>
     <label class="product-price">Price</label>
-    <label class="product-description">Description</label>
-    <label style="float:right" class="product-category">Category</label>  
+    <label class="index-product-description">Description</label>
+    <label class="product-category">Category</label> 
   </div>
   {% for product in products%}
     {% if product.Inventory > 0 %}
@@ -54,8 +54,16 @@
           <p class="product-id">Product ID: {{product.id}}</p>
         </div>
         <div class="product-price">{{product.price}}</div>
-        <div class="product-description">{{product.description}}</div>
-        <div style="float:right" class="product-category">{{product.category}}</div>
+        <div class="index-product-description">{{product.description}}</div>
+        <div class="product-category">{{product.category}}</div>
+        <div style="float:right" class="product-actions" style="float:right">
+          <a id="viewDetails" href="{{ url_for('products.detailview', id=product.id)}}" type="submit">
+            <button class = "view-details">View Details</button>
+          </a>
+          <a id="addCart" href="{{ url_for('products.addtocart', pid=product.id, sid=product.sellerID, quantity=1)}}" type="submit">
+            <button class = "view-product-add-cart">Add to Cart</button>
+          </a>
+        </div>
       </div>
     </div>
     {% endif %}

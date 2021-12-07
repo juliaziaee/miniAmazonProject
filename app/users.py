@@ -15,6 +15,7 @@ from wtforms.validators import (
 )
 from flask_babel import _, lazy_gettext as _l
 from datetime import datetime
+import re
 
 from .models.user import User
 from .models.user import Balance
@@ -275,9 +276,9 @@ def accountdetails():
 def userdetails(uid):
     if current_user.is_authenticated:
         return render_template('userdetails.html',page = User.get(uid),
-                                                    seller = User.is_seller(uid),
+                                                  seller = User.is_seller(uid),
                                                   user = current_user.id,
-                                                  availBought = Purchase.hasPurchasedS(current_user.id, uid),
+                                                  availBought = Purchase.hasPurchasedS(uid, current_user.id),
                                                   availNew = SellerReviews.hasReviewedS(current_user.id, uid),
                                                   review = SellerReviews.get_user_reviews(uid),
                                                   leng = len(SellerReviews.get_user_reviews(uid)))
@@ -319,6 +320,10 @@ def updatereview(id):
         ):        
             return redirect(url_for('users.userdetails', uid= id))
     return render_template("editSellerReview.html", title="Edit Your Seller Review", form=form)
+@bp.route("/userdetails/remove/<sid>/<uid>")
+def removereview(sid, uid):
+    SellerReviews.removeSellReviews(sid, uid)
+    return redirect(url_for('users.userdetails',uid= sid))
 
 @bp.route("/orderhistory")
 def orderhistory():
@@ -358,6 +363,14 @@ def downVotes(sid, numVotes, uid):
     SellerReviews.downVotesS(sid,numVotes, uid)
     #refresh page
     return redirect(url_for('users.userdetails', uid = sid))
+
+@bp.route("/spendinghistory")
+def spendinghistory():
+    category_purchases = Purchase.get_by_category(current_user.id)[:-2].split("),")
+    cat = []
+    for i in category_purchases:
+        cat.append(i.split(",")[0][3:-1] + ": $" + str(round(float(i.split(",")[1]),2)))
+    return render_template("spendinghistory.html", title="Spending History", cat = cat)
 
 @bp.route("/logout")
 def logout():
