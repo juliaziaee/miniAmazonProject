@@ -1,4 +1,5 @@
 from flask import current_app as app
+from flask_login import current_user
 
 
 class Orders:
@@ -128,3 +129,37 @@ WHERE uid = :uid AND SellerID = :sellerID AND orderDateTime = :orderDateTime AND
             # likely id already in use; better error checking and
             # reporting needed
             return None
+
+    @staticmethod
+    def getSearchAndFilt(searchBuyer, searchDate):
+
+        if searchBuyer:
+
+            query = '''
+SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
+SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
+'', ''
+FROM Purchases, Users
+WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID AND Users.id = :searchBuyer
+GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime
+'''
+
+        else:
+            query = '''
+SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
+SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
+'', ''
+FROM Purchases, Users
+WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
+GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime
+'''
+        if searchDate == "dateNew":
+            query += "ORDER BY orderDateTime DESC"
+        if searchDate == "dateOld":
+            query += "ORDER BY orderDateTime"
+                
+        rows = app.db.execute(query,
+searchBuyer = searchBuyer,
+SellerID = current_user.id
+)
+        return [Orders(*row) for row in rows]
