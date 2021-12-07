@@ -291,7 +291,10 @@ def orderhistory():
 @bp.route("/orderhistory/singleorderhistory/<orderDateTime>")
 def singleOrderHistory(orderDateTime):
     if current_user.is_authenticated:
-        format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S.%f')
+        if len(orderDateTime) > 20:
+            format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S.%f')
+        else:
+            format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S')
         #get order details if user is logged in
         orderDetails = Orders.getSingleOrder(current_user.id, format_dateTime)
     else:
