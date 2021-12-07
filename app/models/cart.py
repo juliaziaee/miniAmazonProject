@@ -16,6 +16,7 @@ class Cart:
         self.subtotal = subtotal
         self.imgUrl = imgUrl
 
+#get all items in a given user's cart
     @staticmethod
     def get(uid):
         rows = app.db.execute('''
@@ -29,13 +30,7 @@ WHERE Cart.uid = :uid AND Cart.pid = Products.productID
                               uid=uid)
         return [Cart(*row) for row in rows]
 
-#     @staticmethod
-#     def get_all(available=True):
-#         rows = app.db.execute('''
-# SELECT productID, name, inventory, SellerID
-# FROM Products
-# ''',)
-#         return [Inventory(*row) for row in rows]
+#  add product at a given quantity to a given user's cart 
 
     @staticmethod
     def addToCart(uid, pid, sid, quantity):
@@ -52,10 +47,9 @@ RETURNING pid
             productID = rows[0][0]
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
 
+#increase or decrease the quantity of a given item in a given user's cart
     @staticmethod
     def updateQuantity(uid, pid, new_quantity):
         try:
@@ -70,10 +64,9 @@ WHERE uid = :uid AND pid = :pid
             productID = rows[0][0]
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
-    
+
+#remove a given item from a given user's cart    
     @staticmethod
     def removeFromCart(uid, pid):
         try:
@@ -86,10 +79,9 @@ WHERE uid = :uid AND pid = :pid
             productID = rows
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
-    
+
+#move items from user's cart to purchases table to checkout a cart & delete items from cart upon successful purchase 
     @staticmethod
     def checkoutCart(uid):    
         try:
@@ -110,7 +102,8 @@ WHERE uid = :uid AND pid = :pid
                 else:
                     return Cart.insertPurchases(uid, row[1], row[2], row[3], row[4], orderDateTime, orderDateTime)
         return uid
-    
+
+#insert item from cart into purchases table    
     @staticmethod
     def insertPurchases(uid, pid, SellerID, finalUnitPrice, quantity, orderDateTime, fulfillment_datetime):
         fufullmentstatus = "Processing"

@@ -8,6 +8,7 @@ class Inventory:
         self.num_in_stock = num_in_stock
         self.seller = seller
 
+#get products listed for a given seller 
     @staticmethod
     def get(seller):
         rows = app.db.execute('''
@@ -18,6 +19,7 @@ WHERE SellerID = :SellerID AND inventory > 0
                               SellerID=seller)
         return [Inventory(*row) for row in rows]
 
+#get all products listed/created
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
@@ -26,6 +28,7 @@ FROM Products
 ''',)
         return [Inventory(*row) for row in rows]
 
+# set inventory to 0 to de-list an item from products available
     @staticmethod
     def removeInventory(pid):
         try:
@@ -37,10 +40,9 @@ WHERE productID = :pid
                                   pid = pid)
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
 
+#change inventory quantity for a given product
     @staticmethod
     def updateQuantity(pid, new_quantity):
         try:
@@ -53,6 +55,4 @@ WHERE productID = :pid
                                   new_quantity = new_quantity)
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None

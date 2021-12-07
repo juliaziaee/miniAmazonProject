@@ -23,6 +23,7 @@ finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, totalPrice, pr
         self.reviewStatus = reviewStatus
 
 
+#get a given seller's orders
     @staticmethod
     def get(seller):
         # buyer information including address, date order placed,
@@ -38,6 +39,7 @@ ORDER BY orderDateTime DESC
                               SellerID=seller)
         return [Orders(*row) for row in rows]
 
+#get a given seller's orders from a given individual
     @staticmethod
     def getIndividual(seller, uid, orderDateTime):
         # buyer information including address, date order placed,
@@ -54,11 +56,9 @@ ORDER BY fulfillment_datetime DESC
                               SellerID=seller, uid = uid, orderDateTime = orderDateTime)
         return [Orders(*row) for row in rows]
 
-
+#get an overview of the seller's items sold
     @staticmethod
     def getOverview(seller):
-        # buyer information including address, date order placed,
-        # total amount/number of items, and overall fulfillment status
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
 SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
@@ -71,7 +71,7 @@ ORDER BY orderDateTime DESC
                               SellerID=seller)
         return [Orders(*row) for row in rows]
 
-
+#get all orders that exist
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
@@ -83,7 +83,8 @@ WHERE Purchases.uid = Users.id AND Products.productID = Purchases.pid
 ORDER BY orderDateTime DESC
 ''')
         return [Orders(*row) for row in rows]
-    
+
+#get all items from a given user's/buyer's specific order    
     @staticmethod
     def getSingleOrder(uid, orderDateTime):
         # buyer information including address, date order placed,
@@ -100,7 +101,8 @@ ORDER BY orderDateTime DESC
                               uid=uid,
                               orderDateTime=orderDateTime)
         return [Orders(*row) for row in rows]
-    
+
+#get all orders for a given user/buyer    
     @staticmethod
     def getOrders(uid):
         rows = app.db.execute('''
@@ -115,6 +117,7 @@ ORDER BY orderDateTime DESC
                               uid=uid)
         return [Orders(*row) for row in rows]
 
+#mark item order as fulfilled in purchases
     @staticmethod
     def markFulfilled(uid, sellerID, orderDateTime, pid):
         try:
@@ -127,10 +130,9 @@ WHERE uid = :uid AND SellerID = :sellerID AND orderDateTime = :orderDateTime AND
 
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
 
+#find a buyer's given order
     @staticmethod
     def getSearchAndFilt(searchBuyer, searchDate):
 
@@ -165,6 +167,7 @@ SellerID = current_user.id
 )
         return [Orders(*row) for row in rows]
 
+#get a buyer's given order
     @staticmethod
     def getOrders(uid):
         rows = app.db.execute('''
@@ -179,12 +182,15 @@ ORDER BY orderDateTime DESC
                               uid=uid)
         return [Orders(*row) for row in rows]
 
+
+#analytics for sellers
 class Stats:
     def __init__(self, uid, quantity, spent):
         self.uid = uid
         self.quantity = quantity
         self.spent = spent
 
+#get a seller's analytics
     @staticmethod
     def stats(seller):
         # buyer information including address, date order placed,
@@ -199,6 +205,7 @@ ORDER BY tot DESC
                               SellerID=seller)
         return [Stats(*row) for row in rows]
 
+#filter for a buyer's activity
     @staticmethod
     def getSearchAndFilt(searchBuyer, searchTotal, searchUnits):
 
