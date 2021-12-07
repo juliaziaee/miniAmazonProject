@@ -5,7 +5,7 @@ import datetime
 from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, DecimalField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, SelectField, DecimalField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import (
     ValidationError,
     DataRequired,
@@ -288,6 +288,10 @@ def accountdetails():
 # Create function to show user details page (Public View for user)
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
 def userdetails(uid):
+    if User.is_seller(uid):
+        rateVal = ProdReviews.getAvgSellerReview(uid)
+    else:
+        rateVal = 0
     if current_user.is_authenticated:
         return render_template('userdetails.html',page = User.get(uid),
                                                   seller = User.is_seller(uid),
@@ -295,14 +299,16 @@ def userdetails(uid):
                                                   availBought = Purchase.hasPurchasedS(uid, current_user.id),
                                                   availNew = SellerReviews.hasReviewedS(current_user.id, uid),
                                                   review = SellerReviews.get_user_reviews(uid),
-                                                  leng = len(SellerReviews.get_user_reviews(uid)))
+                                                  leng = len(SellerReviews.get_user_reviews(uid)),
+                                                  avgRating = rateVal)
     else:
         return redirect(url_for('users.login'))
 
 # Create form to review a seller
 class SellerReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
-    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    ## add dropdown menu
+    rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 #  Function to show seller reviews
@@ -322,7 +328,8 @@ def review(id):
 # Create form to update existing seller reviews
 class updateSellerReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
-    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    ## add dropdown menu
+    rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 # Function to update seller reviews
