@@ -40,7 +40,6 @@ def create():
     data.sort()
     form = CreateForm()
     ## check user logged in, product id not in use, and populate database
-    ## create product id????
     if current_user.is_authenticated:
         if form.validate_on_submit():
             if Product.create(form.name.data,
@@ -50,7 +49,6 @@ def create():
                             form.num_products.data,
                             current_user.id,
                             form.image.data):
-                                flash('Congratulations, you have listed an item!')
                                 return redirect(url_for('users.login'))
         return render_template('create.html', title='Create', form=form)
     else:
@@ -127,20 +125,14 @@ def displaycart():
                                 cart_items=cart,
                                 subtotal=total)                     
 
-class ProdReviewForm(FlaskForm):
-    name = StringField(_l('Name'), validators=[DataRequired()])
-    email = StringField(_l('Email (will not be published)'), validators=[DataRequired(), Email()])
-    review = TextAreaField(_l('Review'), validators=[DataRequired()])
-    submit = SubmitField(_l('Submit'))
-    
+
 @bp.route("/detailview/<int:id>")
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
                                                   user = current_user.id, 
                                                   review = ProdReviews.get_all(id),
-                                                  leng = len(ProdReviews.get_all(id)),
-                                                  form=ProdReviewForm())
+                                                  leng = len(ProdReviews.get_all(id)))
     else:
         return redirect(url_for('users.login'))
 
@@ -156,7 +148,7 @@ def review(id):
     if form.validate_on_submit():
         if ProdReviews.NewProdReview(
             current_user.id, 
-            Product.get(id), 
+            id,
             form.review.data,
             form.rating.data,
         ):        

@@ -75,7 +75,9 @@
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
-               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>{% if user == rev.uid %}
+                <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Edit</a> 
+               {% endif %}</td>
                <td> <body>
                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
                 
@@ -91,11 +93,7 @@
                 </div>
                
               </body></td>
-               {% if user.id == rev.uid %}
-               <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Log in</a> 
-              {% endif %}
              </tr>
-            
             </tbody>
            {% endfor %}
          </table>
@@ -103,11 +101,10 @@
    {% endif %}
    {% if not review %}
    <p>This product has not been reviewed yet!<p>
+    <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
    {% endif %}
 
   <br>
-
-  <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
 
   {% endif %}
 
