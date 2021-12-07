@@ -37,7 +37,7 @@
   
   .product-details {
 	float: left;
-	width: 37%;
+	width: 20%;
   }
   
   .product-price {
@@ -47,16 +47,21 @@
   
   .product-quantity {
 	float: left;
-	width: 10%;
+	width: 12%;
   }
   
   .product-removal {
 	float: left;
-	width: 9%;
+	width: 12%;
+  }
+
+  .product-save {
+	float: left;
+	width: 8%;
   }
   
   .product-line-price {
-	float: left;
+	float: right;
 	width: 12%;
 	text-align: right;
   }
@@ -121,7 +126,7 @@
 	line-height: 1.4em;
   }
   .product .product-quantity input {
-	width: 40px;
+	width: 60px;
   }
   
 
@@ -131,6 +136,9 @@
 	border: 0;
 	margin-top: 20px;
 	margin-bottom: 10px;
+	margin-right: 0;
+	margin-left: auto;
+	
 	padding: 6px 25px;
 	background-color: rgb(32, 196, 32); 
 	color: #fff;
@@ -168,5 +176,45 @@
 	background-color: rgb(147, 192, 229);
   }
 
+  .product .product-save {
+	border: 0;
+	padding: 2px 2px;
+	background-color:  rgb(95, 186, 189); 
+	color: #fff;
+	font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
+	font-size: 10x;
+	border-radius: 2px;
+	text-align:center;
+  }
+  .product .product-save:hover {
+	background-color: rgb(134, 233, 250);
+  }
+
+  .order-details {
+	border: 0;
+	padding: 4px 8px;
+	background-color: rgb(57, 126, 153); 
+	color: #fff;
+	font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
+	font-size: 18px;
+	border-radius: 3px;
+  }
+
   
+/*Save for later formatting*/
+
+.move-product {
+	border: 0;
+	padding: 4px 8px;
+	background-color: rgb(95, 186, 189); 
+	color: #fff;
+	font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
+	font-size: 8x;
+	border-radius: 7px;
+	text-align:center;
+  }
+  .move-product:hover {
+	background-color: rgb(134, 233, 250);
+  }
+
   

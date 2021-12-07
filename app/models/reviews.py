@@ -23,6 +23,7 @@ ORDER BY DateTime DESC
 ''',pid=pid)
         return [ProdReviews(*row) for row in rows]
 
+
     @staticmethod
     def hasReviewed(uid,pid):
        
@@ -34,6 +35,19 @@ WHERE ProductReview.uid = :uid AND ProductReview.pid = :pid
             return False
         else:
             return True
+
+    def getAvgReview(pid):
+        avg = app.db.execute('''
+SELECT AVG(rating)
+FROM ProductReview
+WHERE ProductReview.pid = :pid
+''',
+pid=pid)    
+        data = []
+        for row in avg:
+            data.append(str(str(row)[1:-2]))
+        return data[0]
+
     
     @staticmethod
     def NewProdReview(uid, pid, review, rating):

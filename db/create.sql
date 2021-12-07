@@ -65,10 +65,18 @@ CREATE TABLE Purchases (
 -- Keeps track of what items are in a given user's cart
 CREATE TABLE Cart (
 	uid INT NOT NULL REFERENCES USERS(id),
-	pid INT NOT NULL,
+	pid INT NOT NULL REFERENCES PRODUCTS(ProductID),
 	sid INT NOT NULL REFERENCES SELLER(SellerId),
 	quantity INT NOT NULL,
 	CHECK(quantity >= 1),
+	PRIMARY KEY(uid, pid, sid)
+);
+
+-- Keeps track of what items a user has marked as 'saved for later'
+CREATE TABLE SavedItems (
+	uid INT NOT NULL REFERENCES USERS(id),
+	pid INT NOT NULL REFERENCES PRODUCTS(ProductID),
+	sid INT NOT NULL REFERENCES SELLER(SellerId),
 	PRIMARY KEY(uid, pid, sid)
 );
  

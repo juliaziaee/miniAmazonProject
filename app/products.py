@@ -13,6 +13,7 @@ from .models.product import Product
 from .models.orders import Orders
 from .models.reviews import ProdReviews
 from .models.purchase import Purchase
+from .models.saved import Saved
 
 from flask import Blueprint
 bp = Blueprint('products', __name__)
@@ -130,9 +131,12 @@ def displaycart():
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
+
                                                   user = current_user.id,
                                                   availBought = Purchase.hasPurchased(current_user.id, id),
                                                   availNew = ProdReviews.hasReviewed(current_user.id, id),
+
+                                                  averageReview = ProdReviews.getAvgReview(id),
                                                   review = ProdReviews.get_all(id),
                                                   leng = len(ProdReviews.get_all(id)))
     else:
@@ -259,6 +263,17 @@ def search():
                            pagination = pagination,
                            purchase_history=purchases,
                            )
+
+@bp.route("/orderssearch",  methods = ['POST', 'GET'])
+def orderssearch():
+    searchBuyer = request.args.get('searchBuyer')
+    searchDate = request.args.get('searchDate')
+    orders = Orders.getSearchAndFilt(searchBuyer, searchDate)
+    # render the page by adding information to the index.html file
+
+    return render_template('orders.html', 
+                           order_history=orders
+                           )
     
 class EditForm(FlaskForm):
     name = StringField(_l('Product Name'), validators=[DataRequired()])
@@ -298,3 +313,52 @@ def edit(pid):
         return render_template('edit.html', title='Update', form=form, product=product)
     else:
         return redirect(url_for('users.login'))
+
+@bp.route("/savedforlater")
+def savedForLater():
+    if current_user.is_authenticated:
+        # get all orders
+        savedItems = Saved.getSaved(current_user.id)
+        # render the page by adding information to the saved.html file
+        return render_template('savedItems.html',
+                           saved_items=savedItems)
+    else:
+        return redirect(url_for('users.login'))
+
+@bp.route("/savedforlater/remove/<int:pid>")
+def removeItemSaved(pid):
+    if current_user.is_authenticated:
+        #get current items in user's cart
+        Saved.removeSavedItem(current_user.id, pid)
+    else:
+        #not logged in so redirect to login page 
+        return redirect(url_for('users.login'))
+    #refresh page
+    return redirect(url_for('products.savedForLater'))
+
+
+@bp.route("/savedforlater/tocart/<int:pid>/<int:sid>")
+def savedToCart(pid,sid):
+    if current_user.is_authenticated:
+        #add entry to cart
+        Cart.addToCart(current_user.id, pid,sid, 1)
+        #remove from saved for later since its now in cart
+        Saved.removeSavedItem(current_user.id, pid)
+    else:
+        #not logged in so redirect to login page 
+        return redirect(url_for('users.login'))
+    #ender page by adding ingo to the index.html file
+    return redirect(url_for('products.displaycart'))
+
+@bp.route("/savedforlater/tosaved/<int:pid>/<int:sid>")
+def cartToSaved(pid, sid):
+    if current_user.is_authenticated:
+        #add entry to cart
+        Saved.addToSaved(current_user.id, pid, sid)
+        #remove from saved for later since its now in cart
+        Cart.removeFromCart(current_user.id, pid)
+    else:
+        #not logged in so redirect to login page 
+        return redirect(url_for('users.login'))
+    #ender page by adding ingo to the index.html file
+    return redirect(url_for('products.displaycart'))
