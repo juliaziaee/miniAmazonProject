@@ -20,6 +20,7 @@ from .models.user import User
 from .models.user import Balance
 from .models.orders import Orders
 from .models.reviews import SellerReviews
+from .models.reviews import ProdReviews
 from .models.purchase import Purchase
 
 
@@ -267,7 +268,7 @@ def accountbalance():
 
 @bp.route("/accountdetails")
 def accountdetails():
-    return render_template("accountdetails.html", title="Home page")
+    return render_template("accountdetails.html", title="Home page", review = ProdReviews.get_authored(current_user.id))
 
 
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])

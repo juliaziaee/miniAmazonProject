@@ -194,7 +194,17 @@ def inventory():
     else:
         return redirect(url_for('users.login'))
 
-@bp.route("/inventory/<int:pid>")
+@bp.route("/sellerAnalytics")
+def sellerAnalytics():
+    if current_user.is_authenticated:
+        # get all available products for sale:
+        orders = Orders.get(current_user.id)
+        # render the page by adding information to the index.html file
+        return render_template('selleranalytics.html', orders = orders)
+    else:
+        return redirect(url_for('users.login'))
+
+@bp.route("/inventory/<pid>")
 def removeinventory(pid):
     Inventory.removeInventory(pid)
     #ender page by adding ingo to the index.html file
