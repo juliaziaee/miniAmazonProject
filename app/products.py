@@ -25,7 +25,6 @@ data = []
 # Flask Form template for creating a new product
 class CreateForm(FlaskForm):
     name = StringField(_l('Product Name'), validators=[DataRequired()])
-    ## add word limit
     description = StringField(_l('Product Description'), validators=[DataRequired()])
     ## add dropdown menu
     category = SelectField(_l('Category'), choices=data, validators=[DataRequired()])
@@ -33,6 +32,25 @@ class CreateForm(FlaskForm):
     num_products = StringField(_l('Number of Units'), validators=[DataRequired()])
     image = StringField(_l('Image URL'), validators=[DataRequired()])
     submit = SubmitField(_l('Create'))
+
+    # Made sure num products is an int
+    def validate_num_products(form, field):
+        try:
+            int(field.data)
+        except ValueError:
+            raise ValidationError("Must be an integer")
+
+    # Make sure the unit price has no more than two decimal places
+    def validate_unitPrice(form, field):
+        if "." in (str(field.data)):
+            x = (str(field.data)).split(".")[1]
+            if len(x) > 2:
+                raise ValidationError("Cannot exceed two decimal places")
+
+        try:
+            float(field.data)
+        except ValueError:
+            raise ValidationError("Must be in form 0.00")
 
 # Function to create a new product and insert into Product table
 @bp.route("/create", methods=['GET', 'POST'])
