@@ -6,12 +6,14 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from .. import login
 
-
+# Create class for balance with the user ID and their overall balance amount
 class Balance:
     def __init__(self, id, amount):
         self.id = id
+        # Force balance to only have two decimal places
         self.amount = round(amount, 2)
 
+# Function to get a users balance given their user id
     @staticmethod
     def getBalance(id):
         rows = app.db.execute(
@@ -24,6 +26,9 @@ WHERE id = :id
         )
         return Balance(*(rows[0]))
 
+# Function to updaate user balance given user id, datetime and amount
+# Can increase or deduct amount, error handling with a trigger (in create.sql)
+# Trigger ensures that the balance cannot go negative (overwithdraw)
     @staticmethod
     def updateBalance(id, transactionDT, amount):
         try:
@@ -43,7 +48,7 @@ WHERE id = :id
             return error
         return id
 
-
+# Create a class for user with id, email, firstname, lastname, address param
 class User(UserMixin):
     def __init__(
         self, id, email, firstname, lastname, street1, street2, city, state, zip
@@ -58,6 +63,7 @@ class User(UserMixin):
         self.state = state
         self.zip = zip
 
+# Function to try to login user
     @staticmethod
     def get_by_auth(email, password):
         rows = app.db.execute(
@@ -76,6 +82,8 @@ WHERE email = :email
         else:
             return User(*(rows[0][1:]))
 
+# Function to check if user email already exists in database
+# Used in error checking to prevent email from being non-unique
     @staticmethod
     def email_exists(email):
         rows = app.db.execute(
@@ -87,7 +95,8 @@ WHERE email = :email
             email=email,
         )
         return len(rows) > 0
-    
+ 
+ # Function that tells you if a user is a seller given user ID   
     @staticmethod
     def is_seller(id):
         rows = app.db.execute(
@@ -100,6 +109,7 @@ WHERE SellerID = :SellerID
         )
         return len(rows) > 0
 
+# Function to update user email, ensures they give a unique email
     @staticmethod
     def updateEmail(id, email):
         try:
@@ -122,6 +132,8 @@ RETURNING id;""",
             return error
         return id
 
+# Functoin to update user password
+# Hashes the password that is given on input
     @staticmethod
     def updatePassword(id, newpassword):
         try:
@@ -139,9 +151,10 @@ RETURNING id;
             errorInfo = e.orig.args
             error = errorInfo[0]
             return error
-        return id
-        
+        return id   
 
+# Function to register a new user, returns User id if successful
+# Error checking also happens on the form before registering
     @staticmethod
     def register(
         email, password, firstname, lastname, street1, street2, city, state, zip
@@ -171,6 +184,7 @@ RETURNING id
             # reporting needed
             return None
 
+# Function to update user info
     @staticmethod
     def update(id, firstname, lastname, street1, street2, city, state, zip):
         try:
@@ -195,6 +209,7 @@ RETURNING id
             return error
         return id
 
+# Functoin to load a user given their user ID
     @staticmethod
     @login.user_loader
     def get(id):
