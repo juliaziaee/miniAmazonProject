@@ -24,24 +24,18 @@ ORDER BY DateTime DESC
         return [ProdReviews(*row) for row in rows]
     
     @staticmethod
-    def NewProdReview(
-        uid, pid, rating, review
-    ):
-        try:
-            rows = app.db.execute(
-                """
+    def NewProdReview(uid, pid, review, rating):
+        rows = app.db.execute("""
 INSERT INTO ProductReview(uid, pid, rating, numVotes, review)
 VALUES(:uid, :pid, :rating, 0, :review)
 RETURNING uid
 """,
-                uid=uid, 
-                pid=pid, 
-                rating= rating, 
-                review= review, 
+                uid=uid,
+                pid=pid,
+                review= review,
+                rating= rating
             )
-            return uid
-        except Exception:
-            return None
+        return ProdReviews.get_all(pid)
 
     @staticmethod
     def upVotes(pid, numVotes, uid):
