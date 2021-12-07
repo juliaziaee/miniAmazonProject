@@ -24,6 +24,7 @@ from .models.purchase import Purchase
 from .models.reviews import SellerReviews
 from .models.reviews import ProdReviews
 from .models.purchase import Purchase
+from .models.product import Product
 
 
 from flask import Blueprint
@@ -270,7 +271,7 @@ def accountbalance():
 
 @bp.route("/accountdetails")
 def accountdetails():
-    return render_template("accountdetails.html", title="Home page", review = ProdReviews.get_authored(current_user.id))
+    return render_template("accountdetails.html", title="Home page", review = ProdReviews.get_authored(current_user.id), reviewS = SellerReviews.get_authored(current_user.id))
 
 
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
