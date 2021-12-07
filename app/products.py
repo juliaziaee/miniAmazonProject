@@ -11,6 +11,7 @@ from .models.inventory import Inventory
 from .models.cart import Cart
 from .models.product import Product
 from .models.orders import Orders
+from .models.orders import Stats
 from .models.reviews import ProdReviews
 from .models.purchase import Purchase
 from .models.saved import Saved
@@ -177,8 +178,9 @@ def sellerAnalytics():
     if current_user.is_authenticated:
         # get all available products for sale:
         orders = Orders.get(current_user.id)
+        stats = Stats.stats(current_user.id)
         # render the page by adding information to the index.html file
-        return render_template('selleranalytics.html', orders = orders)
+        return render_template('selleranalytics.html', orders = orders, stats = stats)
     else:
         return redirect(url_for('users.login'))
 
@@ -261,6 +263,18 @@ def orderssearch():
 
     return render_template('orders.html', 
                            order_history=orders
+                           )
+
+@bp.route("/analyticssearch",  methods = ['POST', 'GET'])
+def analyticssearch():
+    searchBuyer = request.args.get('searchBuyer')
+    searchTotal = request.args.get('searchTotal')
+    searchUnits = request.args.get('searchUnits')
+    orders = Stats.getSearchAndFilt(searchBuyer, searchTotal, searchUnits)
+    # render the page by adding information to the index.html file
+
+    return render_template('selleranalytics.html', 
+                           stats=orders
                            )
     
 class EditForm(FlaskForm):

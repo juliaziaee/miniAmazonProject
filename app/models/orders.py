@@ -177,3 +177,58 @@ ORDER BY orderDateTime DESC
 ''',
                               uid=uid)
         return [Orders(*row) for row in rows]
+
+class Stats:
+    def __init__(self, uid, quantity, spent):
+        self.uid = uid
+        self.quantity = quantity
+        self.spent = spent
+
+    @staticmethod
+    def stats(seller):
+        # buyer information including address, date order placed,
+        # total amount/number of items, and overall fulfillment status
+        rows = app.db.execute('''
+SELECT Purchases.uid, SUM(quantity), SUM(finalUnitPrice * quantity) as tot
+FROM Purchases, Users
+WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
+GROUP BY Purchases.uid, Purchases.SellerID
+ORDER BY tot DESC
+''',
+                              SellerID=seller)
+        return [Stats(*row) for row in rows]
+
+    @staticmethod
+    def getSearchAndFilt(searchBuyer, searchTotal, searchUnits):
+
+        if searchBuyer:
+
+            query = '''
+SELECT Purchases.uid, SUM(quantity) as units, SUM(finalUnitPrice * quantity) as tot
+FROM Purchases, Users
+WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID AND Users.id = :searchBuyer
+GROUP BY Purchases.uid, Purchases.SellerID
+'''
+
+        else:
+            query = '''
+SELECT Purchases.uid, SUM(quantity) as units, SUM(finalUnitPrice * quantity) as tot
+FROM Purchases, Users
+WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
+GROUP BY Purchases.uid, Purchases.SellerID
+'''
+        if searchTotal == "totalMost":
+            query += "ORDER BY tot DESC"
+        if searchTotal == "totalLeast":
+            query += "ORDER BY tot"
+
+        if searchUnits == "unitsMost":
+            query += "ORDER BY units DESC"
+        if searchUnits == "unitsLeast":
+            query += "ORDER BY units"
+                
+        rows = app.db.execute(query,
+searchBuyer = searchBuyer,
+SellerID = current_user.id
+)
+        return [Stats(*row) for row in rows]

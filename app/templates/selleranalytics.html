@@ -1,8 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
 <div style="display: flex; align-items: center;flex-direction: column;">
-    <h1 class="mb-4 mt-4">Your Analytics</h1>
-    <div> <i class="fas fa-clipboard-check fa-10x" style="color: green;"></i></div>
+    <h1 class="mb-4 mt-4">Your Analytics by Buyer</h1>
+
+    <p></p>
+<form class="form-inline my-2 my-lg-0" action="{{ url_for('products.analyticssearch') }}">
+  <input class="form-control mr-sm-2" name="searchBuyer" type="search" placeholder="Search Buyer ID" aria-label="Search">
+  <select class="form-control mr-sm-2" name="searchTotal">
+    <option value="N/A">Sort by Total Spent</option>
+    <option value="totalMost">Total Spent: most to least</option>
+    <option value="totalLeast">Total Spent: least to most</option>
+  </select>
+  <select class="form-control mr-sm-2" name="searchUnits">
+    <option value="N/A">Sort by Units Bought</option>
+    <option value="unitsMost">Units Bought: most to least</option>
+    <option value="unitsLeast">Units Bought: least to most</option>
+  </select>
+  {% if stats == [] %}
+  <button style="color:#007bff; border:1px solid#007bff" class="btn my-2 my-sm-0" type="submit">Reset</button>
+  {% else %}
+  <button style="color:#007bff; border:1px solid#007bff" class="btn my-2 my-sm-0" type="submit">Submit</button>
+  {% endif %}
+</form>
+<p></p>
+    
+    <table class='table table-hover table-bordered container'>
+        <thead class="thead-dark">
+          <tr>
+              <th scope="col">Buyer ID</th>
+            <th scope="col">Total Spent</th>
+            <th scope="col">Total Units Bought</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stat in stats%}
+            <tr>
+              <th scope="row">{{stat.uid}}</th>
+              <td>{{stat.spent}}</td>
+              <td>{{stat.quantity}}</td>
+            </tr>
+          </tbody>
+          {% endfor %}
+      </tbody>
+      </table>
 
  </div>
 {% endblock %}
