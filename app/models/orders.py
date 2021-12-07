@@ -163,3 +163,17 @@ searchBuyer = searchBuyer,
 SellerID = current_user.id
 )
         return [Orders(*row) for row in rows]
+
+    @staticmethod
+    def getOrders(uid):
+        rows = app.db.execute('''
+SELECT Purchases.uid, '', '', street1, street2, city, state, zip, orderDateTime,
+SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
+'', ''
+FROM Purchases, Users, Products
+WHERE Purchases.uid = :uid AND Users.id = :uid AND Products.productID = Purchases.pid
+GROUP BY orderDateTime, Purchases.uid, street1, street2, city, state, zip
+ORDER BY orderDateTime DESC
+''',
+                              uid=uid)
+        return [Orders(*row) for row in rows]
