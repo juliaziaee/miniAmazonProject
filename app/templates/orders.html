@@ -44,7 +44,10 @@
   <tbody>
     {% for product in order_history%}
       <tr>
-        <th scope="row">{{product.uid}}</th>
+        <th scope="row">
+          <a id="viewBuyer" href="{{ url_for('users.userdetails', uid=product.uid) }}" type="submit">
+          {{product.uid}}</a>
+        </th>
         <td>{{product.street1}}
           {% if product.street2 %}
           <br/>

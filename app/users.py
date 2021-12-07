@@ -275,7 +275,7 @@ def accountdetails():
 def userdetails(uid):
     if current_user.is_authenticated:
         return render_template('userdetails.html',page = User.get(uid),
-                                                    seller = User.is_seller(uid),
+                                                  seller = User.is_seller(uid),
                                                   user = current_user.id,
                                                   availBought = Purchase.hasPurchasedS(current_user.id, uid),
                                                   availNew = SellerReviews.hasReviewedS(current_user.id, uid),
