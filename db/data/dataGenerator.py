@@ -5,8 +5,10 @@ from random import randint
 import random
 from datetime import datetime, timedelta
 
+# Use faker package for realistic data, some will be overwritten with real data
 fake = Faker()
 
+# Create user data
 def createUser():
     i = 0
     names = []
@@ -32,6 +34,7 @@ def createUser():
             i +=1
     return users
 
+# Create seller data
 def createSeller():
     sellers = []
     sample_users = random.sample(range(0, 999), 200)
@@ -39,6 +42,7 @@ def createSeller():
         sellers.append([i])
     return sellers
 
+# Create product data
 def createProducts(sellers):
     i = 0
     names = []
@@ -64,6 +68,7 @@ def createProducts(sellers):
             i += 1
     return products
 
+# Create funding data
 def createFunding():
     funding = []
     users = random.sample(range(0, 999), 200)
@@ -86,6 +91,7 @@ def createFunding():
         funding.append(fund)
     return funding
 
+# Create purchase data
 def createPurchases(funding, products):
     purchases = []
     users = []
@@ -126,6 +132,7 @@ def createPurchases(funding, products):
 
     return purchases
 
+# Create cart data
 def createCart(products):
     cart = []
     sample_users = random.sample(range(0, 999), 5)
@@ -134,36 +141,81 @@ def createCart(products):
         cart.append([i, products[productindex][0], products[productindex][6], 1])
     return cart
     
-
+# Write the data to csvs (include generated in csv name)
 if __name__ == '__main__':
-    userData = createUser()
-    with open("db/data/UsersGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(userData)
+    # userData = createUser()
+    # with open("db/data/UsersGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(userData)
     
-    sellerData = createSeller()
-    with open("db/data/SellerGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(sellerData)
+    # sellerData = createSeller()
+    # with open("db/data/SellerGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(sellerData)
 
-    productData = createProducts(sellerData)
-    with open("db/data/ProductsGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(productData)
+    # productData = createProducts(sellerData)
+    # with open("db/data/ProductsGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(productData)
     
-    fundingData = createFunding()
-    with open("db/data/FundingGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(fundingData)
+    # fundingData = createFunding()
+    # with open("db/data/FundingGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(fundingData)
 
-    purchasingData = createPurchases(fundingData, productData)
-    with open("db/data/PurchasesGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(purchasingData)
+    # purchasingData = createPurchases(fundingData, productData)
+    # with open("db/data/PurchasesGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(purchasingData)
     
-    cartData = createCart(productData)
-    with open("db/data/CartGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(cartData)
+    # cartData = createCart(productData)
+    # with open("db/data/CartGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(cartData)
     
+    
+    ### Comment out everything in main func before running this unless you want to generate new data entirely ####
+    
+    # Before running this, ran productScrape.py to generate clothes.csv file
+    # The functions below replace products with real data that we webscraped
+    
+    random.seed(10)
+    
+    datafile = open('db/data/ProductsGenerated.csv', 'r')
+    datareader = csv.reader(datafile)
+    data = []
+    for row in datareader:
+        data.append(row)    
+
+    datafile = open('db/data/clothes.csv', 'r')
+    datareader = csv.reader(datafile)
+    scraped = []
+    for row in datareader:
+        scraped.append(row)    
+
+    for i in range(len(scraped)):
+        data[i][1] = scraped[i][0]
+        data[i][4] = scraped[i][1]
+        data[i][7] = scraped[i][2]
+
+    for i in range(96, 1000):
+        data[i][7] = scraped[i % 95][2]
+
+    with open("db/data/ProductsGenerated.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
+        
+    # Create reviews based on PurchasesGenerated
+    for i in data:
+        sellersReviews= []
+        productReviews= []
+        
+    with open("db/data/SellerReviewsGenerated.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(sellersReviews)
+    
+    with open("db/data/ProductReviewsGenerated.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(productReviews)
+        
     
