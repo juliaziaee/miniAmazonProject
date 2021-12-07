@@ -22,28 +22,28 @@
     <label class="product-add-cart">Add To Cart</label>
   </div>
   {% for product in saved_items%}
-  <div class="saved-product">
-    <div class="saved-product-image">
+  <div class="product">
+    <div class="product-image">
       <a href = "{{url_for('products.detailview', id=product.pid)}}">
         <img style="float:left" src={{product.imgUrl}}>
     </a>
     </div>
-    <div class="saved-product-details">
+    <div class="product-details">
       <div class="product-title">{{product.name}}</div>
       <p class="product-id">Product ID: {{product.pid}}</p>
     </div>
-    <div class="saved-product-price">{{product.unitPrice}}</div>
-    <div class="saved-product-removal">
+    <div class="product-price">{{product.unitPrice}}</div>
+    <div class="product-removal">
       <a id="removeSavedLink" href="{{ url_for('products.removeItemSaved', pid=product.pid)}}" 
           type="submit"><button class = "remove-product">Remove</button></a>
     </div>
     {% if product.Inventory > 0 %}
-    <div class="saved-product-add-cart">
+    <div class="product-add-cart">
         <a id="addCartLink" href="{{ url_for('products.savedToCart', pid=product.pid, sid=product.sid)}}" 
             type="submit"><button class = "move-product">Move To Cart</button></a>
       </div>
     {% else %}
-    <div class="saved-product-add-cart">
+    <div class="product-add-cart">
         Out of stock.
     </div>
     {% endif %}
