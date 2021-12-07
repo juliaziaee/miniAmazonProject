@@ -41,7 +41,6 @@ def create():
     data.sort()
     form = CreateForm()
     ## check user logged in, product id not in use, and populate database
-    ## create product id????
     if current_user.is_authenticated:
         if form.validate_on_submit():
             if Product.create(form.name.data,
@@ -51,7 +50,6 @@ def create():
                             form.num_products.data,
                             current_user.id,
                             form.image.data):
-                                flash('Congratulations, you have listed an item!')
                                 return redirect(url_for('users.login'))
         return render_template('create.html', title='Create', form=form)
     else:
@@ -128,44 +126,35 @@ def displaycart():
                                 cart_items=cart,
                                 subtotal=total)                     
 
-class ProdReviewForm(FlaskForm):
-    name = StringField(_l('Name'), validators=[DataRequired()])
-    email = StringField(_l('Email (will not be published)'), validators=[DataRequired(), Email()])
-    review = TextAreaField(_l('Review'), validators=[DataRequired()])
-    submit = SubmitField(_l('Submit'))
-    
+
 @bp.route("/detailview/<int:id>")
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
                                                   user = current_user.id, 
+                                                  averageReview = ProdReviews.getAvgReview(id),
                                                   review = ProdReviews.get_all(id),
-                                                  leng = len(ProdReviews.get_all(id)),
-                                                  form=ProdReviewForm())
+                                                  leng = len(ProdReviews.get_all(id)))
     else:
         return redirect(url_for('users.login'))
 
 
 class ReviewForm(FlaskForm):
-    review = StringField(_l("Review"), validators=[DataRequired()])
-    rating = StringField(_l("Rating"), validators=[DataRequired()])
+    review = StringField(_l('Review'), validators=[DataRequired()])
+    rating = StringField(_l('Rating'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 @bp.route("/newReview/<int:id>", methods=["GET", "POST"])
 def review(id):
     form = ReviewForm()
-    user = current_user.id
-    product = Product.get(id)
     if form.validate_on_submit():
         if ProdReviews.NewProdReview(
-            user, 
-            product, 
+            current_user.id, 
+            id,
             form.review.data,
             form.rating.data,
-        ):
-        
-            flash("You have successfully submitted a review!")
-            return redirect(url_for("product.detailview"))
+        ):        
+            return redirect(url_for('products.detailview', id= id))
     return render_template("newReview.html", title="Leave a Review", form=form)
 
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
@@ -189,6 +178,19 @@ def removeinventory(pid):
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.inventory'))
 
+@bp.route("/detailview/<pid>/<numVotes>/<uid>/up")
+def upVotes(pid, numVotes, uid):
+    #change inventory in database
+    ProdReviews.upVotes(pid, numVotes, uid)
+    #refresh page
+    return redirect(url_for('products.detailview', id = pid))
+
+@bp.route("/detailview/<pid>/<numVotes>/<uid>/down")
+def downVotes(pid, numVotes, uid):
+    #change inventory in database
+    ProdReviews.downVotes(pid,numVotes, uid)
+    #refresh page
+    return redirect(url_for('products.detailview', id = pid))
 
 @bp.route("/orders")
 def orders():
