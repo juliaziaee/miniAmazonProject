@@ -75,28 +75,25 @@
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
-               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>{% if user == rev.uid %}
+                <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Edit</a> 
+               {% endif %}</td>
                <td> <body>
                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
                 
                 <div class = "votContainer">
-                  <div class = "upbutton">
-                    <i class = "fas fa-chevron-up" role="button"></i>
-                  </div>
+                  <a id="{{rev.pid + rev.uid}} up" href="{{ url_for('products.upVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  type="submit">
+                      <i class = "fas fa-chevron-up" role="button"></i></a>
                   <div class = "vot">
                     <p> {{rev.numVotes}}</p>
                   </div>
-                  <div class = "downbutton">
-                    <i class = "fas fa-chevron-down"></i>
-                  </div>
+                  <a id="{{rev.pid + rev.uid}} down" href="{{ url_for('products.downVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  type="submit"><i class = "fas fa-chevron-down"></i></a>
                 </div>
                
               </body></td>
-               {% if user.id == rev.uid %}
-               <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Log in</a> 
-              {% endif %}
              </tr>
-            
             </tbody>
            {% endfor %}
          </table>
@@ -104,11 +101,10 @@
    {% endif %}
    {% if not review %}
    <p>This product has not been reviewed yet!<p>
+    <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
    {% endif %}
 
   <br>
-
-  <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
 
   {% endif %}
 

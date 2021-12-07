@@ -37,19 +37,9 @@ width: 50%;
     margin: 1px;
     font-size: 12px;
 }
-.votContainer:hover div{
-    margin: 5px 15px;
-}
-
-.votContainer:hover{
-    border: none;
-    width: 60px;
-    height:50px;
-    border-radius: 50px;
-}
 
 
-.votContainer div:first-child:hover{
+.votContainer div:first-child{
     padding: 12px 19px;
     border-radius: 50px 50px 0 0;
     background: linear-gradient(145deg, #cacaca, #58b124);
@@ -57,7 +47,7 @@ width: 50%;
     color: rgb(133, 131, 131);
 }
 
-.votContainer div:last-child:hover{
+.votContainer div:last-child{
     padding: 12px 19px;
     border-radius: 0 0 50px 50px ;
     background: linear-gradient(145deg, #cacaca, #b12929);
