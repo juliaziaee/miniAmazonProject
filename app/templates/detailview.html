@@ -3,24 +3,13 @@
 {% block content %}
 {% if product!=None %}
 <br>
-<p><span><a href="{{ url_for('index.index') }}"><button>Back</button></a></span>
-        <span><a style="float:right" id="submissionlink" href="{{ url_for('products.addtocart', pid=product.id, sid=product.sellerID, quantity=1) }}" type="submit"><button>Add to Cart</button></a>
+<a href="{{ url_for('index.index') }}"><button>Back</button></a>
+        <a style="float:right" id="submissionlink" href="{{ url_for('products.addtocart', pid=product.id, sid=product.sellerID, quantity=1) }}" type="submit"><button onclick="addAttribute()">Add to Cart</button></a>
         <script>
-            function addAttribute(maxVal, currVal) {
-              if (currVal > maxVal){
-                document.getElementById("theQuantity").value = maxVal;
-                document.getElementById("submissionlink").href = (document.getElementById("submissionlink").href.split('/').slice(0, -1).join('/'))+ "/" + String(maxVal);
-              }
-              else{
-                document.getElementById("submissionlink").href = (document.getElementById("submissionlink").href.split('/').slice(0, -1).join('/'))+ "/" + String(currVal);
-              }
-              return;
+            function addAttribute() {
+                document.getElementById("submissionlink").href = document.getElementById("submissionlink").href.substring(0,document.getElementById("submissionlink").href.length-1) + "/" + document.getElementById("theQuantity").value;
             }
         </script>
-        </span>
-        <span><input style="float:right" id="theQuantity" type="number" value="1" min="1" max="{{product.Inventory}}" onchange="addAttribute(this.max, this.value)"></span>
-        <span style="float:right">Qty:</span>
-        </p>
 <p></p>
 <h2>Product Details</h2>
 <div class="container py-5">
@@ -46,26 +35,30 @@
 </div>
 
 <br></br>
-<h2>Seller Information and Quantity</h2>
+<h3>Seller Information and Quantity</h3>
         <table class="table table-bordered mt-3">
           <thead class="thead-dark">
             <tr>
               <th scope="row" class="w-150 dark-grey-text h6">Seller ID</th>
               <th scope="row" class="w-150 dark-grey-text h6">Seller Name</th>
               <th scope="row" class="w-150 dark-grey-text h6">Amount in Stock</th>
+              <th scope="row" class="w-150 dark-grey-text h6">Quantity</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td width="33.33%"><p><a href="{{ url_for('users.userdetails', uid=product.sellerID) }}">{{product.sellerID}}</a></p></td>
-              <td width="33.33%" scope="row" class="w-150 dark-grey-text h6">{{product.sellerName}}</td>
-              <td width="33.33%%" scope="row" class="w-150 dark-grey-text h6">{{product.Inventory}}</td>
+              <td><p><a href="{{ url_for('users.userdetails', uid=product.sellerID) }}">{{product.sellerID}}</a></p></td>
+              <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{product.sellerName}}</td>
+              <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{product.Inventory}}</td>
+              <td width="25%" scope="row" class="w-150 dark-grey-text h6">
+              <input id="theQuantity" type="number" value="1" min="1" max="{{product.Inventory}}">
+              </td>
             </tr>
           </tbody>
         </table>
 
    <br></br>   
-   <h2>Product Reviews</h2>
+   <h1>Product Reviews:</h1>
    {% if review %}
        <table class="table table-bordered mt-3">
            <thead class="thead-dark">
@@ -112,12 +105,9 @@
    {% endif %}
    {% if not review %}
    <p>This product has not been reviewed yet!<p>
-    
-   {% endif %}
-
-   {% if availBought and availNew %}
     <a class="btn btn-secondary" href="{{ url_for('products.review', id=product.id)}}" role="button">Leave a Review</a>
    {% endif %}
+
   <br>
 
   {% endif %}

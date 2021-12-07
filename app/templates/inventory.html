@@ -39,7 +39,6 @@
     </div>
     <div style="float: left; position: relative; left: 372px" class="product-title">{{product.name}}</div>
     <div style="float:right" class="product-removal">
-      <a href="{{ url_for('products.edit', pid=product.pid) }}" type="submit"><button>Edit</button></a>
       <a id="submissionlink" href="{{ url_for('products.removeinventory', pid=product.pid) }}" type="submit"><button>Remove</button></a>
     </div>
   </div>
