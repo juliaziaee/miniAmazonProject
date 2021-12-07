@@ -21,12 +21,15 @@
     <label class="product-price">Price</label>
     <label class="product-quantity">Quantity</label>
     <label class="product-removal">Remove</label>
+    <label class="product-save">Save for Later</label>
     <label class="product-line-price">Total</label>
   </div>
   {% for product in cart_items%}
   <div class="product">
     <div class="product-image">
-      <img style="float:left" src={{product.imgUrl}}>
+      <a href = "{{url_for('products.detailview', id=product.pid)}}">
+        <img style="float:left" src={{product.imgUrl}}>
+      </a>
     </div>
     <div class="product-details">
       <div class="product-title">{{product.name}}</div>
@@ -47,6 +50,10 @@
     <div class="product-removal">
       <a id="updatelink" href="{{ url_for('products.removeItem', pid=product.pid)}}" 
           type="submit"><button class = "remove-product">Remove</button></a>
+    </div>
+    <div class="product-save">
+      <a id="updatelink" href="{{ url_for('products.cartToSaved', pid=product.pid, sid=product.sid)}}" 
+          type="submit"><button class = "product-save">Save</button></a>
     </div>
     <div class="product-line-price">{{product.totalPrice}}</div>
   </div>

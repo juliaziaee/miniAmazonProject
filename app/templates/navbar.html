@@ -18,8 +18,14 @@
           <a class="nav-link" href="{{ url_for('products.orders') }}">ORDERS</a>
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('products.displaycart')}}">CART</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          CART
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="nav-link" href="{{ url_for('products.displaycart')}}">CART</a>
+          <a class="nav-link" href="{{ url_for('products.savedForLater') }}">SAVED ITEMS</a>
+        </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
