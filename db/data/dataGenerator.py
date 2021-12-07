@@ -206,3 +206,16 @@ if __name__ == '__main__':
         writer.writerows(data)
         
     # Create reviews based on PurchasesGenerated
+    for i in data:
+        sellersReviews= []
+        productReviews= []
+        
+    with open("db/data/SellerReviewsGenerated.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(sellersReviews)
+    
+    with open("db/data/ProductReviewsGenerated.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(productReviews)
+        
+    
