@@ -5,7 +5,7 @@ Assingment for Duke CS 316
 Group Members: 
 - Caroline Levenson: Users Guru
 - Clara Lyra: Social Guru
-- Jennifer Shultz: Products Guru
+- Jennifer Schultz: Products Guru
 - Julia Ziaee: Carts Guru
 - Nicole Malpeli: Sellers Guru
 
@@ -15,7 +15,7 @@ Our [Gitlab Repository] (https://gitlab.oit.duke.edu/databosses/mini-amazon-skel
 
 MILESTONE 4 (FINAL)
 All members of the group would like to have a group grade.
-Final video link: 
+Final video link: https://www.youtube.com/watch?v=8mgZoF1ma6E
 
 To Create and Load Data into Database:
 Inside of the VM terminal, cd to the db folder of the final project and run the following commands.
