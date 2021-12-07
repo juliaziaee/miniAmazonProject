@@ -77,6 +77,22 @@ RETURNING uid
                 rating= rating
             )
         return ProdReviews.get_all(pid)
+        
+    @staticmethod
+    def removeProdReviews(uid,pid):
+        try:
+            rows = app.db.execute("""
+DELETE FROM ProductReview
+WHERE uid = :uid AND pid = :pid
+""",
+                                  uid = uid, pid = pid)
+            return None
+            eg
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
+
 
     @staticmethod
     def upVotes(pid, numVotes, uid):
@@ -160,6 +176,21 @@ RETURNING uid
                 rating= rating
             )
         return SellerReviews.get_user_reviews(sid)
+
+    @staticmethod
+    def removeSellReviews(sid,uid):
+        try:
+            rows = app.db.execute("""
+DELETE FROM SellerReview
+WHERE uid = :uid AND sid = :sid
+""",
+                                  uid = uid, sid = sid)
+            return None
+            
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
 
     @staticmethod
     def upVotesS(sid, numVotes, uid):

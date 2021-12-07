@@ -276,7 +276,7 @@ def userdetails(uid):
         return render_template('userdetails.html',page = User.get(uid),
                                                     seller = User.is_seller(uid),
                                                   user = current_user.id,
-                                                  availBought = Purchase.hasPurchasedS(current_user.id, uid),
+                                                  availBought = Purchase.hasPurchasedS(uid, current_user.id),
                                                   availNew = SellerReviews.hasReviewedS(current_user.id, uid),
                                                   review = SellerReviews.get_user_reviews(uid),
                                                   leng = len(SellerReviews.get_user_reviews(uid)))
@@ -318,6 +318,10 @@ def updatereview(id):
         ):        
             return redirect(url_for('users.userdetails', uid= id))
     return render_template("editSellerReview.html", title="Edit Your Seller Review", form=form)
+@bp.route("/userdetails/remove/<sid>/<uid>")
+def removereview(sid, uid):
+    SellerReviews.removeSellReviews(sid, uid)
+    return redirect(url_for('users.userdetails',uid= sid))
 
 @bp.route("/orderhistory")
 def orderhistory():
