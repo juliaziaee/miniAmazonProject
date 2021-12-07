@@ -5,7 +5,7 @@ import datetime
 from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, DecimalField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, SelectField, DecimalField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import (
     ValidationError,
     DataRequired,
@@ -307,7 +307,8 @@ def userdetails(uid):
 # Create form to review a seller
 class SellerReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
-    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    ## add dropdown menu
+    rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 #  Function to show seller reviews
@@ -327,7 +328,8 @@ def review(id):
 # Create form to update existing seller reviews
 class updateSellerReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
-    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    ## add dropdown menu
+    rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 # Function to update seller reviews
