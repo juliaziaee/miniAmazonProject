@@ -79,7 +79,7 @@ def updateCartQty(pid, quantity):
     return redirect(url_for('products.displaycart'))
 
 
-@bp.route("/inventory/<pid>/<num>")
+@bp.route("/inventory/<int:pid>/<int:num>")
 def updateInventoryQty(pid, num):
     #change inventory in database
     Inventory.updateQuantity(pid,num)
@@ -87,7 +87,7 @@ def updateInventoryQty(pid, num):
     return redirect(url_for('products.inventory'))
     
 
-@bp.route("/cart/<pid>")
+@bp.route("/cart/<int:pid>")
 def removeItem(pid):
     if current_user.is_authenticated:
         #get current items in user's cart
@@ -132,7 +132,11 @@ def displaycart():
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
-                                                  user = current_user.id, 
+
+                                                  user = current_user.id,
+                                                  availBought = Purchase.hasPurchased(current_user.id, id),
+                                                  availNew = ProdReviews.hasReviewed(current_user.id, id),
+
                                                   averageReview = ProdReviews.getAvgReview(id),
                                                   review = ProdReviews.get_all(id),
                                                   leng = len(ProdReviews.get_all(id)))
@@ -156,7 +160,25 @@ def review(id):
             form.rating.data,
         ):        
             return redirect(url_for('products.detailview', id= id))
-    return render_template("newReview.html", title="Leave a Review", form=form)
+    return render_template("newReview.html", title="Leave a Product Review", form=form)
+
+class updateReviewForm(FlaskForm):
+    review = StringField(_l('Review'), validators=[DataRequired()])
+    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
+
+@bp.route("/updateReview/<int:id>", methods=["GET", "POST"])
+def updatereview(id):
+    form = updateReviewForm()
+    if form.validate_on_submit():
+        if ProdReviews.updateProdReview(
+            current_user.id, 
+            id,
+            form.review.data,
+            form.rating.data,
+        ):        
+            return redirect(url_for('products.detailview', id= id))
+    return render_template("updateReview.html", title="Edit Your Product Review", form=form)
 
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
 def individualOrder(uid, sellerID, orderDateTime):
@@ -190,14 +212,14 @@ def removeinventory(pid):
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.inventory'))
 
-@bp.route("/detailview/<pid>/<numVotes>/<uid>/up")
+@bp.route("/detailview/<int:pid>/<int:numVotes>/<int:uid>/up")
 def upVotes(pid, numVotes, uid):
     #change inventory in database
     ProdReviews.upVotes(pid, numVotes, uid)
     #refresh page
     return redirect(url_for('products.detailview', id = pid))
 
-@bp.route("/detailview/<pid>/<numVotes>/<uid>/down")
+@bp.route("/detailview/<int:pid>/<int:numVotes>/<int:uid>/down")
 def downVotes(pid, numVotes, uid):
     #change inventory in database
     ProdReviews.downVotes(pid,numVotes, uid)
@@ -215,7 +237,7 @@ def orders():
     else:
         return redirect(url_for('users.login'))
 
-@bp.route("/orders/<uid>/<sellerID>/<orderDateTime>/<pid>")
+@bp.route("/orders/<int:uid>/<int:sellerID>/<orderDateTime>/<int:pid>")
 def markFulfilled(uid, sellerID, orderDateTime, pid):
     Orders.markFulfilled(uid, sellerID, orderDateTime, pid)
     return redirect(url_for('products.individualOrder', uid = uid, sellerID = sellerID, orderDateTime = orderDateTime))
@@ -294,25 +316,26 @@ def edit(pid):
         if i not in data:
             data.append(i)
     data.sort()
-    form = EditForm()
-    form.name.data = product.name
-    form.description.data = product.description
-    form.category.data = product.category
-    form.unitPrice.data = product.price
-    form.num_products.data = product.Inventory
-    form.image.data = product.image
-
+    form = EditForm() 
+    error = None
     if current_user.is_authenticated:
         if form.validate_on_submit():
-            # if Product.create(form.name.data,
-            #                 form.description.data,
-            #                 form.category.data,
-            #                 form.unitPrice.data,
-            #                 form.num_products.data,
-            #                 current_user.id,
-            #                 form.image.data):
-                                return redirect(url_for('users.login'))
-        return render_template('edit.html', title='Update', form=form, product=product)
+            if Product.update(pid,
+                            form.name.data,
+                            form.description.data,
+                            form.category.data,
+                            form.unitPrice.data,
+                            form.num_products.data,
+                            form.image.data) == pid:
+                                return redirect(url_for('products.inventory'))
+            else: error = Product.update(pid,
+                            form.name.data,
+                            form.description.data,
+                            form.category.data,
+                            form.unitPrice.data,
+                            form.num_products.data,
+                            form.image.data)
+        return render_template('edit.html', title='Update', form=form, product=product, error=error)
     else:
         return redirect(url_for('users.login'))
 
