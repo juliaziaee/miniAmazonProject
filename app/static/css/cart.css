@@ -178,16 +178,16 @@
 
   .product .product-save {
 	border: 0;
-	padding: 2px 4px;
-	background-color: rgb(186, 137, 219); 
+	padding: 2px 2px;
+	background-color:  rgb(95, 186, 189); 
 	color: #fff;
 	font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
 	font-size: 10x;
-	border-radius: 3px;
+	border-radius: 2px;
 	text-align:center;
   }
   .product .product-save:hover {
-	background-color: rgb(232, 174, 245);
+	background-color: rgb(134, 233, 250);
   }
 
   .order-details {
@@ -200,23 +200,21 @@
 	border-radius: 3px;
   }
 
-  .move-product {
+  
+/*Save for later formatting*/
+
+.move-product {
 	border: 0;
-	padding: 2px 4px;
-	background-color: rgb(186, 137, 219); 
+	padding: 4px 8px;
+	background-color: rgb(95, 186, 189); 
 	color: #fff;
 	font-family: "HelveticaNeue-Medium", "Helvetica Neue Medium";
 	font-size: 8x;
-	border-radius: 5px;
+	border-radius: 7px;
 	text-align:center;
   }
   .move-product:hover {
-	background-color: rgb(232, 174, 245);
+	background-color: rgb(134, 233, 250);
   }
-  
 
-  /*table cleanup*/
-  th, td {
-	border-bottom: 1px solid #ddd;
-  }
   
