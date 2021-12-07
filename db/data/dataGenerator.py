@@ -234,7 +234,7 @@ if __name__ == '__main__':
             sellerreview.append(fake.sentence(nb_words=5))
             dtplus1 = (datetime.strptime(str(i[3]),'%Y-%m-%d %I:%M:%S %p')+ timedelta(days=1)).strftime('%Y-%m-%d %I:%M:%S %p')
             sellerreview.append(dtplus1)
-        sellersReviews.append(sellerreview)
+            sellersReviews.append(sellerreview)
         
     with open("db/data/SellerReviewsGenerated.csv", "w", newline="") as f:
         writer = csv.writer(f)
