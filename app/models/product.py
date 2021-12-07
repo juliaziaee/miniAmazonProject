@@ -1,5 +1,7 @@
 from flask import current_app as app
 from flask import Flask, render_template
+from sqlalchemy.exc import SQLAlchemyError
+
 
 class Product:
     def __init__(self, id, name, price, image, category, description, Inventory, sellerID, sellerName):
@@ -139,3 +141,27 @@ RETURNING productID
             # likely id already in use; better error checking and
             # reporting needed
             return None
+        
+    @staticmethod
+    def update(pid, name, description, category, unitPrice, inventory, image):
+        try:
+            rows = app.db.execute(
+                """
+                UPDATE Products
+                SET name = :name, description = :description, category = :category, unitPrice = :unitPrice, Inventory = :inventory, image = :image
+                WHERE productID = :pid
+                RETURNING productID""",
+                pid=pid,
+                name=name,
+                description=description,
+                category=category,
+                unitPrice=unitPrice,
+                inventory=inventory,
+                image=image)
+            productID = rows[0][0]
+            return Product.get(productID)
+        except SQLAlchemyError as e:
+            errorInfo = e.orig.args
+            error = errorInfo[0]
+            return error
+        return pid
