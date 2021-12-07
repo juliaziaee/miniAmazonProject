@@ -170,7 +170,7 @@ SellerID = current_user.id
         rows = app.db.execute('''
 SELECT Purchases.uid, '', '', street1, street2, city, state, zip, orderDateTime,
 SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
-'', ''
+'', '', ''
 FROM Purchases, Users, Products
 WHERE Purchases.uid = :uid AND Users.id = :uid AND Products.productID = Purchases.pid
 GROUP BY orderDateTime, Purchases.uid, street1, street2, city, state, zip
