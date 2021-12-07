@@ -137,12 +137,13 @@
 
   .product .product-category {
 	float: right;
-	width: 24%;
+	width: 23%;
 	margin-left: 5px;
   }
   .shopping-cart .product-category {
 	float: right;
-	width: 24%;
+	width: 23%;
+	margin-left: 5px;
   }
 
   .product .product-actions{
