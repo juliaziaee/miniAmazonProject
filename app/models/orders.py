@@ -4,7 +4,7 @@ from flask_login import current_user
 
 class Orders:
     def __init__(self, uid, sellerID, pid, street1, street2, city, state, zip1, orderDateTime,
-finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, totalPrice, productName):
+finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, totalPrice, productName, reviewStatus):
         self.uid = uid
         self.sellerID = sellerID
         self.pid = pid
@@ -20,6 +20,7 @@ finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, totalPrice, pr
         self.fulfillment_datetime = fulfillment_datetime
         self.totalPrice = totalPrice
         self.productName = productName
+        self.reviewStatus = reviewStatus
 
 
     @staticmethod
@@ -29,7 +30,7 @@ finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, totalPrice, pr
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, pid, street1, street2, city, state, zip, orderDateTime,
 finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, 
-(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName
+(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName, ''
 FROM Purchases, Users, Products
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID AND Products.productID = Purchases.pid
 ORDER BY orderDateTime DESC
@@ -44,7 +45,7 @@ ORDER BY orderDateTime DESC
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, pid, street1, street2, city, state, zip, orderDateTime,
 finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, 
-(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName
+(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName, ''
 FROM Purchases, Users, Products
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID AND Products.productID = Purchases.pid AND Users.id = :uid AND
 orderDateTime = :orderDateTime
@@ -61,7 +62,7 @@ ORDER BY fulfillment_datetime DESC
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
 SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
-'', ''
+'', '', ''
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
 GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime
@@ -76,7 +77,7 @@ ORDER BY orderDateTime DESC
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, pid, street1, street2, city, state, zip, orderDateTime,
 finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, 
-(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName
+(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName, ''
 FROM Purchases, Users, Products
 WHERE Purchases.uid = Users.id AND Products.productID = Purchases.pid
 ORDER BY orderDateTime DESC
@@ -90,7 +91,7 @@ ORDER BY orderDateTime DESC
         rows = app.db.execute('''
 SELECT Purchases.uid, Purchases.SellerID, Purchases.pid, street1, street2, city, state, zip, orderDateTime,
 finalUnitPrice, quantity, fufullmentstatus, fulfillment_datetime, 
-(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName
+(quantity*finalUnitPrice) AS totalPrice, Products.name AS productName, ''
 FROM Purchases, Users, Products
 WHERE Purchases.uid = Users.id AND Purchases.uid = :uid 
     AND Products.productID = Purchases.pid AND Purchases.orderDateTime = :orderDateTime
@@ -105,7 +106,7 @@ ORDER BY orderDateTime DESC
         rows = app.db.execute('''
 SELECT Purchases.uid, '', '', street1, street2, city, state, zip, orderDateTime,
 SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
-'', ''
+'', '', ''
 FROM Purchases, Users, Products
 WHERE Purchases.uid = :uid AND Users.id = :uid AND Products.productID = Purchases.pid
 GROUP BY orderDateTime, Purchases.uid, street1, street2, city, state, zip
@@ -138,7 +139,7 @@ WHERE uid = :uid AND SellerID = :sellerID AND orderDateTime = :orderDateTime AND
             query = '''
 SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
 SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
-'', ''
+'', '', ''
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID AND Users.id = :searchBuyer
 GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime
@@ -148,7 +149,7 @@ GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, 
             query = '''
 SELECT Purchases.uid, Purchases.SellerID, '', street1, street2, city, state, zip, orderDateTime,
 SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
-'', ''
+'', '', ''
 FROM Purchases, Users
 WHERE Purchases.uid = Users.id AND Purchases.SellerID = :SellerID
 GROUP BY Purchases.uid, Purchases.SellerID, street1, street2, city, state, zip, orderDateTime
@@ -169,7 +170,7 @@ SellerID = current_user.id
         rows = app.db.execute('''
 SELECT Purchases.uid, '', '', street1, street2, city, state, zip, orderDateTime,
 SUM(finalUnitPrice * quantity), SUM(quantity), ARRAY_AGG(DISTINCT fufullmentstatus) fufullmentstatuses, MAX(fulfillment_datetime), 
-'', ''
+'', '', ''
 FROM Purchases, Users, Products
 WHERE Purchases.uid = :uid AND Users.id = :uid AND Products.productID = Purchases.pid
 GROUP BY orderDateTime, Purchases.uid, street1, street2, city, state, zip
