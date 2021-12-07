@@ -34,27 +34,35 @@
   {% for order in all_orders%}
   <tbody>
     <tr>
-      <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.orderDateTime}}</td>
-      <td width="25%" scope="row" class="w-150 dark-grey-text h6"> 
+      <td width="15%" scope="row" class="w-150 dark-grey-text h6">{{order.orderDateTime}}</td>
+      <td width="20%" scope="row" class="w-150 dark-grey-text h6"> 
         <div> Name: {{order.productName}}</div> 
         <div> Seller ID: {{order.sellerID}}</div> 
         <div> Product ID: {{order.pid}}</div> 
       </td>
-      <td width="25%" scope="row" class="w-150 dark-grey-text h6">
+      <td width="15%" scope="row" class="w-150 dark-grey-text h6">
         <div>{{order.fufullmentstatus}}</div>
         <div>on {{order.fulfillment_datetime}}</div>
       </td>
-      <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.finalUnitPrice}}</td>
-      <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.quantity}}</td>
-      <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{order.totalPrice}}</td>
+      <td width="10%" scope="row" class="w-150 dark-grey-text h6">{{order.finalUnitPrice}}</td>
+      <td width="10%" scope="row" class="w-150 dark-grey-text h6">{{order.quantity}}</td>
+      <td width="15%" scope="row" class="w-150 dark-grey-text h6">{{order.totalPrice}}</td>
       {% if order.fufullmentstatus == 'fulfilled' %}
-      <td width="50%" scope="row" class="w-150 dark-grey-text h6">  
+      {% if order.reviewStatus %}
+      <td width="15%" scope="row" class="w-150 dark-grey-text h6">  
         <a id = "leaveProdReview" href = "{{url_for('products.review', id = order.pid)}}">
-            <button id= "prodRevPage">Review</button>
+            <button id= "prodRevPage">Leave a Review</button>
         </a>
       </td>
       {% else %}
-      <td width="50%" scope="row" class="w-150 dark-grey-text h6"> Unavailable until order is fulfilled</td>
+      <td width="15%" scope="row" class="w-150 dark-grey-text h6">  
+        <a id = "leaveProdReview" href = "{{url_for('products.updatereview', id = order.pid)}}">
+            <button id= "prodRevPage">Edit Your Review</button>
+        </a>
+      </td>
+      {% endif %}
+      {% else %}
+      <td width="15%" scope="row" class="w-150 dark-grey-text h6"> Unavailable until order is fulfilled</td>
       {% endif %}
     </tr>
   </tbody>

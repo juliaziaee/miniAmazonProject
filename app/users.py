@@ -344,13 +344,17 @@ def singleOrderHistory(orderDateTime):
             format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S')
         #get order details if user is logged in
         orderDetails = Orders.getSingleOrder(current_user.id, format_dateTime)
+
+        #add if review has been made for each order or not
+        for i in range(len(orderDetails)):
+            orderDetails[i].reviewStatus = ProdReviews.hasReviewed(current_user.id, orderDetails[i].pid)
     else:
         #prompt user to log in if not
         return redirect(url_for("users.login"))
     #show order details if properly logged in 
     return render_template("orderhistory.html", all_orders = orderDetails)
 
-    
+
 @bp.route("/userdetails/<sid>/<numVotes>/<uid>/up")
 def upVotes(sid, numVotes, uid):
     #change inventory in database
