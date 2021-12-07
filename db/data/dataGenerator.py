@@ -215,12 +215,14 @@ if __name__ == '__main__':
     for row in datareader:
         purchases.append(row)    
         
-    # Create reviews based on pruchases
+    # Create reviews based on purchases
+    
     # seller id = data[0]
     # user id = data[1]
     # product id = data[2]
     # date = data[3]
     user_seller = []
+    user_product = []
     sellersReviews= []
     productReviews= []
     for i in purchases:
@@ -235,6 +237,18 @@ if __name__ == '__main__':
             dtplus1 = (datetime.strptime(str(i[3]),'%Y-%m-%d %I:%M:%S %p')+ timedelta(days=1)).strftime('%Y-%m-%d %I:%M:%S %p')
             sellerreview.append(dtplus1)
             sellersReviews.append(sellerreview)
+    for i in purchases:
+        if user_product.count(i[1]) == 0:
+            user_product.append(i[1])
+            prodreview = []
+            prodreview.append(i[1])
+            prodreview.append(i[2])
+            prodreview.append(random.randint(1, 5))
+            prodreview.append(random.randint(-5, 5))
+            prodreview.append(fake.sentence(nb_words=5))
+            dtplus1 = (datetime.strptime(str(i[3]),'%Y-%m-%d %I:%M:%S %p')+ timedelta(days=1)).strftime('%Y-%m-%d %I:%M:%S %p')
+            prodreview.append(dtplus1)
+            productReviews.append(prodreview)
         
     with open("db/data/SellerReviewsGenerated.csv", "w", newline="") as f:
         writer = csv.writer(f)

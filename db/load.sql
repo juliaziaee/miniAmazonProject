@@ -9,4 +9,4 @@ SELECT pg_catalog.setval('public.products_productID_seq', 1000, false);
 \COPY Purchases FROM 'data/PurchasesGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY Cart FROM 'data/CartGenerated.csv' WITH DELIMITER ',' NULL '' CSV
 \COPY SellerReview FROM 'data/SellerReviewsGenerated.csv' WITH DELIMITER ',' NULL '' CSV
-\COPY ProductReview FROM 'data/ProductReview.csv' WITH DELIMITER ',' NULL '' CSV
+\COPY ProductReview FROM 'data/ProductReviewsGenerated.csv' WITH DELIMITER ',' NULL '' CSV
