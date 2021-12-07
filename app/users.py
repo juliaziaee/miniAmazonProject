@@ -286,7 +286,7 @@ def orderhistory():
         #prompt user to log in if not
         return redirect(url_for("users.login"))
     #show order history if properly logged in 
-    return render_template("orderHistoryNew.html", order_history = orderHist)
+    return render_template("orderHistoryOverview.html", order_history = orderHist)
 
 @bp.route("/orderhistory/singleorderhistory/<orderDateTime>")
 def singleOrderHistory(orderDateTime):

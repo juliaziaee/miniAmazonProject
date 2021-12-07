@@ -43,7 +43,7 @@
           {% endif %}
         </td>
         <td>{{product.fulfillment_datetime}}</td>
-        <td><a id="viewlink" href="{{ url_for('users.singleOrderHistory', orderDateTime = product.orderDateTime) }}" type="submit"><button>Details</button></a></td>
+        <td><a id="viewlink" href="{{ url_for('users.singleOrderHistory', orderDateTime = product.orderDateTime) }}" type="submit"><button class = 'order-details'>Details</button></a></td>
       </tr>
     </tbody>
     {% endfor %}

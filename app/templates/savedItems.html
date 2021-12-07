@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en" >
+{% block content %}
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/cart.css">
+</head>
+<body>
+<!-- partial:index.partial.html -->
+{% if saved_items == [] or not current_user.is_authenticated %}
+    <h1>You have no saved items.</h1>
+{% else %}
+<h1>Saved Items</h1>
+<br><br>
+<div class="shopping-cart">
+  <div class="column-labels">
+    <label class="product-image">Image</label>
+    <label class="product-details">Product</label>
+    <label class="product-price">Unit Price</label>
+    <label class="product-removal">Remove</label>
+    <label class="product-add-cart">Add To Cart</label>
+  </div>
+  {% for product in saved_items%}
+  <div class="product">
+    <div class="product-image">
+      <a href = "{{url_for('products.detailview', id=product.pid)}}">
+        <img style="float:left" src={{product.imgUrl}}>
+    </a>
+    </div>
+    <div class="product-details">
+      <div class="product-title">{{product.name}}</div>
+      <p class="product-id">Product ID: {{product.pid}}</p>
+    </div>
+    <div class="product-price">{{product.unitPrice}}</div>
+    <div class="product-removal">
+      <a id="removeSavedLink" href="{{ url_for('products.removeItemSaved', pid=product.pid)}}" 
+          type="submit"><button class = "remove-product">Remove</button></a>
+    </div>
+    {% if product.Inventory > 0 %}
+    <div class="product-add-cart">
+        <a id="addCartLink" href="{{ url_for('products.savedToCart', pid=product.pid, sid=product.sid)}}" 
+            type="submit"><button class = "move-product">Move To Cart</button></a>
+      </div>
+    {% else %}
+    <div class="product-add-cart">
+        Out of stock.
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% endif %}
+
+<!-- partial -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+{% endblock %}
+</body>
+</html>

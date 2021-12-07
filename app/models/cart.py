@@ -4,9 +4,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 
 class Cart:
-    def __init__(self, uid, pid, name, unitPrice, quantity, Inventory, totalPrice, subtotal, imgUrl):
+    def __init__(self, uid, pid, sid, name, unitPrice, quantity, Inventory, totalPrice, subtotal, imgUrl):
         self.uid = uid
         self.pid = pid
+        self.sid = sid
         self.name = name
         self.unitPrice = unitPrice
         self.quantity = quantity
@@ -18,7 +19,7 @@ class Cart:
     @staticmethod
     def get(uid):
         rows = app.db.execute('''
-SELECT Cart.uid, Cart.pid, Products.name, Products.unitPrice, Cart.quantity, Products.Inventory,
+SELECT Cart.uid, Cart.pid, Cart.sid, Products.name, Products.unitPrice, Cart.quantity, Products.Inventory,
     (Cart.quantity * Products.unitPrice) AS totalPrice,
     cartTotalPrice.totalPrice AS subtotal, Products.image AS imgUrl
 FROM Cart, Products, cartTotalPrice
@@ -135,5 +136,7 @@ WHERE uid = :uid AND pid = :pid
             error = errorInfo[0].split("CONTEXT")
             return error[0]
         return uid
+    
+   
         
         
