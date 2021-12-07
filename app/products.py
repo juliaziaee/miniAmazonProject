@@ -78,7 +78,7 @@ def updateCartQty(pid, quantity):
     return redirect(url_for('products.displaycart'))
 
 
-@bp.route("/inventory/<int:pid>/<int:num>")
+@bp.route("/inventory/<pid>/<num>")
 def updateInventoryQty(pid, num):
     #change inventory in database
     Inventory.updateQuantity(pid,num)
@@ -86,7 +86,7 @@ def updateInventoryQty(pid, num):
     return redirect(url_for('products.inventory'))
     
 
-@bp.route("/cart/<int:pid>")
+@bp.route("/cart/<pid>")
 def removeItem(pid):
     if current_user.is_authenticated:
         #get current items in user's cart
@@ -179,6 +179,11 @@ def updatereview(id):
             return redirect(url_for('products.detailview', id= id))
     return render_template("updateReview.html", title="Edit Your Product Review", form=form)
 
+@bp.route("/detailview/remove/<pid>/<uid>")
+def removereview(uid, pid):
+    ProdReviews.removeProdReviews(uid, pid)
+    return redirect(url_for('products.detailview', id= pid))
+
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
 def individualOrder(uid, sellerID, orderDateTime):
     return render_template('individualorder.html', order_history = Orders.getIndividual(current_user.id, uid, orderDateTime))
@@ -194,6 +199,7 @@ def inventory():
     else:
         return redirect(url_for('users.login'))
 
+
 @bp.route("/sellerAnalytics")
 def sellerAnalytics():
     if current_user.is_authenticated:
@@ -204,20 +210,21 @@ def sellerAnalytics():
     else:
         return redirect(url_for('users.login'))
 
+
 @bp.route("/inventory/<pid>")
 def removeinventory(pid):
     Inventory.removeInventory(pid)
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.inventory'))
 
-@bp.route("/detailview/<int:pid>/<int:numVotes>/<int:uid>/up")
+@bp.route("/detailview/<pid>/<numVotes>/<uid>/up")
 def upVotes(pid, numVotes, uid):
     #change inventory in database
     ProdReviews.upVotes(pid, numVotes, uid)
     #refresh page
     return redirect(url_for('products.detailview', id = pid))
 
-@bp.route("/detailview/<int:pid>/<int:numVotes>/<int:uid>/down")
+@bp.route("/detailview/<pid>/<numVotes>/<uid>/down")
 def downVotes(pid, numVotes, uid):
     #change inventory in database
     ProdReviews.downVotes(pid,numVotes, uid)
@@ -235,7 +242,7 @@ def orders():
     else:
         return redirect(url_for('users.login'))
 
-@bp.route("/orders/<int:uid>/<int:sellerID>/<orderDateTime>/<int:pid>")
+@bp.route("/orders/<uid>/<sellerID>/<orderDateTime>/<pid>")
 def markFulfilled(uid, sellerID, orderDateTime, pid):
     Orders.markFulfilled(uid, sellerID, orderDateTime, pid)
     return redirect(url_for('products.individualOrder', uid = uid, sellerID = sellerID, orderDateTime = orderDateTime))
@@ -302,26 +309,25 @@ def edit(pid):
         if i not in data:
             data.append(i)
     data.sort()
-    form = EditForm() 
-    error = None
+    form = EditForm()
+    form.name.data = product.name
+    form.description.data = product.description
+    form.category.data = product.category
+    form.unitPrice.data = product.price
+    form.num_products.data = product.Inventory
+    form.image.data = product.image
+
     if current_user.is_authenticated:
         if form.validate_on_submit():
-            if Product.update(pid,
-                            form.name.data,
-                            form.description.data,
-                            form.category.data,
-                            form.unitPrice.data,
-                            form.num_products.data,
-                            form.image.data) == pid:
-                                return redirect(url_for('products.inventory'))
-            else: error = Product.update(pid,
-                            form.name.data,
-                            form.description.data,
-                            form.category.data,
-                            form.unitPrice.data,
-                            form.num_products.data,
-                            form.image.data)
-        return render_template('edit.html', title='Update', form=form, product=product, error=error)
+            # if Product.create(form.name.data,
+            #                 form.description.data,
+            #                 form.category.data,
+            #                 form.unitPrice.data,
+            #                 form.num_products.data,
+            #                 current_user.id,
+            #                 form.image.data):
+                                return redirect(url_for('users.login'))
+        return render_template('edit.html', title='Update', form=form, product=product)
     else:
         return redirect(url_for('users.login'))
 
