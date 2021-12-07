@@ -22,7 +22,6 @@ from .models.user import Balance
 from .models.orders import Orders
 from .models.reviews import SellerReviews
 from .models.reviews import ProdReviews
-from .models.purchase import Purchase
 
 
 from flask import Blueprint
@@ -339,10 +338,7 @@ def orderhistory():
 @bp.route("/orderhistory/singleorderhistory/<orderDateTime>")
 def singleOrderHistory(orderDateTime):
     if current_user.is_authenticated:
-        if len(orderDateTime) > 20:
-            format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S.%f')
-        else:
-            format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S')
+        format_dateTime = datetime.strptime(orderDateTime, '%Y-%m-%d %H:%M:%S.%f')
         #get order details if user is logged in
         orderDetails = Orders.getSingleOrder(current_user.id, format_dateTime)
     else:
@@ -350,19 +346,7 @@ def singleOrderHistory(orderDateTime):
         return redirect(url_for("users.login"))
     #show order details if properly logged in 
     return render_template("orderhistory.html", all_orders = orderDetails)
-@bp.route("/userdetails/<sid>/<numVotes>/<uid>/up")
-def upVotes(sid, numVotes, uid):
-    #change inventory in database
-    SellerReviews.upVotesS(sid, numVotes, uid)
-    #refresh page
-    return redirect(url_for('users.userdetails', uid = sid))
 
-@bp.route("/userdetails/<sid>/<numVotes>/<uid>/down")
-def downVotes(sid, numVotes, uid):
-    #change inventory in database
-    SellerReviews.downVotesS(sid,numVotes, uid)
-    #refresh page
-    return redirect(url_for('users.userdetails', uid = sid))
 
 @bp.route("/spendinghistory")
 def spendinghistory():

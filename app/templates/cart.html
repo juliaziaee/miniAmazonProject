@@ -40,16 +40,10 @@
       <input id = "prodQty" name = "{{product.pid}}" type="number" value="{{product.quantity}}" min="1" max="{{product.Inventory}}" 
               onchange="changeQty(this.value, this.name, this.max)">
       <a id="{{product.pid}}" href="{{ url_for('products.updateCartQty', pid=product.pid, quantity=product.quantity)}}" 
-          type="submit"><button class = "update-qty">Update</button></a>
+          type="submit"><button class = "update-qty" onclick="updateAtrribute()">Update</button></a>
          <script>
-          function changeQty(newVal, newId, maxVal) {
-            if (newVal <= maxVal){
-              document.getElementById(newId).href = (document.getElementById(newId).href.split('/').slice(0, -1).join('/')) + "/" + String(newVal);
-            }
-            else{
-              document.getElementsByName(newId)[0].value = maxVal;
-              document.getElementById(newId).href = (document.getElementById(newId).href.split('/').slice(0, -1).join('/')) + "/" + String(maxVal);
-            }
+          function changeQty(newVal, newId) {
+            document.getElementById(newId).href = (document.getElementById(newId).href.split('/').slice(0, -1).join('/')) + "/" + String(newVal);
             return;
           }
         </script>

@@ -11,6 +11,7 @@ from .models.inventory import Inventory
 from .models.cart import Cart
 from .models.product import Product
 from .models.orders import Orders
+from .models.orders import Stats
 from .models.reviews import ProdReviews
 from .models.purchase import Purchase
 from .models.saved import Saved
@@ -131,11 +132,7 @@ def displaycart():
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
-
-                                                  user = current_user.id,
-                                                  availBought = Purchase.hasPurchased(current_user.id, id),
-                                                  availNew = ProdReviews.hasReviewed(current_user.id, id),
-
+                                                  user = current_user.id, 
                                                   averageReview = ProdReviews.getAvgReview(id),
                                                   review = ProdReviews.get_all(id),
                                                   leng = len(ProdReviews.get_all(id)))
@@ -159,25 +156,7 @@ def review(id):
             form.rating.data,
         ):        
             return redirect(url_for('products.detailview', id= id))
-    return render_template("newReview.html", title="Leave a Product Review", form=form)
-
-class updateReviewForm(FlaskForm):
-    review = StringField(_l('Review'), validators=[DataRequired()])
-    rating = StringField(_l('Rating'), validators=[DataRequired()])
-    submit = SubmitField(_l('Submit'))
-
-@bp.route("/updateReview/<int:id>", methods=["GET", "POST"])
-def updatereview(id):
-    form = updateReviewForm()
-    if form.validate_on_submit():
-        if ProdReviews.updateProdReview(
-            current_user.id, 
-            id,
-            form.review.data,
-            form.rating.data,
-        ):        
-            return redirect(url_for('products.detailview', id= id))
-    return render_template("updateReview.html", title="Edit Your Product Review", form=form)
+    return render_template("newReview.html", title="Leave a Review", form=form)
 
 @bp.route("/detailview/remove/<pid>/<uid>")
 def removereview(uid, pid):
@@ -205,8 +184,9 @@ def sellerAnalytics():
     if current_user.is_authenticated:
         # get all available products for sale:
         orders = Orders.get(current_user.id)
+        stats = Stats.stats(current_user.id)
         # render the page by adding information to the index.html file
-        return render_template('selleranalytics.html', orders = orders)
+        return render_template('selleranalytics.html', orders = orders, stats = stats)
     else:
         return redirect(url_for('users.login'))
 
@@ -290,6 +270,18 @@ def orderssearch():
 
     return render_template('orders.html', 
                            order_history=orders
+                           )
+
+@bp.route("/analyticssearch",  methods = ['POST', 'GET'])
+def analyticssearch():
+    searchBuyer = request.args.get('searchBuyer')
+    searchTotal = request.args.get('searchTotal')
+    searchUnits = request.args.get('searchUnits')
+    orders = Stats.getSearchAndFilt(searchBuyer, searchTotal, searchUnits)
+    # render the page by adding information to the index.html file
+
+    return render_template('selleranalytics.html', 
+                           stats=orders
                            )
     
 class EditForm(FlaskForm):

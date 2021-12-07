@@ -34,18 +34,6 @@ ORDER BY DateTime DESC
 ''',id=id)
         return [ProdReviews(*row) for row in rows]
 
-    @staticmethod
-    def hasReviewed(uid,pid):
-       
-        if app.db.execute('''
-SELECT uid, pid
-FROM ProductReview
-WHERE ProductReview.uid = :uid AND ProductReview.pid = :pid
-''',uid=uid, pid=pid):
-            return False
-        else:
-            return True
-
     def getAvgReview(pid):
         avg = app.db.execute('''
 SELECT AVG(rating)
@@ -57,7 +45,6 @@ pid=pid)
         for row in avg:
             data.append(str(str(row)[1:-2]))
         return data[0]
-
     
     @staticmethod
     def NewProdReview(uid, pid, review, rating):
@@ -137,7 +124,7 @@ class SellerReviews:
 
     @staticmethod
     def get_user_reviews(sid):
-        rows = app.db.execute('''
+        try: rows = app.db.execute('''
 SELECT firstname, lastname, uid, sid, rating, numVotes, review, DateTime
 FROM SellerReview, Users
 WHERE SellerReview.uid = Users.id AND SellerReview.sid = :sid
@@ -211,13 +198,7 @@ WHERE sid = :sid AND uid = :uid
 ''',sid=sid, numVotes = numVotes, uid = uid)
         except Exception:
             return None
-
-    @staticmethod
-    def downVotesS(sid, numVotes, uid):
-        try: rows = app.db.execute('''
-UPDATE SellerReview
-SET numVotes = :numVotes - 1
-WHERE pid = :pid AND uid = :uid
-''',sid=sid, numVotes = numVotes, uid = uid)
-        except Exception:
+        if rows:
+            return [SellerReviews(*row) for row in rows]
+        else:
             return None

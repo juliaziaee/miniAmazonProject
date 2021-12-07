@@ -8,23 +8,24 @@
 </head>
 
 
-{% if page!=None %}
+{% if user!=None %}
 <br>
 <h1>User Details:</h1>
-<p>{{page.firstname}} {{page.lastname}}</p>
-<p>User ID: {{page.id}}</p>
+<p>{{user.firstname}} {{user.lastname}}</p>
+<p>User ID: {{user.id}}</p>
 
 {% if seller %}
     <h1>Seller Information:</h1>
-    <p>{{page.email}}</p>
-    <p>{{page.street1}}</p>
-    {% if page.street2 %}
-    <p>{{page.street2}}</p>
+    <p>{{user.email}}</p>
+    <p>{{user.street1}}</p>
+    {% if user.street2 %}
+    <p>{{user.street2}}</p>
     {% endif %}
-    <p>{{page.city}}, {{page.state}} {{page.zip}} </p>
+    <p>{{user.city}}, {{user.state}} {{user.zip}} </p>
 
-    <h1>Seller Reviews:</h1>
-    {% if review %}
+<h1>Seller Reviews:</h1>
+    {% if reviews %}
+        {% for rev in reviews%}
         <table class="table table-bordered mt-3">
             <thead class="thead-dark">
               <tr>
@@ -35,7 +36,6 @@
                 <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
               </tr>
             </thead>
-            {% for rev in review%}
             <tbody>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}
@@ -61,12 +61,14 @@
                    type="submit"><i class = "fas fa-chevron-down"></i></a>
                  </div>
                 
-               </body></td>
               </tr>
-             </tbody>
-            {% endfor %}
+            </tbody>
           </table>
- 
+        {% endfor %}
+
+    {% endif %}
+    {% if reviews == None %}
+    <p>This seller has not been reviewed yet!<p>
     {% endif %}
    
     {% if not review %}
@@ -90,8 +92,8 @@
 {% endif %}
   
 
-{% if page==None %}
-<h3>Error: you have requested information for an invalid page</h3>
+{% if user==None %}
+<h3>Error: you have requested information for an invalid user</h3>
 
 {% endif %}
 

@@ -95,14 +95,15 @@ WHERE uid = :uid AND pid = :pid
         try:
             orderDateTime = datetime.now()
             rows = app.db.execute('''
-                SELECT Cart.uid, Cart.pid, Products.SellerID, Products.unitPrice, Cart.quantity
+                SELECT Cart.uid, Cart.pid, Products.SellerID, Products.unitPrice, 
+                    Cart.quantity
                 FROM Cart, Products
                 WHERE Cart.uid = :uid AND Products.productID = Cart.pid
                 ''', uid=uid)
         except SQLAlchemyError as e:
             errorInfo = e.orig.args
-            error = errorInfo[0].split("CONTEXT")
-            return error[0]
+            error = errorInfo[0]
+            return error
         for row in rows:
                 res = Cart.insertPurchases(uid, row[1], row[2], row[3], row[4], orderDateTime, orderDateTime)
                 if res == uid:

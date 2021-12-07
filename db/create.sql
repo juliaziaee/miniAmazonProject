@@ -117,6 +117,21 @@ CREATE TABLE Messages (
  
 -- TRIGGERS 
 
+-- Ensures there is enough inventory for the user to purchase the item
+CREATE FUNCTION TF_Inventory() RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS(SELECT * FROM Products, Purchases
+        WHERE productID = NEW.uid AND Purchases.SellerID = NEW.SellerID AND inventory- quantity<0) THEN
+        RAISE EXCEPTION '% does not have the desired amount in stock', NEW.uid;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+ 
+CREATE TRIGGER TF_Inventory  
+BEFORE INSERT OR UPDATE ON Purchases
+  FOR EACH ROW  EXECUTE PROCEDURE TF_Inventory();
+
 -- Checks to see if user can message seller (condition is that must have made a purchase from them)
 CREATE FUNCTION TF_MessagingSeller() RETURNS TRIGGER AS $$
 BEGIN
@@ -199,29 +214,29 @@ BEFORE INSERT ON SellerReview
     FOR EACH ROW
     EXECUTE PROCEDURE TF_DoubleSellerReview();
 
--- Raises error if quantity of an item existing in someones cart is no longer valid when they 
--- go to purchase that quantity
+-- Raises error if quantity of an item existing in someones cart is no longer valid because someone
+ -- else purchased the item and the inventory is now less than the amount in the user's cart
 CREATE FUNCTION TF_validCartQuantity() RETURNS TRIGGER AS $$
 BEGIN
-    IF EXISTS(SELECT * FROM Products
-        WHERE NEW.pid = Products.productID AND NEW.SellerID = Products.SellerID AND 
-            NEW.quantity > Products.inventory) THEN
-        RAISE EXCEPTION '% can no longer purchase % units of %', NEW.uid, NEW.quantity, NEW.pid;
+    IF EXISTS(SELECT * FROM Cart, Products
+        WHERE Cart.pid = Products.productID AND Cart.sid = Products.SellerID AND
+            Products.productID= NEW.pid AND Products.SellerID = NEW.SellerID AND
+            Cart.quantity > Products.inventory) THEN
+        RAISE EXCEPTION '% can no longer purchase % units of %', Cart.uid, Cart.quantity, Cart.pid;
     END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER TG_validCartQuantity
-BEFORE INSERT ON Purchases
+AFTER INSERT ON Purchases
     FOR EACH ROW
     EXECUTE PROCEDURE TF_validCartQuantity();
 
 -- Trigger to update the product inventory after a purchase
 CREATE FUNCTION TF_updateInventory() RETURNS TRIGGER AS $$
 BEGIN
-    UPDATE Products SET inventory = inventory - NEW.quantity WHERE productID = NEW.pid AND 
-        SellerID = new.SellerID;
+    UPDATE Products set inventory = inventory - NEW.quantity where productID = NEW.pid and SellerID = new.SellerID;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
