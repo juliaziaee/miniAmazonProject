@@ -46,6 +46,7 @@ WHERE ProductReview.uid = :uid AND ProductReview.pid = :pid
         else:
             return True
 
+    @staticmethod
     def getAvgReview(pid):
         avg = app.db.execute('''
 SELECT AVG(rating)
@@ -53,6 +54,18 @@ FROM ProductReview
 WHERE ProductReview.pid = :pid
 ''',
 pid=pid)    
+        data = []
+        for row in avg:
+            data.append(str(str(row)[1:-2]))
+        return data[0]
+
+    @staticmethod
+    def getAvgSellerReview(sid):
+        avg = app.db.execute('''
+SELECT AVG(rating)
+FROM SellerReview
+WHERE SellerReview.sid = :sid
+''', sid=sid)    
         data = []
         for row in avg:
             data.append(str(str(row)[1:-2]))

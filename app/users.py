@@ -288,6 +288,10 @@ def accountdetails():
 # Create function to show user details page (Public View for user)
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
 def userdetails(uid):
+    if User.is_seller(uid):
+        rateVal = ProdReviews.getAvgSellerReview(uid)
+    else:
+        rateVal = 0
     if current_user.is_authenticated:
         return render_template('userdetails.html',page = User.get(uid),
                                                   seller = User.is_seller(uid),
@@ -295,7 +299,8 @@ def userdetails(uid):
                                                   availBought = Purchase.hasPurchasedS(uid, current_user.id),
                                                   availNew = SellerReviews.hasReviewedS(current_user.id, uid),
                                                   review = SellerReviews.get_user_reviews(uid),
-                                                  leng = len(SellerReviews.get_user_reviews(uid)))
+                                                  leng = len(SellerReviews.get_user_reviews(uid)),
+                                                  avgRating = rateVal)
     else:
         return redirect(url_for('users.login'))
 
