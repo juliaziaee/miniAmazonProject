@@ -12,8 +12,8 @@
 <form class="form-inline my-2 my-lg-0" action="{{ url_for('products.orderssearch') }}">
   <input class="form-control mr-sm-2" name="searchBuyer" type="search" placeholder="Search Buyer ID" aria-label="Search">
   <select class="form-control mr-sm-2" name="searchDate">
-    <option value="dateNew">Date: newest to oldest</option>
-    <option value="dateOld">Date: oldest to newest</option>
+    <option value="dateNew">Date Placed: newest to oldest</option>
+    <option value="dateOld">Date Placed: oldest to newest</option>
   </select>
   {% if order_history == [] %}
   <button style="color:#007bff; border:1px solid#007bff" class="btn my-2 my-sm-0" type="submit">Reset</button>

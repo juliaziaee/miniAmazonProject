@@ -220,14 +220,14 @@ def removeinventory(pid):
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.inventory'))
 
-@bp.route("/detailview/<int:pid>/<int:numVotes>/<int:uid>/up")
+@bp.route("/detailview/<int:pid>/<numVotes>/<int:uid>/productup")
 def upVotes(pid, numVotes, uid):
     #change inventory in database
     ProdReviews.upVotes(pid, numVotes, uid)
     #refresh page
     return redirect(url_for('products.detailview', id = pid))
 
-@bp.route("/detailview/<int:pid>/<int:numVotes>/<int:uid>/down")
+@bp.route("/detailview/<int:pid>/<numVotes>/<int:uid>/productdown")
 def downVotes(pid, numVotes, uid):
     #change inventory in database
     ProdReviews.downVotes(pid,numVotes, uid)

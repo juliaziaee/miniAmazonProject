@@ -35,7 +35,8 @@
         <tbody>
           {% for stat in stats%}
             <tr>
-              <th scope="row">{{stat.uid}}</th>
+              <th scope="row"><a id="viewBuyer" href="{{ url_for('users.userdetails', uid=stat.uid) }}" type="submit">
+                {{stat.uid}}</a></th>
               <td>{{stat.spent}}</td>
               <td>{{stat.quantity}}</td>
             </tr>
