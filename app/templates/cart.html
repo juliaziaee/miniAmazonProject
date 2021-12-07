@@ -43,8 +43,9 @@
           type="submit"><button class = "update-qty">Update</button></a>
          <script>
           function changeQty(newVal, newId, maxVal) {
-            if (newVal <= maxVal){
+            if (newVal < maxVal){
               document.getElementById(newId).href = (document.getElementById(newId).href.split('/').slice(0, -1).join('/')) + "/" + String(newVal);
+              return;
             }
             else{
               document.getElementsByName(newId)[0].value = maxVal;
