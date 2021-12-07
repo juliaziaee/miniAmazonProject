@@ -20,6 +20,7 @@ import re
 from .models.user import User
 from .models.user import Balance
 from .models.orders import Orders
+from .models.purchase import Purchase
 from .models.reviews import SellerReviews
 from .models.reviews import ProdReviews
 
@@ -346,7 +347,6 @@ def singleOrderHistory(orderDateTime):
         return redirect(url_for("users.login"))
     #show order details if properly logged in 
     return render_template("orderhistory.html", all_orders = orderDetails)
-
 
 @bp.route("/spendinghistory")
 def spendinghistory():
