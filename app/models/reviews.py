@@ -50,6 +50,21 @@ RETURNING uid
         return ProdReviews.get_all(pid)
 
     @staticmethod
+    def updateProdReview(uid, pid, review, rating):
+        rows = app.db.execute("""
+UPDATE ProductReview
+SET review = :review, rating = :rating
+WHERE uid = :uid and pid = :pid
+RETURNING uid
+""",
+                uid=uid,
+                pid=pid,
+                review= review,
+                rating= rating
+            )
+        return ProdReviews.get_all(pid)
+
+    @staticmethod
     def upVotes(pid, numVotes, uid):
         try: rows = app.db.execute('''
 UPDATE ProductReview
@@ -93,4 +108,64 @@ ORDER BY DateTime DESC
         if rows:
             return [SellerReviews(*row) for row in rows]
         else:
+            return None
+    @staticmethod
+    def hasReviewedS(uid,sid):
+       
+        if app.db.execute('''
+SELECT uid, sid
+FROM SellerReview
+WHERE SellerReview.sid = :sid AND SellerReview.uid = :uid
+''',uid=uid, sid=sid):
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def NewSellerReview(uid, sid, review, rating):
+        rows = app.db.execute("""
+INSERT INTO SellerReview(uid, sid, rating, numVotes, review)
+VALUES(:uid, :sid, :rating, 0, :review)
+RETURNING uid
+""",
+                uid=uid,
+                sid=sid,
+                review= review,
+                rating= rating
+            )
+        return SellerReviews.get_user_reviews(sid)
+
+    @staticmethod
+    def updateSellerReview(uid, sid, review, rating):
+        rows = app.db.execute("""
+UPDATE SellerReview
+SET review = :review, rating = :rating
+WHERE uid = :uid and sid = :sid
+RETURNING uid
+""",
+                uid=uid,
+                sid=sid,
+                review= review,
+                rating= rating
+            )
+        return SellerReviews.get_user_reviews(sid)
+
+    @staticmethod
+    def upVotesS(sid, numVotes, uid):
+        try: rows = app.db.execute('''
+UPDATE SellerReview
+SET numVotes = :numVotes + 1
+WHERE sid = :sid AND uid = :uid
+''',sid=sid, numVotes = numVotes, uid = uid)
+        except Exception:
+            return None
+
+    @staticmethod
+    def downVotesS(sid, numVotes, uid):
+        try: rows = app.db.execute('''
+UPDATE SellerReview
+SET numVotes = :numVotes - 1
+WHERE pid = :pid AND uid = :uid
+''',sid=sid, numVotes = numVotes, uid = uid)
+        except Exception:
             return None

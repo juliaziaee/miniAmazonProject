@@ -42,3 +42,16 @@ WHERE uid = :uid and pid = :pid
             return True
         else:
             return False
+
+    @staticmethod
+    def hasPurchasedS(SellerID, uid):
+        if app.db.execute('''
+SELECT SellerID, uid
+FROM Purchases
+WHERE uid = :uid and SellerID = :SellerID
+''',
+                              uid=uid,
+                              SellerID = SellerID):
+            return True
+        else:
+            return False

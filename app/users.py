@@ -20,6 +20,7 @@ from .models.user import User
 from .models.user import Balance
 from .models.orders import Orders
 from .models.reviews import SellerReviews
+from .models.purchase import Purchase
 
 
 from flask import Blueprint
@@ -271,11 +272,52 @@ def accountdetails():
 
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
 def userdetails(uid):
-    reviews = SellerReviews.get_user_reviews(uid)
-    seller = User.is_seller(uid)
-    user = User.get(uid)
-    return render_template("userdetails.html", user=user, seller=seller, reviews=reviews)
+    if current_user.is_authenticated:
+        return render_template('userdetails.html',page = User.get(uid),
+                                                    seller = User.is_seller(uid),
+                                                  user = current_user.id,
+                                                  availBought = Purchase.hasPurchasedS(current_user.id, uid),
+                                                  availNew = SellerReviews.hasReviewedS(current_user.id, uid),
+                                                  review = SellerReviews.get_user_reviews(uid),
+                                                  leng = len(SellerReviews.get_user_reviews(uid)))
+    else:
+        return redirect(url_for('users.login'))
+    
+class SellerReviewForm(FlaskForm):
+    review = StringField(_l('Review'), validators=[DataRequired()])
+    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
 
+@bp.route("/newSellerReview/<int:id>", methods=["GET", "POST"])
+def review(id):
+    form = SellerReviewForm()
+    if form.validate_on_submit():
+        if SellerReviews.NewSellerReview(
+            current_user.id, 
+            id,
+            form.review.data,
+            form.rating.data,
+        ):        
+            return redirect(url_for('users.userdetails', uid= id))
+    return render_template("newSellerReview.html", title="Leave a Seller Review", form=form)
+
+class updateSellerReviewForm(FlaskForm):
+    review = StringField(_l('Review'), validators=[DataRequired()])
+    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
+
+@bp.route("/editSellerReview/<int:id>", methods=["GET", "POST"])
+def updatereview(id):
+    form = updateSellerReviewForm()
+    if form.validate_on_submit():
+        if SellerReviews.updateSellerReview(
+            current_user.id, 
+            id,
+            form.review.data,
+            form.rating.data,
+        ):        
+            return redirect(url_for('users.userdetails', uid= id))
+    return render_template("editSellerReview.html", title="Edit Your Seller Review", form=form)
 
 @bp.route("/orderhistory")
 def orderhistory():
@@ -299,7 +341,19 @@ def singleOrderHistory(orderDateTime):
         return redirect(url_for("users.login"))
     #show order details if properly logged in 
     return render_template("orderhistory.html", all_orders = orderDetails)
+@bp.route("/userdetails/<sid>/<numVotes>/<uid>/up")
+def upVotes(sid, numVotes, uid):
+    #change inventory in database
+    SellerReviews.upVotesS(sid, numVotes, uid)
+    #refresh page
+    return redirect(url_for('users.userdetails', uid = sid))
 
+@bp.route("/userdetails/<sid>/<numVotes>/<uid>/down")
+def downVotes(sid, numVotes, uid):
+    #change inventory in database
+    SellerReviews.downVotesS(sid,numVotes, uid)
+    #refresh page
+    return redirect(url_for('users.userdetails', uid = sid))
 
 @bp.route("/logout")
 def logout():

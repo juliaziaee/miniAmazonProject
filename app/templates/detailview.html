@@ -77,7 +77,7 @@
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>
                 {% if user == rev.uid %}
-                <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Edit</a> 
+                <a href="{{ url_for('products.updatereview' , id=product.id)}}" type="button" class="btn btn-dark">Edit</a> 
                {% endif %}</td>
                <td> <body>
                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
