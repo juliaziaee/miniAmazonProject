@@ -12,7 +12,8 @@ class Saved:
         self.unitPrice = unitPrice
         self.Inventory = Inventory
         self.imgUrl = imgUrl
-    
+
+#get a given user's saved items    
     @staticmethod
     def getSaved(uid):
         rows = app.db.execute('''
@@ -24,6 +25,7 @@ WHERE SavedItems.uid = :uid AND SavedItems.pid = Products.productID
                               uid=uid)
         return [Saved(*row) for row in rows]
     
+#remove a given item from saved for a given user
     @staticmethod
     def removeSavedItem(uid, pid):
         try:
@@ -35,10 +37,9 @@ WHERE uid = :uid AND pid = :pid
                                   pid=pid)
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
-    
+
+#Add a product to user's saved items
     @staticmethod
     def addToSaved(uid, pid, sid):
         try:
@@ -53,7 +54,5 @@ RETURNING pid
             productID = rows[0][0]
             return None
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
     

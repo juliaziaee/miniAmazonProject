@@ -180,8 +180,6 @@ RETURNING id
             id = rows[0][0]
             return User.get(id)
         except Exception:
-            # likely email already in use; better error checking and
-            # reporting needed
             return None
 
 # Function to update user info

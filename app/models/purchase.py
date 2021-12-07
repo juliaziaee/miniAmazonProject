@@ -8,6 +8,7 @@ class Purchase:
         self.pid = pid
         self.orderDateTime = orderDateTime
 
+#get purchases for a given user 
     @staticmethod
     def get(uid):
         rows = app.db.execute('''
@@ -18,6 +19,7 @@ WHERE uid = :uid
                               uid=uid)
         return Purchase(*(rows[0])) if rows else None
 
+#get all orders for a given user since a certain date
     @staticmethod
     def get_all_by_uid_since(uid, since):
         rows = app.db.execute('''
@@ -30,6 +32,8 @@ ORDER BY orderDateTime DESC
                               uid=uid,
                               since=since)
         return [Purchase(*row) for row in rows]
+
+#check if user has purchased item already
     @staticmethod
     def hasPurchased(uid, pid):
         if app.db.execute('''
@@ -43,6 +47,7 @@ WHERE uid = :uid and pid = :pid
         else:
             return False
 
+#check if user has purchased from seller already
     @staticmethod
     def hasPurchasedS(SellerID, uid):
         if app.db.execute('''
@@ -55,7 +60,8 @@ WHERE uid = :uid and SellerID = :SellerID
             return True
         else:
             return False
-        
+
+#select categories of items user has purchased        
     @staticmethod
     def get_by_category(uid):
         rows = app.db.execute('''

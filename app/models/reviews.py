@@ -12,6 +12,7 @@ class ProdReviews:
         self.review = review
         self.DateTime = DateTime
 
+#get all reviews for a given product
     @staticmethod
     def get_all(pid):
        
@@ -23,6 +24,7 @@ ORDER BY DateTime DESC
 ''',pid=pid)
         return [ProdReviews(*row) for row in rows]
 
+#get all reviews authored by a given user
     @staticmethod
     def get_authored(id):
        
@@ -34,6 +36,7 @@ ORDER BY DateTime DESC
 ''',id=id)
         return [ProdReviews(*row) for row in rows]
 
+#check if user has reviewed a given product
     @staticmethod
     def hasReviewed(uid,pid):
        
@@ -46,6 +49,7 @@ WHERE ProductReview.uid = :uid AND ProductReview.pid = :pid
         else:
             return True
 
+#get average rating for a given product
     @staticmethod
     def getAvgReview(pid):
         avg = app.db.execute('''
@@ -59,6 +63,7 @@ pid=pid)
             data.append(str(str(row)[1:-2]))
         return data[0]
 
+#get average rating for a given seller
     @staticmethod
     def getAvgSellerReview(sid):
         avg = app.db.execute('''
@@ -71,7 +76,7 @@ WHERE SellerReview.sid = :sid
             data.append(str(str(row)[1:-2]))
         return data[0]
 
-    
+#insert new product review into table to store product reviews    
     @staticmethod
     def NewProdReview(uid, pid, review, rating):
         rows = app.db.execute("""
@@ -86,6 +91,7 @@ RETURNING uid
             )
         return ProdReviews.get_all(pid)
 
+#update an existing product review
     @staticmethod
     def updateProdReview(uid, pid, review, rating):
         rows = app.db.execute("""
@@ -100,7 +106,8 @@ RETURNING uid
                 rating= rating
             )
         return ProdReviews.get_all(pid)
-        
+
+#remove an existing product review for a given user and product
     @staticmethod
     def removeProdReviews(uid,pid):
         try:
@@ -116,7 +123,7 @@ WHERE uid = :uid AND pid = :pid
             # reporting needed
             return None
 
-
+#upvote functionality on review
     @staticmethod
     def upVotes(pid, numVotes, uid):
         try: rows = app.db.execute('''
@@ -127,6 +134,7 @@ WHERE pid = :pid AND uid = :uid
         except Exception:
             return None
 
+#downvote functionality on review
     @staticmethod
     def downVotes(pid, numVotes, uid):
         try: rows = app.db.execute('''
@@ -137,6 +145,7 @@ WHERE pid = :pid AND uid = :uid
         except Exception:
             return None
 
+#seller review object
 class SellerReviews:
     def __init__(self, firstname, lastname, uid, sid, rating, numVotes, review, DateTime):
         self.firstname = firstname
@@ -148,6 +157,7 @@ class SellerReviews:
         self.review = review
         self.DateTime = DateTime
 
+#get user reviews for a given seller
     @staticmethod
     def get_user_reviews(sid):
         rows = app.db.execute('''
@@ -158,7 +168,8 @@ ORDER BY DateTime DESC
 ''',sid=sid)
     
         return [SellerReviews(*row) for row in rows]
-    
+
+#get all seller reviews authored by a given user   
     @staticmethod
     def get_authored(id):
        
@@ -170,6 +181,7 @@ ORDER BY DateTime DESC
 ''',id=id)
         return [SellerReviews(*row) for row in rows]
 
+#check if seller has reviews from user
     @staticmethod
     def hasReviewedS(uid,sid):
        
@@ -182,6 +194,7 @@ WHERE SellerReview.sid = :sid AND SellerReview.uid = :uid
         else:
             return True
 
+#insert new review for seller into seller review table
     @staticmethod
     def NewSellerReview(uid, sid, review, rating):
         rows = app.db.execute("""
@@ -196,6 +209,7 @@ RETURNING uid
             )
         return SellerReviews.get_user_reviews(sid)
 
+#update existing seller review for a given user 
     @staticmethod
     def updateSellerReview(uid, sid, review, rating):
         rows = app.db.execute("""
@@ -211,6 +225,7 @@ RETURNING uid
             )
         return SellerReviews.get_user_reviews(sid)
 
+#remove a user's given review for a given seller 
     @staticmethod
     def removeSellReviews(sid,uid):
         try:
@@ -222,10 +237,9 @@ WHERE uid = :uid AND sid = :sid
             return None
             
         except Exception:
-            # likely id already in use; better error checking and
-            # reporting needed
             return None
 
+#upvote for seller reviews functionality
     @staticmethod
     def upVotesS(sid, numVotes, uid):
         try: rows = app.db.execute('''
@@ -236,6 +250,7 @@ WHERE sid = :sid AND uid = :uid
         except Exception:
             return None
 
+#downvote for seller reviews functionality
     @staticmethod
     def downVotesS(sid, numVotes, uid):
         try: rows = app.db.execute('''
