@@ -21,7 +21,7 @@
     <label style="float:left" class="product-id">Product ID</label>
     <label style="float: left; position: relative; left: 330px" class="product-quantity">Amount in Stock</label>
     <label style="float: left; position: relative; left: 600px" class="product-title">Product Name</label>
-    <label style="float:right" class="product-removal">Remove</label>  
+    <label style="float:right" class="product-removal">Edit/Remove</label>  
   </div>
   {% for product in avail_inventory%}
   <div class="product">
@@ -39,6 +39,7 @@
     </div>
     <div style="float: left; position: relative; left: 672px" class="product-title">{{product.name}}</div>
     <div style="float:right" class="product-removal">
+      <a href="{{ url_for('products.edit', pid=product.pid) }}" type="submit"><button>Edit</button></a>
       <a id="submissionlink" href="{{ url_for('products.removeinventory', pid=product.pid) }}" type="submit"><button>Remove</button></a>
     </div>
   </div>
