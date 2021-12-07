@@ -23,7 +23,7 @@
       <th scope="col">Number of Items</th>
       <th scope="col">Fulfillment Status</th>
       <th scope="col">Fulfillment Date</th>
-      <th scope="col">Edit</th>
+      <th scope="col">Edit/View Details</th>
     </tr>
   </thead>
   <tbody>
@@ -46,7 +46,7 @@
           {% endif %}
         </td>
         <td>{{product.fulfillment_datetime}}</td>
-        <td><a id="editlink" href="{{ url_for('products.individualOrder', uid=product.uid, sellerID = product.sellerID, orderDateTime = product.orderDateTime) }}" type="submit"><button>Edit</button></a></td>
+        <td><a id="editlink" href="{{ url_for('products.individualOrder', uid=product.uid, sellerID = product.sellerID, orderDateTime = product.orderDateTime) }}" type="submit"><button>Edit/View Details</button></a></td>
       </tr>
     </tbody>
     {% endfor %}
