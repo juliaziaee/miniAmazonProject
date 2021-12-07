@@ -111,18 +111,15 @@ class SellerReviews:
 
     @staticmethod
     def get_user_reviews(sid):
-        try: rows = app.db.execute('''
+        rows = app.db.execute('''
 SELECT firstname, lastname, uid, sid, rating, numVotes, review, DateTime
 FROM SellerReview, Users
 WHERE SellerReview.uid = Users.id AND SellerReview.sid = :sid
 ORDER BY DateTime DESC
 ''',sid=sid)
-        except Exception:
-            return None
-        if rows:
-            return [SellerReviews(*row) for row in rows]
-        else:
-            return None
+    
+        return [SellerReviews(*row) for row in rows]
+      
     @staticmethod
     def hasReviewedS(uid,sid):
        
