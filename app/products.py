@@ -22,6 +22,7 @@ bp = Blueprint('products', __name__)
 options = []
 data = []
 
+# Flask Form template for creating a new product
 class CreateForm(FlaskForm):
     name = StringField(_l('Product Name'), validators=[DataRequired()])
     ## add word limit
@@ -33,6 +34,7 @@ class CreateForm(FlaskForm):
     image = StringField(_l('Image URL'), validators=[DataRequired()])
     submit = SubmitField(_l('Create'))
 
+# Function to create a new product and insert into Product table
 @bp.route("/create", methods=['GET', 'POST'])
 def create():
     options = Product.addCategory()
@@ -56,6 +58,7 @@ def create():
     else:
         return redirect(url_for('users.login'))
 
+# Function to add a product with a chosen quantity to the cart
 @bp.route("/cart/<int:pid>/<int:sid>/<int:quantity>")
 def addtocart(pid,sid,quantity):
     if current_user.is_authenticated:
@@ -67,6 +70,7 @@ def addtocart(pid,sid,quantity):
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.displaycart'))
 
+# Function to update the quantity of the product in the cart
 @bp.route("/cart/<int:pid>/<int:quantity>")
 def updateCartQty(pid, quantity):
     if current_user.is_authenticated:
@@ -78,7 +82,7 @@ def updateCartQty(pid, quantity):
     #refresh page
     return redirect(url_for('products.displaycart'))
 
-
+# Function to update the product quantity in the inventory
 @bp.route("/inventory/<int:pid>/<int:num>")
 def updateInventoryQty(pid, num):
     #change inventory in database
@@ -86,7 +90,7 @@ def updateInventoryQty(pid, num):
     #refresh page
     return redirect(url_for('products.inventory'))
     
-
+# Function to remove a product from the cart
 @bp.route("/cart/<int:pid>")
 def removeItem(pid):
     if current_user.is_authenticated:
@@ -98,6 +102,7 @@ def removeItem(pid):
     #refresh page
     return redirect(url_for('products.displaycart'))
 
+# Function to checkout a cart and move to purchases
 @bp.route("/checkout")
 def checkout():
     if current_user.is_authenticated:
@@ -112,6 +117,7 @@ def checkout():
         #not logged in so redirect to login page 
         return redirect(url_for('users.login'))
 
+# Function to display contents of the cart
 @bp.route("/displaycart")
 def displaycart():
     if current_user.is_authenticated:
@@ -127,7 +133,7 @@ def displaycart():
                                 cart_items=cart,
                                 subtotal=total)                     
 
-
+# Function to display the detail view of a given product
 @bp.route("/detailview/<int:id>")
 def detailview(id):
     if current_user.is_authenticated:
@@ -143,13 +149,14 @@ def detailview(id):
     else:
         return redirect(url_for('users.login'))
 
-
+# Flask Form template for reviewing and rating a product
 class ReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
     ## add dropdown menu
     rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
+# Function for leaving a review
 @bp.route("/newReview/<int:id>", methods=["GET", "POST"])
 def review(id):
     form = ReviewForm()
@@ -163,11 +170,13 @@ def review(id):
             return redirect(url_for('products.detailview', id= id))
     return render_template("newReview.html", title="Leave a Product Review", form=form)
 
+# FLask Form template for updating a review
 class updateReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
     rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
+# Function for updating a review
 @bp.route("/updateReview/<int:id>", methods=["GET", "POST"])
 def updatereview(id):
     form = updateReviewForm()
@@ -181,15 +190,18 @@ def updatereview(id):
             return redirect(url_for('products.detailview', id= id))
     return render_template("updateReview.html", title="Edit Your Product Review", form=form)
 
+# Function for removing a review
 @bp.route("/detailview/remove/<pid>/<uid>")
 def removereview(uid, pid):
     ProdReviews.removeProdReviews(uid, pid)
     return redirect(url_for('products.detailview', id= pid))
 
+# Function for showing buyer's order details
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
 def individualOrder(uid, sellerID, orderDateTime):
     return render_template('individualorder.html', order_history = Orders.getIndividual(current_user.id, uid, orderDateTime))
 
+# Function for showing the inventory for a user 
 @bp.route("/inventory")
 def inventory():
     if current_user.is_authenticated:
@@ -253,6 +265,7 @@ def markFulfilled(uid, sellerID, orderDateTime, pid):
 def get_products(products, offset=0, per_page=10):
     return products[offset: offset + per_page]
 
+# Function for filtering and sorting products in the home page
 @bp.route("/search",  methods = ['POST', 'GET'])
 def search():
     c = request.args.get('c')
