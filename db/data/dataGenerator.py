@@ -136,34 +136,62 @@ def createCart(products):
     
 
 if __name__ == '__main__':
-    userData = createUser()
-    with open("db/data/UsersGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(userData)
+    # userData = createUser()
+    # with open("db/data/UsersGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(userData)
     
-    sellerData = createSeller()
-    with open("db/data/SellerGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(sellerData)
+    # sellerData = createSeller()
+    # with open("db/data/SellerGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(sellerData)
 
-    productData = createProducts(sellerData)
-    with open("db/data/ProductsGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(productData)
+    # productData = createProducts(sellerData)
+    # with open("db/data/ProductsGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(productData)
     
-    fundingData = createFunding()
-    with open("db/data/FundingGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(fundingData)
+    # fundingData = createFunding()
+    # with open("db/data/FundingGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(fundingData)
 
-    purchasingData = createPurchases(fundingData, productData)
-    with open("db/data/PurchasesGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(purchasingData)
+    # purchasingData = createPurchases(fundingData, productData)
+    # with open("db/data/PurchasesGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(purchasingData)
     
-    cartData = createCart(productData)
-    with open("db/data/CartGenerated.csv", "w+") as myCsv:
-        csvWriter = csv.writer(myCsv, delimiter=',')
-        csvWriter.writerows(cartData)
+    # cartData = createCart(productData)
+    # with open("db/data/CartGenerated.csv", "w+") as myCsv:
+    #     csvWriter = csv.writer(myCsv, delimiter=',')
+    #     csvWriter.writerows(cartData)
     
     
+    # Comment out everything in main func before running this unless you want to generate new data entirely
+    # Before running this, ran productScrape.py to generate clothes.csv file
+    
+    random.seed(10)
+    
+    datafile = open('db/data/ProductsGenerated.csv', 'r')
+    datareader = csv.reader(datafile)
+    data = []
+    for row in datareader:
+        data.append(row)    
+
+    datafile = open('db/data/clothes.csv', 'r')
+    datareader = csv.reader(datafile)
+    scraped = []
+    for row in datareader:
+        scraped.append(row)    
+
+    for i in range(len(scraped)):
+        data[i][1] = scraped[i][0]
+        data[i][4] = scraped[i][1]
+        data[i][7] = scraped[i][2]
+
+    for i in range(96, 1000):
+        data[i][7] = scraped[i % 95][2]
+
+    with open("db/data/ProductsGenerated.csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
