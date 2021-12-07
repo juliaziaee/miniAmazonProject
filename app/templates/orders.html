@@ -7,12 +7,27 @@
   <link rel="stylesheet" type="text/css" href="static/css/cart.css">
 </head>
 
+<h2>Orders:</h2>
+<p></p>
+<form class="form-inline my-2 my-lg-0" action="{{ url_for('products.orderssearch') }}">
+  <input class="form-control mr-sm-2" name="searchBuyer" type="search" placeholder="Search Buyer ID" aria-label="Search">
+  <select class="form-control mr-sm-2" name="searchDate">
+    <option value="dateNew">Date: newest to oldest</option>
+    <option value="dateOld">Date: oldest to newest</option>
+  </select>
+  {% if order_history == [] %}
+  <button style="color:#007bff; border:1px solid#007bff" class="btn my-2 my-sm-0" type="submit">Reset</button>
+  {% else %}
+  <button style="color:#007bff; border:1px solid#007bff" class="btn my-2 my-sm-0" type="submit">Submit</button>
+  {% endif %}
+</form>
+<p></p>
+
 {% if order_history == [] or not current_user.is_authenticated %}
 <h2>You have not sold any items yet</h2>
 <h3>Go to the 'List' tab to list a product</h3>
 {% else %}
 
-<h2>Orders:</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>

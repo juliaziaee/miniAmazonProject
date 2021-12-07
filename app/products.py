@@ -241,6 +241,17 @@ def search():
                            pagination = pagination,
                            purchase_history=purchases,
                            )
+
+@bp.route("/orderssearch",  methods = ['POST', 'GET'])
+def orderssearch():
+    searchBuyer = request.args.get('searchBuyer')
+    searchDate = request.args.get('searchDate')
+    orders = Orders.getSearchAndFilt(searchBuyer, searchDate)
+    # render the page by adding information to the index.html file
+
+    return render_template('orders.html', 
+                           order_history=orders
+                           )
     
 class EditForm(FlaskForm):
     name = StringField(_l('Product Name'), validators=[DataRequired()])
