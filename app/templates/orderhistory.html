@@ -10,6 +10,9 @@
   <link rel="stylesheet" type="text/css" href="static/css/cart.css">
 </head>
 
+<a href="{{ url_for('users.orderhistory') }}"><button>Back</button></a>
+<p></p>
+
 <body>
 {% if all_orders == [] or not current_user.is_authenticated %}
     <h1>You have no order history.</h1>

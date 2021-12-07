@@ -36,8 +36,8 @@
         <td>{{product.finalUnitPrice}}</td>
         <td>{{product.quantity}}</td>
         <td>
-          {% if product.fufullmentstatus[0] != 'fulfilled' or product.fufullmentstatus[1] != 'fulfilled'%}
-            unfulfilled
+          {% if product.fufullmentstatus[0] == 'Processing' or product.fufullmentstatus[1] == 'Processing'%}
+            Processing
           {% else %}
             fulfilled
           {% endif %}
