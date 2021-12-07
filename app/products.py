@@ -146,7 +146,8 @@ def detailview(id):
 
 class ReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
-    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    ## add dropdown menu
+    rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 @bp.route("/newReview/<int:id>", methods=["GET", "POST"])
@@ -164,7 +165,7 @@ def review(id):
 
 class updateReviewForm(FlaskForm):
     review = StringField(_l('Review'), validators=[DataRequired()])
-    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    rating = SelectField(_l('Rating'), choices=[1,2,3,4,5], validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
 
 @bp.route("/updateReview/<int:id>", methods=["GET", "POST"])
