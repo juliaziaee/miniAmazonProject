@@ -22,6 +22,51 @@
 <p><a href="{{ url_for('users.updateemail') }}"><button>Update Email</button></a></p>
 <p><a href="{{ url_for('users.updatepassword') }}"><button>Update Password</button></a></p>
 
+
+   {% if review %}
+   <h1>Product Reviews Authored:</h1>
+       <table class="table table-bordered mt-3">
+           <thead class="thead-dark">
+             <tr>
+               <th scope="row" class="w-150 dark-grey-text h6">Review Date</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Product ID</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Rating</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Review</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Reviewer</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
+             </tr>
+           </thead>
+           {% for rev in review%}
+           <tbody>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.pid}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>{% if user == rev.uid %}
+                <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Edit</a> 
+               {% endif %}</td>
+               <td> <body>
+                <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
+                
+                <div class = "votContainer">
+                  <a id="{{rev.pid + rev.uid}} up" href="{{ url_for('products.upVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  type="submit">
+                      <i class = "fas fa-chevron-up" role="button"></i></a>
+                  <div class = "vot">
+                    <p> {{rev.numVotes}}</p>
+                  </div>
+                  <a id="{{rev.pid + rev.uid}} down" href="{{ url_for('products.downVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  type="submit"><i class = "fas fa-chevron-down"></i></a>
+                </div>
+               
+              </body></td>
+             </tr>
+            </tbody>
+           {% endfor %}
+         </table>
+
+   {% endif %}
+
 {% else %}
 <p><a href="{{ url_for('users.login') }}">Log in</a> to see your account details!</p>
 {% endif %}
