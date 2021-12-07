@@ -305,7 +305,8 @@ def analyticssearch():
     return render_template('selleranalytics.html', 
                            stats=orders
                            )
-    
+
+# Create a flask form to edit product information
 class EditForm(FlaskForm):
     name = StringField(_l('Product Name'), validators=[DataRequired()])
     description = StringField(_l('Product Description'), validators=[DataRequired()])
@@ -315,6 +316,7 @@ class EditForm(FlaskForm):
     image = StringField(_l('Image URL'), validators=[DataRequired()])
     update = SubmitField(_l('Update'))
 
+# Function to edit product
 @bp.route("/edit/<int:pid>", methods=['GET', 'POST'])
 def edit(pid):
     product = Product.get(pid)
@@ -325,8 +327,10 @@ def edit(pid):
     data.sort()
     form = EditForm() 
     error = None
+    # if the user is logged in, otherwise make them login
     if current_user.is_authenticated:
         if form.validate_on_submit():
+            # If its successful, should return product ID
             if Product.update(pid,
                             form.name.data,
                             form.description.data,
@@ -335,6 +339,7 @@ def edit(pid):
                             form.num_products.data,
                             form.image.data) == pid:
                                 return redirect(url_for('products.inventory'))
+            # If there is an error, display it
             else: error = Product.update(pid,
                             form.name.data,
                             form.description.data,
@@ -342,10 +347,13 @@ def edit(pid):
                             form.unitPrice.data,
                             form.num_products.data,
                             form.image.data)
+        # In the edit.html template, only displays the form to update product if your userid matches the
+        # user ID of the person who listed the product (the seller)
         return render_template('edit.html', title='Update', form=form, product=product, error=error)
     else:
         return redirect(url_for('users.login'))
 
+# Function for saved to later additional feature
 @bp.route("/savedforlater")
 def savedForLater():
     if current_user.is_authenticated:
@@ -357,6 +365,7 @@ def savedForLater():
     else:
         return redirect(url_for('users.login'))
 
+# Function to remove items from saved for later
 @bp.route("/savedforlater/remove/<int:pid>")
 def removeItemSaved(pid):
     if current_user.is_authenticated:
@@ -369,6 +378,7 @@ def removeItemSaved(pid):
     return redirect(url_for('products.savedForLater'))
 
 
+# Function to move a saved for later item to the cart
 @bp.route("/savedforlater/tocart/<int:pid>/<int:sid>")
 def savedToCart(pid,sid):
     if current_user.is_authenticated:
@@ -382,6 +392,7 @@ def savedToCart(pid,sid):
     #ender page by adding ingo to the index.html file
     return redirect(url_for('products.displaycart'))
 
+# Function to move a item from cart to saved for later
 @bp.route("/savedforlater/tosaved/<int:pid>/<int:sid>")
 def cartToSaved(pid, sid):
     if current_user.is_authenticated:

@@ -142,6 +142,7 @@ RETURNING productID
             # reporting needed
             return None
         
+    # Function to update product info, only ever gets called if that user is the seller who listed the product
     @staticmethod
     def update(pid, name, description, category, unitPrice, inventory, image):
         try:
@@ -158,10 +159,10 @@ RETURNING productID
                 unitPrice=unitPrice,
                 inventory=inventory,
                 image=image)
-            productID = rows[0][0]
-            return Product.get(productID)
+        # Intercept error
         except SQLAlchemyError as e:
             errorInfo = e.orig.args
             error = errorInfo[0]
             return error
-        return pid
+        productID = rows[0][0]
+        return productID
