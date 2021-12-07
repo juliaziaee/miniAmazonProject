@@ -61,6 +61,37 @@ RETURNING uid
         return ProdReviews.get_all(pid)
 
     @staticmethod
+    def updateProdReview(uid, pid, review, rating):
+        rows = app.db.execute("""
+UPDATE ProductReview
+SET review = :review, rating = :rating
+WHERE uid = :uid and pid = :pid
+RETURNING uid
+""",
+                uid=uid,
+                pid=pid,
+                review= review,
+                rating= rating
+            )
+        return ProdReviews.get_all(pid)
+        
+    @staticmethod
+    def removeProdReviews(uid,pid):
+        try:
+            rows = app.db.execute("""
+DELETE FROM ProductReview
+WHERE uid = :uid AND pid = :pid
+""",
+                                  uid = uid, pid = pid)
+            return None
+            eg
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
+
+
+    @staticmethod
     def upVotes(pid, numVotes, uid):
         try: rows = app.db.execute('''
 UPDATE ProductReview
@@ -99,6 +130,72 @@ FROM SellerReview, Users
 WHERE SellerReview.uid = Users.id AND SellerReview.sid = :sid
 ORDER BY DateTime DESC
 ''',sid=sid)
+    
+        return [SellerReviews(*row) for row in rows]
+      
+    @staticmethod
+    def hasReviewedS(uid,sid):
+       
+        if app.db.execute('''
+SELECT uid, sid
+FROM SellerReview
+WHERE SellerReview.sid = :sid AND SellerReview.uid = :uid
+''',uid=uid, sid=sid):
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def NewSellerReview(uid, sid, review, rating):
+        rows = app.db.execute("""
+INSERT INTO SellerReview(uid, sid, rating, numVotes, review)
+VALUES(:uid, :sid, :rating, 0, :review)
+RETURNING uid
+""",
+                uid=uid,
+                sid=sid,
+                review= review,
+                rating= rating
+            )
+        return SellerReviews.get_user_reviews(sid)
+
+    @staticmethod
+    def updateSellerReview(uid, sid, review, rating):
+        rows = app.db.execute("""
+UPDATE SellerReview
+SET review = :review, rating = :rating
+WHERE uid = :uid and sid = :sid
+RETURNING uid
+""",
+                uid=uid,
+                sid=sid,
+                review= review,
+                rating= rating
+            )
+        return SellerReviews.get_user_reviews(sid)
+
+    @staticmethod
+    def removeSellReviews(sid,uid):
+        try:
+            rows = app.db.execute("""
+DELETE FROM SellerReview
+WHERE uid = :uid AND sid = :sid
+""",
+                                  uid = uid, sid = sid)
+            return None
+            
+        except Exception:
+            # likely id already in use; better error checking and
+            # reporting needed
+            return None
+
+    @staticmethod
+    def upVotesS(sid, numVotes, uid):
+        try: rows = app.db.execute('''
+UPDATE SellerReview
+SET numVotes = :numVotes + 1
+WHERE sid = :sid AND uid = :uid
+''',sid=sid, numVotes = numVotes, uid = uid)
         except Exception:
             return None
         if rows:

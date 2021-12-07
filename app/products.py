@@ -158,6 +158,11 @@ def review(id):
             return redirect(url_for('products.detailview', id= id))
     return render_template("newReview.html", title="Leave a Review", form=form)
 
+@bp.route("/detailview/remove/<pid>/<uid>")
+def removereview(uid, pid):
+    ProdReviews.removeProdReviews(uid, pid)
+    return redirect(url_for('products.detailview', id= pid))
+
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
 def individualOrder(uid, sellerID, orderDateTime):
     return render_template('individualorder.html', order_history = Orders.getIndividual(current_user.id, uid, orderDateTime))
@@ -173,6 +178,7 @@ def inventory():
     else:
         return redirect(url_for('users.login'))
 
+
 @bp.route("/sellerAnalytics")
 def sellerAnalytics():
     if current_user.is_authenticated:
@@ -183,6 +189,7 @@ def sellerAnalytics():
         return render_template('selleranalytics.html', orders = orders, stats = stats)
     else:
         return redirect(url_for('users.login'))
+
 
 @bp.route("/inventory/<pid>")
 def removeinventory(pid):

@@ -74,10 +74,14 @@
            <tbody>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
-               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
-               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>{% if user == rev.uid %}
-                <a href="{{ url_for('users.login') }}" type="button" class="btn btn-dark">Edit</a> 
-               {% endif %}</td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}
+                {% if user == rev.uid %}
+                <a href="{{ url_for('products.updatereview' , id=product.id)}}" type="button" class="btn btn-dark">Edit</a> 
+                <a href="{{ url_for('products.removereview' , uid = rev.uid, pid=rev.pid)}}" type="button" style="background-color:red" class="btn btn-dark">Remove</a> 
+               {% endif %}
+               </td>
+               <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>
+                </td>
                <td> <body>
                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
                 
