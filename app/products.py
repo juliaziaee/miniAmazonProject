@@ -131,7 +131,11 @@ def displaycart():
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
-                                                  user = current_user.id, 
+
+                                                  user = current_user.id,
+                                                  availBought = Purchase.hasPurchased(current_user.id, id),
+                                                  availNew = ProdReviews.hasReviewed(current_user.id, id),
+
                                                   averageReview = ProdReviews.getAvgReview(id),
                                                   review = ProdReviews.get_all(id),
                                                   leng = len(ProdReviews.get_all(id)))
@@ -155,7 +159,25 @@ def review(id):
             form.rating.data,
         ):        
             return redirect(url_for('products.detailview', id= id))
-    return render_template("newReview.html", title="Leave a Review", form=form)
+    return render_template("newReview.html", title="Leave a Product Review", form=form)
+
+class updateReviewForm(FlaskForm):
+    review = StringField(_l('Review'), validators=[DataRequired()])
+    rating = StringField(_l('Rating'), validators=[DataRequired()])
+    submit = SubmitField(_l('Submit'))
+
+@bp.route("/updateReview/<int:id>", methods=["GET", "POST"])
+def updatereview(id):
+    form = updateReviewForm()
+    if form.validate_on_submit():
+        if ProdReviews.updateProdReview(
+            current_user.id, 
+            id,
+            form.review.data,
+            form.rating.data,
+        ):        
+            return redirect(url_for('products.detailview', id= id))
+    return render_template("updateReview.html", title="Edit Your Product Review", form=form)
 
 @bp.route("/individualOrder/<int:uid>/<int:sellerID>/<orderDateTime>")
 def individualOrder(uid, sellerID, orderDateTime):
