@@ -8,25 +8,24 @@
 </head>
 
 
-{% if user!=None %}
+{% if page!=None %}
 <br>
 <a href="{{ url_for('index.index') }}"><button>Back</button></a>
 <h1>User Details:</h1>
-<p>{{user.firstname}} {{user.lastname}}</p>
-<p>User ID: {{user.id}}</p>
+<p>{{page.firstname}} {{page.lastname}}</p>
+<p>User ID: {{page.id}}</p>
 
 {% if seller %}
     <h1>Seller Information:</h1>
-    <p>{{user.email}}</p>
-    <p>{{user.street1}}</p>
-    {% if user.street2 %}
-    <p>{{user.street2}}</p>
+    <p>{{page.email}}</p>
+    <p>{{page.street1}}</p>
+    {% if page.street2 %}
+    <p>{{page.street2}}</p>
     {% endif %}
-    <p>{{user.city}}, {{user.state}} {{user.zip}} </p>
+    <p>{{page.city}}, {{page.state}} {{page.zip}} </p>
 
-<h1>Seller Reviews:</h1>
-    {% if reviews %}
-        {% for rev in reviews%}
+    <h1>Seller Reviews:</h1>
+    {% if review %}
         <table class="table table-bordered mt-3">
             <thead class="thead-dark">
               <tr>
@@ -37,18 +36,35 @@
                 <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
               </tr>
             </thead>
+            {% for rev in review%}
             <tbody>
-                <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
+                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
                 <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}</td>
-                <td><a href="{{ url_for('users.userdetails', uid=rev.uid) }}">User {{rev.firstname}}</a></td>
-                <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{rev.numVotes}}</td>
+                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>
+                 {% if user == rev.uid %}
+                 <a href="{{ url_for('users.userdetails' , uid=page.id)}}" type="button" class="btn btn-dark">Edit</a> 
+                {% endif %}</td>
+                <td> <body>
+                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
+                 
+                 <div class = "votContainer">
+                   <a id="{{rev.sid + rev.uid}} up" href="{{ url_for('users.upVotes', sid=rev.sid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                   type="submit">
+                       <i class = "fas fa-chevron-up" role="button"></i></a>
+                   <div class = "vot">
+                     <p> {{rev.numVotes}}</p>
+                   </div>
+                   <a id="{{rev.sid + rev.uid}} down" href="{{ url_for('users.downVotes', sid=rev.sid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                   type="submit"><i class = "fas fa-chevron-down"></i></a>
+                 </div>
                 
+               </body></td>
               </tr>
-            </tbody>
+             </tbody>
+            {% endfor %}
           </table>
-        {% endfor %}
-
+ 
     {% endif %}
     {% if reviews == None %}
     <p>This seller has not been reviewed yet!<p>
@@ -58,8 +74,8 @@
 {% endif %}
 
 
-{% if user==None %}
-<h3>Error: you have requested information for an invalid user</h3>
+{% if page==None %}
+<h3>Error: you have requested information for an invalid page</h3>
 
 {% endif %}
 
