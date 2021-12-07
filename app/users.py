@@ -20,6 +20,7 @@ from .models.user import User
 from .models.user import Balance
 from .models.orders import Orders
 from .models.reviews import SellerReviews
+from .models.reviews import ProdReviews
 from .models.purchase import Purchase
 
 
@@ -267,14 +268,14 @@ def accountbalance():
 
 @bp.route("/accountdetails")
 def accountdetails():
-    return render_template("accountdetails.html", title="Home page")
+    return render_template("accountdetails.html", title="Home page", review = ProdReviews.get_authored(current_user.id))
 
 
 @bp.route("/userdetails/<int:uid>", methods=["GET", "POST"])
 def userdetails(uid):
     if current_user.is_authenticated:
         return render_template('userdetails.html',page = User.get(uid),
-                                                    seller = User.is_seller(uid),
+                                                  seller = User.is_seller(uid),
                                                   user = current_user.id,
                                                   availBought = Purchase.hasPurchasedS(uid, current_user.id),
                                                   availNew = SellerReviews.hasReviewedS(current_user.id, uid),
