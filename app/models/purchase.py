@@ -55,3 +55,15 @@ WHERE uid = :uid and SellerID = :SellerID
             return True
         else:
             return False
+        
+    @staticmethod
+    def get_by_category(uid):
+        rows = app.db.execute('''
+SELECT category, SUM(finalUnitPrice*quantity)
+FROM Purchases, Products
+WHERE uid = :uid
+AND Products.productID = Purchases.pid
+GROUP BY category
+''',
+                              uid=uid)
+        return str(rows)
