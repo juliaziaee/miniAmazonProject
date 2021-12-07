@@ -130,7 +130,8 @@ def displaycart():
 def detailview(id):
     if current_user.is_authenticated:
         return render_template('detailview.html', product = Product.get(id),
-                                                  user = current_user.id, 
+                                                  user = current_user.id,
+                                                  avail = Purchase.hasPurchased(current_user.id, id),
                                                   review = ProdReviews.get_all(id),
                                                   leng = len(ProdReviews.get_all(id)))
     else:

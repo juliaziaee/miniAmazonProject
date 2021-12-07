@@ -22,6 +22,18 @@ WHERE ProductReview.uid = Users.id AND ProductReview.pid = :pid
 ORDER BY DateTime DESC
 ''',pid=pid)
         return [ProdReviews(*row) for row in rows]
+
+    @staticmethod
+    def hasReviewed(uid,pid):
+       
+        if app.db.execute('''
+SELECT uid, pid
+FROM ProductReview
+WHERE ProductReview.uid = :uid AND ProductReview.pid = :pid
+''',uid=uid, pid=pid):
+            return False
+        else:
+            return True
     
     @staticmethod
     def NewProdReview(uid, pid, review, rating):
