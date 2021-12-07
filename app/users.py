@@ -385,7 +385,7 @@ def singleOrderHistory(orderDateTime):
     return render_template("orderhistory.html", all_orders = orderDetails)
 
 # Create upvotes for reviews
-@bp.route("/userdetails/<int:sid>/<int:numVotes>/<int:uid>/up")
+@bp.route("/userdetails/<int:sid>/<numVotes>/<int:uid>/up")
 def upVotes(sid, numVotes, uid):
     #change inventory in database
     SellerReviews.upVotesS(sid, numVotes, uid)
@@ -393,7 +393,7 @@ def upVotes(sid, numVotes, uid):
     return redirect(url_for('users.userdetails', uid = sid))
 
 # Create downvotes for reviews
-@bp.route("/userdetails/<int:sid>/<int:numVotes>/<int:uid>/down")
+@bp.route("/userdetails/<int:sid>/<numVotes>/<int:uid>/down")
 def downVotes(sid, numVotes, uid):
     #change inventory in database
     SellerReviews.downVotesS(sid,numVotes, uid)
