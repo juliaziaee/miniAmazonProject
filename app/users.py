@@ -345,6 +345,8 @@ def singleOrderHistory(orderDateTime):
         return redirect(url_for("users.login"))
     #show order details if properly logged in 
     return render_template("orderhistory.html", all_orders = orderDetails)
+
+    
 @bp.route("/userdetails/<sid>/<numVotes>/<uid>/up")
 def upVotes(sid, numVotes, uid):
     #change inventory in database

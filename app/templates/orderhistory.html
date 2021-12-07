@@ -28,6 +28,7 @@
       <th scope="row" class="w-150 dark-grey-text h6">Final Unit Price</th>
       <th scope="row" class="w-150 dark-grey-text h6">Quantity</th>
       <th scope="row" class="w-150 dark-grey-text h6">Total Price</th>
+      <th scope="row" class="w-150 dark-grey-text h6">Review Product</th>
     </tr>
   </thead>
   {% for order in all_orders%}
@@ -46,7 +47,15 @@
       <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.finalUnitPrice}}</td>
       <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{order.quantity}}</td>
       <td width="50%" scope="row" class="w-150 dark-grey-text h6">{{order.totalPrice}}</td>
-      
+      {% if order.fufullmentstatus == 'fulfilled' %}
+      <td width="50%" scope="row" class="w-150 dark-grey-text h6">  
+        <a id = "leaveProdReview" href = "{{url_for('products.review', id = order.pid)}}">
+            <button id= "prodRevPage">Review</button>
+        </a>
+      </td>
+      {% else %}
+      <td width="50%" scope="row" class="w-150 dark-grey-text h6"> Unavailable until order is fulfilled</td>
+      {% endif %}
     </tr>
   </tbody>
   {% endfor %}
