@@ -72,19 +72,19 @@
 
 
    {% if reviewS %}
-   <h1>Seller Reviews Authored:</h1>
+   <h1> Seller Reviews Authored:</h1>
        <table class="table table-bordered mt-3">
            <thead class="thead-dark">
              <tr>
                <th scope="row" class="w-150 dark-grey-text h6">Review Date</th>
-               <th scope="row" class="w-150 dark-grey-text h6">Product ID</th>
+               <th scope="row" class="w-150 dark-grey-text h6">Seller ID</th>
                <th scope="row" class="w-150 dark-grey-text h6">Rating</th>
                <th scope="row" class="w-150 dark-grey-text h6">Review</th>
                <th scope="row" class="w-150 dark-grey-text h6">Reviewer</th>
                <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
              </tr>
            </thead>
-           {% for rev in review%}
+           {% for rev in reviewS%}
            <tbody>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
                <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.sid}}</td>
@@ -100,13 +100,13 @@
                 <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
                 
                 <div class = "votContainer">
-                  <a id="{{rev.pid + rev.uid}} up" href="{{ url_for('products.upVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  <a id="{{rev.sid + rev.uid}} up" href="{{ url_for('users.upVotes', sid=rev.sid, numVotes=rev.numVotes, uid = rev.uid)}}" 
                   type="submit">
                       <i class = "fas fa-chevron-up" role="button"></i></a>
                   <div class = "vot">
                     <p> {{rev.numVotes}}</p>
                   </div>
-                  <a id="{{rev.pid + rev.uid}} down" href="{{ url_for('products.downVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
+                  <a id="{{rev.sid + rev.uid}} down" href="{{ url_for('users.downVotes', sid=rev.sid, numVotes=rev.numVotes, uid = rev.uid)}}" 
                   type="submit"><i class = "fas fa-chevron-down"></i></a>
                 </div>
                
