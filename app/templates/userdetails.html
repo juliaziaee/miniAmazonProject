@@ -26,6 +26,7 @@
     <h1>Seller Reviews:</h1>
     {% if review %}
         <table class="table table-bordered mt-3">
+          <caption>Seller Average Rating: {{avgRating}}</caption>
             <thead class="thead-dark">
               <tr>
                 <th scope="row" class="w-150 dark-grey-text h6">Review Date</th>
@@ -71,49 +72,6 @@
    
     {% if not review %}
     <p>This seller has not been reviewed yet!<p>
-    {% else %}
-    <table class="table table-bordered mt-3">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="row" class="w-150 dark-grey-text h6">Review Date</th>
-          <th scope="row" class="w-150 dark-grey-text h6">Rating</th>
-          <th scope="row" class="w-150 dark-grey-text h6">Review</th>
-          <th scope="row" class="w-150 dark-grey-text h6">Reviewer</th>
-          <th scope="row" class="w-150 dark-grey-text h6">Votes</th>
-        </tr>
-      </thead>
-      {% for rev in review%}
-      <tbody>
-          <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.DateTime}}</td>
-          <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.rating}}</td>
-          <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.review}}
-           {% if user == rev.uid %}
-           <a href="{{ url_for('products.updatereview' , id=product.id)}}" type="button" class="btn btn-dark">Edit</a> 
-           <a href="{{ url_for('products.removereview' , uid = rev.uid, pid=rev.pid)}}" type="button" style="background-color:red" class="btn btn-dark">Remove</a> 
-          {% endif %}
-          </td>
-          <td width="25%" scope="row" class="w-150 dark-grey-text h6">{{rev.firstname}}<p></p>
-           </td>
-          <td> <body>
-           <script src = "https://kit.fontawesome.com/5708ed03ed.js" crossorigin = "anonymous" ></script>
-           
-           <div class = "votContainer">
-             <a id="{{rev.pid + rev.uid}} up" href="{{ url_for('products.upVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
-             type="submit">
-                 <i class = "fas fa-chevron-up" role="button"></i></a>
-             <div class = "vot">
-               <p> {{rev.numVotes}}</p>
-             </div>
-             <a id="{{rev.pid + rev.uid}} down" href="{{ url_for('products.downVotes', pid=rev.pid, numVotes=rev.numVotes, uid = rev.uid)}}" 
-             type="submit"><i class = "fas fa-chevron-down"></i></a>
-           </div>
-          
-         </body></td>
-        </tr>
-       </tbody>
-      {% endfor %}
-    </table>
-
      
     {% endif %}
     

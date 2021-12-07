@@ -101,8 +101,7 @@ CREATE TABLE SellerReview (
     numVotes INT NOT NULL,
 	review VARCHAR(256),
 	DateTime timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
-	PRIMARY KEY(uid, sid)
-	
+	PRIMARY KEY(uid, sid)	
 );
 
 -- Stores conversations between seller and user 
