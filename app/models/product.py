@@ -2,7 +2,7 @@ from flask import current_app as app
 from flask import Flask, render_template
 from sqlalchemy.exc import SQLAlchemyError
 
-
+# Create a class for product information
 class Product:
     def __init__(self, id, name, price, image, category, description, Inventory, sellerID, sellerName):
         self.id = id
@@ -15,6 +15,7 @@ class Product:
         self.sellerID = sellerID
         self.sellerName = sellerName
 
+    # Function to return product information given a product ID 
     @staticmethod
     def get(productID):
         rows = app.db.execute('''
@@ -25,6 +26,7 @@ WHERE productID = :productID AND Users.id = Products.SellerID
                               productID=productID)
         return Product(*(rows[0])) if rows else None
 
+    # Function to select distinct categories from database
     def addCategory():
         rows = app.db.execute('''
 SELECT DISTINCT(category)
@@ -35,6 +37,7 @@ FROM Products
             data.append(str(str(row)[2:-3]))
         return data
 
+    # Function gets specific products after filtering and sorting 
     @staticmethod
     def getSearchAndFilt(category, keyword, sort, price):
         category = "%{}%".format(category)
@@ -77,6 +80,7 @@ keyword=keyword,
 )
         return [Product(*row) for row in rows]
 
+    # Function that gets all available products
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
@@ -86,6 +90,7 @@ WHERE Users.id = Products.SellerID
 ''',)
         return [Product(*row) for row in rows]
 
+    # Function that checks if the product exists
     @staticmethod
     def product_exists(productID):
         rows = app.db.execute("""
@@ -96,6 +101,7 @@ WHERE productID = :productID
                               productID=productID)
         return len(rows) > 0
 
+    # Function that checks if seller exists
     @staticmethod
     def seller_exists(SellerID):
         rows = app.db.execute("""
@@ -106,6 +112,7 @@ WHERE SellerID = :SellerID
                               SellerID=SellerID)
         return len(rows) > 0
 
+    # Function that adds a seller to the seller table
     @staticmethod
     def add_seller(SellerID):
         try:
@@ -118,6 +125,7 @@ VALUES(:SellerID)
         except Exception:
             return None
 
+    # Function that creates a new product and inserts into product table
     @staticmethod
     def create(name, description, category, unitPrice, inventory, SellerID, image):
         if not Product.seller_exists(SellerID):
