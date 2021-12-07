@@ -22,6 +22,18 @@ WHERE ProductReview.uid = Users.id AND ProductReview.pid = :pid
 ORDER BY DateTime DESC
 ''',pid=pid)
         return [ProdReviews(*row) for row in rows]
+
+    def getAvgReview(pid):
+        avg = app.db.execute('''
+SELECT AVG(rating)
+FROM ProductReview
+WHERE ProductReview.pid = :pid
+''',
+pid=pid)    
+        data = []
+        for row in avg:
+            data.append(str(str(row)[1:-2]))
+        return data[0]
     
     @staticmethod
     def NewProdReview(
